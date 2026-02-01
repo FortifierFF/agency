@@ -47,11 +47,11 @@ export function Navbar() {
           : "bg-transparent py-5"
       )}
     >
-      <nav className="container flex items-center justify-between" aria-label="Main navigation">
+      <nav className="container flex items-center justify-between" aria-label={tCommon("mainNavigation")}>
         <Link
           href="/"
           className="text-xl font-bold tracking-tight"
-          aria-label="Apex Studio - Home"
+          aria-label={tCommon("apexStudioHome")}
         >
           apex<span className="text-primary">.</span>
         </Link>
@@ -90,7 +90,7 @@ export function Navbar() {
             variant="ghost"
             size="icon"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-label={isMobileMenuOpen ? tCommon("closeMenu") : tCommon("openMenu")}
             aria-expanded={isMobileMenuOpen}
             className="h-9 w-9"
           >

@@ -1,21 +1,8 @@
-import Link from "next/link";
-import { Github, Twitter, Linkedin, Mail } from "lucide-react";
+"use client";
 
-const footerLinks = {
-  navigation: [
-    { label: "Projects", href: "/projects" },
-    { label: "Services", href: "/services" },
-    { label: "Pricing", href: "/pricing" },
-    { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
-  ],
-  services: [
-    { label: "Web Development", href: "/services#web-development" },
-    { label: "UI/UX Design", href: "/services#ui-ux-design" },
-    { label: "SEO & Performance", href: "/services#seo-performance" },
-    { label: "Mobile Apps", href: "/services#mobile-apps" },
-  ],
-};
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { Github, Twitter, Linkedin, Mail } from "lucide-react";
 
 const socialLinks = [
   { label: "Twitter", href: "#", icon: Twitter },
@@ -24,6 +11,25 @@ const socialLinks = [
 ];
 
 export function Footer() {
+  const t = useTranslations();
+  const tNav = useTranslations("nav");
+  const tFooter = useTranslations("footer");
+  
+  const footerLinks = {
+    navigation: [
+      { label: tNav("projects"), href: "/projects" },
+      { label: tNav("services"), href: "/services" },
+      { label: tNav("pricing"), href: "/pricing" },
+      { label: tNav("about"), href: "/about" },
+      { label: tNav("contact"), href: "/contact" },
+    ],
+    services: [
+      { label: tFooter("webDevelopment"), href: "/services#web-development" },
+      { label: tFooter("uiUxDesign"), href: "/services#ui-ux-design" },
+      { label: tFooter("seoPerformance"), href: "/services#seo-performance" },
+      { label: tFooter("mobileApps"), href: "/services#mobile-apps" },
+    ],
+  };
   return (
     <footer className="border-t border-border bg-card" role="contentinfo">
       <div className="container py-12 md:py-16">
@@ -34,7 +40,7 @@ export function Footer() {
               apex<span className="text-primary">.</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground max-w-xs">
-              We build digital products that help businesses grow. From strategy to launch and beyond.
+              {tFooter("description")}
             </p>
             <div className="mt-6 flex gap-3">
               {socialLinks.map((social) => (
@@ -52,7 +58,7 @@ export function Footer() {
 
           {/* Navigation */}
           <div>
-            <h3 className="font-semibold text-sm mb-4">Navigation</h3>
+            <h3 className="font-semibold text-sm mb-4">{tFooter("navigation")}</h3>
             <ul className="space-y-3">
               {footerLinks.navigation.map((link) => (
                 <li key={link.href}>
@@ -69,7 +75,7 @@ export function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className="font-semibold text-sm mb-4">Services</h3>
+            <h3 className="font-semibold text-sm mb-4">{tFooter("services")}</h3>
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
                 <li key={link.href}>
@@ -86,7 +92,7 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="font-semibold text-sm mb-4">Contact</h3>
+            <h3 className="font-semibold text-sm mb-4">{tFooter("contact")}</h3>
             <ul className="space-y-3">
               <li>
                 <a
@@ -98,7 +104,7 @@ export function Footer() {
                 </a>
               </li>
               <li className="text-sm text-muted-foreground">
-                Based remotely, working globally.
+                {tFooter("basedRemotely")}
               </li>
             </ul>
           </div>
@@ -107,14 +113,14 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Apex Studio. All rights reserved.
+            {tFooter("copyright", { year: new Date().getFullYear() })}
           </p>
           <div className="flex gap-6 text-sm text-muted-foreground">
             <a href="#" className="hover:text-foreground transition-colors">
-              Privacy Policy
+              {tFooter("privacyPolicy")}
             </a>
             <a href="#" className="hover:text-foreground transition-colors">
-              Terms of Service
+              {tFooter("termsOfService")}
             </a>
           </div>
         </div>

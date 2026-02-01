@@ -1,4 +1,7 @@
-import Link from "next/link";
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { ArrowRight, Globe, Palette, TrendingUp, Smartphone } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { services } from "@/data/services";
@@ -11,20 +14,21 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 export function ServicesSection() {
+  const t = useTranslations("home.services");
+  const tCommon = useTranslations("common");
   return (
     <section className="section-padding">
       <div className="container">
         <AnimatedSection>
           <div className="text-center max-w-2xl mx-auto mb-16">
             <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-              What We Do
+              {t("label")}
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-              Full-service digital studio
+              {t("title")}
             </h2>
             <p className="text-muted-foreground">
-              We handle everything from strategy to launch. Pick what you need, 
-              or let us build the complete solution.
+              {t("description")}
             </p>
           </div>
         </AnimatedSection>
@@ -48,8 +52,8 @@ export function ServicesSection() {
                         key={item}
                         className="text-sm text-muted-foreground flex items-start gap-2"
                       >
-                        <span className="text-primary mt-1">•</span>
-                        {item}
+                        <span className="text-primary shrink-0">•</span>
+                        <span className="flex-1">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -57,7 +61,7 @@ export function ServicesSection() {
                     href={`/services#${service.id}`}
                     className="inline-flex items-center text-sm font-medium text-primary hover:underline underline-offset-4"
                   >
-                    Learn more
+                    {tCommon("learnMore")}
                     <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>
                 </div>

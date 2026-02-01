@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Search } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { AnimatedSection } from "@/components/AnimatedSection";
@@ -9,11 +10,18 @@ import { projects, getProjectsByTag, searchProjects } from "@/data/projects";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 
-const tags = ["All", "Web", "UIUX", "SEO", "Mobile"];
-
 export default function ProjectsPage() {
+  const t = useTranslations("projects");
   const [activeTag, setActiveTag] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  
+  const tags = [
+    { value: "All", label: t("filterAll") },
+    { value: "Web", label: t("filterWeb") },
+    { value: "UIUX", label: t("filterUIUX") },
+    { value: "SEO", label: t("filterSEO") },
+    { value: "Mobile", label: t("filterMobile") },
+  ];
 
   const filteredProjects = useMemo(() => {
     let result = getProjectsByTag(activeTag);
@@ -32,14 +40,13 @@ export default function ProjectsPage() {
         <div className="container">
           <AnimatedSection>
             <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-              Our Work
+              {t("ourWork")}
             </p>
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-              Projects that delivered results
+              {t("title")}
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl">
-              From startups to established brands, here's a selection of the 
-              digital products we've designed and built.
+              {t("description")}
             </p>
           </AnimatedSection>
         </div>
@@ -54,15 +61,15 @@ export default function ProjectsPage() {
               <div className="flex flex-wrap gap-2">
                 {tags.map((tag) => (
                   <button
-                    key={tag}
-                    onClick={() => setActiveTag(tag)}
+                    key={tag.value}
+                    onClick={() => setActiveTag(tag.value)}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                      activeTag === tag
+                      activeTag === tag.value
                         ? "bg-primary text-primary-foreground"
                         : "bg-secondary text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    {tag}
+                    {tag.label}
                   </button>
                 ))}
               </div>
@@ -72,7 +79,7 @@ export default function ProjectsPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="search"
-                  placeholder="Search projects..."
+                  placeholder={t("searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 rounded-full"
@@ -88,7 +95,7 @@ export default function ProjectsPage() {
         <div className="container">
           {filteredProjects.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">No projects found matching your criteria.</p>
+              <p className="text-muted-foreground">{t("noProjects")}</p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

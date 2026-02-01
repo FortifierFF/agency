@@ -1,10 +1,14 @@
-import Link from "next/link";
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { ArrowUpRight } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { getFeaturedProjects } from "@/data/projects";
 import { Badge } from "@/components/ui/badge";
 
 export function FeaturedWork() {
+  const t = useTranslations("home.featuredWork");
   const projects = getFeaturedProjects();
 
   return (
@@ -14,17 +18,17 @@ export function FeaturedWork() {
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
             <div>
               <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-                Featured Work
+                {t("label")}
               </p>
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-                Projects that delivered
+                {t("title")}
               </h2>
             </div>
             <Link
               href="/projects"
               className="text-sm font-medium text-primary hover:underline underline-offset-4 flex items-center gap-1"
             >
-              View all projects
+              {t("viewAll")}
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>

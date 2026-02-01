@@ -1,4 +1,7 @@
-import Link from "next/link";
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Globe, Palette, TrendingUp, Smartphone, ArrowRight, Check } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { AnimatedSection } from "@/components/AnimatedSection";
@@ -13,6 +16,9 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 export default function ServicesPage() {
+  const t = useTranslations("services");
+  const tNav = useTranslations("nav");
+  const tCommon = useTranslations("common");
   return (
     <Layout>
       {/* Hero */}
@@ -21,14 +27,13 @@ export default function ServicesPage() {
           <AnimatedSection>
             <div className="max-w-3xl">
               <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-                Services
+                {tNav("services")}
               </p>
               <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
-                Everything you need to build and grow online
+                {t("title")}
               </h1>
               <p className="text-lg text-muted-foreground">
-                From strategy to launch and beyond. We offer focused services 
-                that deliver measurable results for your business.
+                {t("description")}
               </p>
             </div>
           </AnimatedSection>
@@ -69,7 +74,7 @@ export default function ServicesPage() {
                       </ul>
                       <Button asChild className="rounded-full px-6">
                         <Link href="/contact">
-                          Discuss Your Project
+                          {tCommon("discussProject")}
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
                       </Button>
@@ -96,14 +101,13 @@ export default function ServicesPage() {
         <div className="container text-center">
           <AnimatedSection>
             <h2 className="text-3xl font-bold mb-4">
-              Not sure which service you need?
+              {t("notSure")}
             </h2>
             <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-              Book a free consultation and we'll help you figure out the best 
-              approach for your specific goals.
+              {t("notSureDescription")}
             </p>
             <Button asChild size="lg" variant="secondary" className="rounded-full px-8">
-              <Link href="/contact">Book a Free Call</Link>
+              <Link href="/contact">{t("bookFreeCall")}</Link>
             </Button>
           </AnimatedSection>
         </div>

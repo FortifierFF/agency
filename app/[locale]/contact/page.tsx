@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -26,36 +27,38 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters").max(100),
-  email: z.string().email("Please enter a valid email address").max(255),
-  company: z.string().max(100).optional(),
-  serviceType: z.string().min(1, "Please select a service type"),
-  budgetRange: z.string().min(1, "Please select a budget range"),
-  message: z.string().min(10, "Message must be at least 10 characters").max(2000),
-});
-
-type FormData = z.infer<typeof formSchema>;
-
-const serviceOptions = [
-  { value: "web-development", label: "Website / Web App" },
-  { value: "ui-ux-design", label: "UI/UX Design" },
-  { value: "seo-performance", label: "SEO & Performance" },
-  { value: "mobile-apps", label: "Mobile App" },
-  { value: "other", label: "Something Else" },
-];
-
-const budgetOptions = [
-  { value: "under-5k", label: "Under $5,000" },
-  { value: "5k-15k", label: "$5,000 - $15,000" },
-  { value: "15k-50k", label: "$15,000 - $50,000" },
-  { value: "50k-plus", label: "$50,000+" },
-  { value: "not-sure", label: "Not Sure Yet" },
-];
-
 export default function ContactPage() {
+  const t = useTranslations("contact");
+  const tCommon = useTranslations("common");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const formSchema = z.object({
+    name: z.string().min(2, t("nameRequired")).max(100),
+    email: z.string().email(t("emailRequired")).max(255),
+    company: z.string().max(100).optional(),
+    serviceType: z.string().min(1, t("serviceRequired")),
+    budgetRange: z.string().min(1, t("budgetRequired")),
+    message: z.string().min(10, t("messageRequired")).max(2000),
+  });
+
+  type FormData = z.infer<typeof formSchema>;
+  
+  const serviceOptions = [
+    { value: "web-development", label: t("serviceOptions.webDevelopment") },
+    { value: "ui-ux-design", label: t("serviceOptions.uiUxDesign") },
+    { value: "seo-performance", label: t("serviceOptions.seoPerformance") },
+    { value: "mobile-apps", label: t("serviceOptions.mobileApps") },
+    { value: "other", label: t("serviceOptions.other") },
+  ];
+
+  const budgetOptions = [
+    { value: "under-5k", label: t("budgetOptions.under5k") },
+    { value: "5k-15k", label: t("budgetOptions.5k15k") },
+    { value: "15k-50k", label: t("budgetOptions.15k50k") },
+    { value: "50k-plus", label: t("budgetOptions.50kPlus") },
+    { value: "not-sure", label: t("budgetOptions.notSure") },
+  ];
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -90,14 +93,13 @@ export default function ContactPage() {
           <AnimatedSection>
             <div className="max-w-2xl">
               <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-                Contact
+                {t("title")}
               </p>
               <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-                Let's talk about your project
+                {t("title")}
               </h1>
               <p className="text-lg text-muted-foreground">
-                Fill out the form below and we'll get back to you within 24 hours. 
-                Or if you prefer, reach out directly via email.
+                {t("description")}
               </p>
             </div>
           </AnimatedSection>
@@ -116,10 +118,9 @@ export default function ContactPage() {
                     <div className="h-16 w-16 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-6">
                       <CheckCircle className="h-8 w-8 text-success" />
                     </div>
-                    <h2 className="text-2xl font-bold mb-4">Message Sent!</h2>
+                    <h2 className="text-2xl font-bold mb-4">{tCommon("messageSent")}</h2>
                     <p className="text-muted-foreground mb-8">
-                      Thanks for reaching out. We'll review your message and get 
-                      back to you within 24 hours.
+                      {tCommon("thanksForReachingOut")}
                     </p>
                     <Button
                       onClick={() => {
@@ -129,7 +130,7 @@ export default function ContactPage() {
                       variant="outline"
                       className="rounded-full"
                     >
-                      Send Another Message
+                      {tCommon("sendAnotherMessage")}
                     </Button>
                   </div>
                 ) : (
@@ -144,10 +145,10 @@ export default function ContactPage() {
                           name="name"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Name *</FormLabel>
+                              <FormLabel>{t("name")} *</FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Your name"
+                                  placeholder={t("namePlaceholder")}
                                   {...field}
                                   className="rounded-lg"
                                 />
@@ -161,11 +162,11 @@ export default function ContactPage() {
                           name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Email *</FormLabel>
+                              <FormLabel>{t("email")} *</FormLabel>
                               <FormControl>
                                 <Input
                                   type="email"
-                                  placeholder="you@company.com"
+                                  placeholder={t("emailPlaceholder")}
                                   {...field}
                                   className="rounded-lg"
                                 />
@@ -180,17 +181,17 @@ export default function ContactPage() {
                         control={form.control}
                         name="company"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Company (Optional)</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Your company name"
-                                {...field}
-                                className="rounded-lg"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
+                            <FormItem>
+                              <FormLabel>{t("company")}</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder={t("companyPlaceholder")}
+                                  {...field}
+                                  className="rounded-lg"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
                         )}
                       />
 
@@ -200,14 +201,14 @@ export default function ContactPage() {
                           name="serviceType"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Service Type *</FormLabel>
+                              <FormLabel>{t("serviceType")} *</FormLabel>
                               <Select
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}
                               >
                                 <FormControl>
                                   <SelectTrigger className="rounded-lg">
-                                    <SelectValue placeholder="Select a service" />
+                                    <SelectValue placeholder={t("selectService")} />
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -227,14 +228,14 @@ export default function ContactPage() {
                           name="budgetRange"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Budget Range *</FormLabel>
+                              <FormLabel>{t("budgetRange")} *</FormLabel>
                               <Select
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}
                               >
                                 <FormControl>
                                   <SelectTrigger className="rounded-lg">
-                                    <SelectValue placeholder="Select a range" />
+                                    <SelectValue placeholder={t("selectRange")} />
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -255,18 +256,18 @@ export default function ContactPage() {
                         control={form.control}
                         name="message"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Message *</FormLabel>
-                            <FormControl>
-                              <Textarea
-                                placeholder="Tell us about your project..."
-                                rows={6}
-                                {...field}
-                                className="rounded-lg resize-none"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
+                            <FormItem>
+                              <FormLabel>{t("message")} *</FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  placeholder={t("messagePlaceholder")}
+                                  rows={6}
+                                  {...field}
+                                  className="rounded-lg resize-none"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
                         )}
                       />
 
@@ -277,10 +278,10 @@ export default function ContactPage() {
                         disabled={isSubmitting}
                       >
                         {isSubmitting ? (
-                          "Sending..."
+                          tCommon("sending")
                         ) : (
                           <>
-                            Send Message
+                            {tCommon("sendMessage")}
                             <Send className="ml-2 h-4 w-4" />
                           </>
                         )}
@@ -296,7 +297,7 @@ export default function ContactPage() {
               <AnimatedSection delay={0.2}>
                 <div className="space-y-8">
                   <div>
-                    <h3 className="font-semibold mb-4">Direct Contact</h3>
+                    <h3 className="font-semibold mb-4">{t("directContact")}</h3>
                     <div className="space-y-4">
                       <a
                         href="mailto:hello@apexstudio.com"
@@ -311,25 +312,24 @@ export default function ContactPage() {
                         <div className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center">
                           <MapPin className="h-4 w-4" />
                         </div>
-                        Remote-first, Global
+                        {t("remoteLocation")}
                       </div>
                     </div>
                   </div>
 
                   <div className="p-6 rounded-2xl bg-card border border-border">
-                    <h3 className="font-semibold mb-2">Response Time</h3>
+                    <h3 className="font-semibold mb-2">{t("responseTime")}</h3>
                     <p className="text-sm text-muted-foreground">
-                      We typically respond within 24 hours during business days. 
-                      For urgent inquiries, please mention it in your message.
+                      {t("responseTimeDescription")}
                     </p>
                   </div>
 
                   <div className="p-6 rounded-2xl bg-card border border-border">
-                    <h3 className="font-semibold mb-2">What happens next?</h3>
+                    <h3 className="font-semibold mb-2">{t("whatHappensNext")}</h3>
                     <ol className="text-sm text-muted-foreground space-y-2">
-                      <li>1. We'll review your project details</li>
-                      <li>2. Schedule a discovery call</li>
-                      <li>3. Provide a tailored proposal</li>
+                      <li>{t("whatHappensNext1")}</li>
+                      <li>{t("whatHappensNext2")}</li>
+                      <li>{t("whatHappensNext3")}</li>
                     </ol>
                   </div>
                 </div>

@@ -1,21 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { testimonials } from "@/data/testimonials";
 import { Button } from "@/components/ui/button";
 
-const metrics = [
-  { value: "50+", label: "Projects Delivered" },
-  { value: "98%", label: "Client Satisfaction" },
-  { value: "4.9★", label: "Average Rating" },
-  { value: "5+ yrs", label: "Experience" },
-];
-
 export function TestimonialsSection() {
+  const t = useTranslations("home.testimonials");
+  const tCommon = useTranslations("common");
   const [current, setCurrent] = useState(0);
+  
+  const metrics = [
+    { value: "50+", label: t("metrics.projectsDelivered") },
+    { value: "98%", label: t("metrics.clientSatisfaction") },
+    { value: "4.9★", label: t("metrics.averageRating") },
+    { value: "5+ yrs", label: t("metrics.experience") },
+  ];
 
   const next = () => setCurrent((prev) => (prev + 1) % testimonials.length);
   const prev = () =>
@@ -27,10 +30,10 @@ export function TestimonialsSection() {
         <AnimatedSection>
           <div className="text-center max-w-2xl mx-auto mb-16">
             <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-              Proof
+              {t("label")}
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-              What our clients say
+              {t("title")}
             </h2>
           </div>
         </AnimatedSection>
@@ -77,7 +80,7 @@ export function TestimonialsSection() {
                   variant="outline"
                   size="icon"
                   onClick={prev}
-                  aria-label="Previous testimonial"
+                  aria-label={tCommon("previousTestimonial")}
                   className="h-10 w-10 rounded-full"
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -86,7 +89,7 @@ export function TestimonialsSection() {
                   variant="outline"
                   size="icon"
                   onClick={next}
-                  aria-label="Next testimonial"
+                  aria-label={tCommon("nextTestimonial")}
                   className="h-10 w-10 rounded-full"
                 >
                   <ChevronRight className="h-4 w-4" />
@@ -104,7 +107,7 @@ export function TestimonialsSection() {
                         ? "w-6 bg-primary"
                         : "w-2 bg-muted-foreground/30"
                     }`}
-                    aria-label={`Go to testimonial ${index + 1}`}
+                    aria-label={tCommon("goToTestimonial", { number: index + 1 })}
                   />
                 ))}
               </div>

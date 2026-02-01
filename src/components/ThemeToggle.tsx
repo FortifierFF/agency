@@ -1,23 +1,25 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/ThemeProvider";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const tCommon = useTranslations("common");
 
   return (
     <Button
       variant="ghost"
       size="icon"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+      aria-label={theme === "light" ? tCommon("switchToDarkMode") : tCommon("switchToLightMode")}
       className="h-9 w-9 rounded-full"
     >
       <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-      <span className="sr-only">Toggle theme</span>
+      <span className="sr-only">{theme === "light" ? tCommon("switchToDarkMode") : tCommon("switchToLightMode")}</span>
     </Button>
   );
 }

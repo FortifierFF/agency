@@ -1,52 +1,51 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Search, PenTool, Code, Rocket } from "lucide-react";
 
-const steps = [
-  {
-    number: "01",
-    title: "Discover",
-    description:
-      "We dive deep into your business, users, and goals. Through research and strategy sessions, we define the problem worth solving.",
-    icon: Search,
-  },
-  {
-    number: "02",
-    title: "Design",
-    description:
-      "Wireframes become prototypes. We iterate with your feedback until the design feels right—intuitive, beautiful, and on-brand.",
-    icon: PenTool,
-  },
-  {
-    number: "03",
-    title: "Build",
-    description:
-      "Clean code, modern stack, and regular check-ins. We develop with quality and transparency, keeping you informed throughout.",
-    icon: Code,
-  },
-  {
-    number: "04",
-    title: "Launch & Grow",
-    description:
-      "We deploy, test, and optimize. Post-launch, we measure what matters and help you iterate based on real user data.",
-    icon: Rocket,
-  },
-];
-
 export function ProcessSection() {
+  const t = useTranslations("home.process");
+  
+  const steps = [
+    {
+      number: t("step1.number"),
+      title: t("step1.title"),
+      description: t("step1.description"),
+      icon: Search,
+    },
+    {
+      number: t("step2.number"),
+      title: t("step2.title"),
+      description: t("step2.description"),
+      icon: PenTool,
+    },
+    {
+      number: t("step3.number"),
+      title: t("step3.title"),
+      description: t("step3.description"),
+      icon: Code,
+    },
+    {
+      number: t("step4.number"),
+      title: t("step4.title"),
+      description: t("step4.description"),
+      icon: Rocket,
+    },
+  ];
   return (
     <section className="section-padding bg-card">
       <div className="container">
         <AnimatedSection>
           <div className="text-center max-w-2xl mx-auto mb-16">
             <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-              How We Work
+              {t("label")}
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-              A process built for clarity
+              {t("title")}
             </h2>
             <p className="text-muted-foreground">
-              No surprises, no scope creep. Just a proven process that 
-              gets you from idea to launch efficiently.
+              {t("description")}
             </p>
           </div>
         </AnimatedSection>

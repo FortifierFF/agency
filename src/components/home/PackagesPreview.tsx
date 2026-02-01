@@ -1,4 +1,7 @@
-import Link from "next/link";
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { ArrowRight, Check } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { packages } from "@/data/pricing";
@@ -6,6 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 export function PackagesPreview() {
+  const t = useTranslations("home.packages");
+  const tCommon = useTranslations("common");
+  const tPricing = useTranslations("pricing");
   const previewPackages = packages.slice(0, 3);
 
   return (
@@ -15,17 +21,17 @@ export function PackagesPreview() {
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
             <div>
               <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-                Packages
+                {t("label")}
               </p>
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-                Clear pricing, no surprises
+                {t("title")}
               </h2>
             </div>
             <Link
               href="/pricing"
               className="text-sm font-medium text-primary hover:underline underline-offset-4 flex items-center gap-1"
             >
-              View all packages
+              {t("viewAll")}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -42,7 +48,7 @@ export function PackagesPreview() {
                 }`}
               >
                 {pkg.popular && (
-                  <Badge className="absolute -top-3 left-6">Most Popular</Badge>
+                  <Badge className="absolute -top-3 left-6">{tPricing("mostPopular")}</Badge>
                 )}
                 <div className="mb-4">
                   <h3 className="text-xl font-semibold mb-1">{pkg.name}</h3>
@@ -61,7 +67,7 @@ export function PackagesPreview() {
                   ))}
                 </ul>
                 <Button asChild variant={pkg.popular ? "default" : "outline"} className="rounded-full">
-                  <Link href="/pricing">Learn More</Link>
+                  <Link href="/pricing">{tCommon("learnMore")}</Link>
                 </Button>
               </div>
             </AnimatedSection>

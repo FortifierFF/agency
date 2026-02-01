@@ -18,7 +18,19 @@
     "sending": "Sending...",
     "sendAnotherMessage": "Send Another Message",
     "messageSent": "Message Sent!",
-    "thanksForReachingOut": "Thanks for reaching out. We'll review your message and get back to you within 24 hours."
+    "thanksForReachingOut": "Thanks for reaching out. We'll review your message and get back to you within 24 hours.",
+    "discussProject": "Discuss Your Project",
+    "startYourProject": "Start Your Project",
+    "switchLanguage": "Switch language",
+    "previousTestimonial": "Previous testimonial",
+    "nextTestimonial": "Next testimonial",
+    "goToTestimonial": "Go to testimonial {number}",
+    "mainNavigation": "Main navigation",
+    "apexStudioHome": "Apex Studio - Home",
+    "closeMenu": "Close menu",
+    "openMenu": "Open menu",
+    "switchToDarkMode": "Switch to dark mode",
+    "switchToLightMode": "Switch to light mode"
   },
   "nav": {
     "projects": "Projects",
@@ -47,12 +59,47 @@
     "process": {
       "label": "How We Work",
       "title": "A process built for clarity",
-      "description": "No surprises, no scope creep. Just a proven process that gets you from idea to launch efficiently."
+      "description": "No surprises, no scope creep. Just a proven process that gets you from idea to launch efficiently.",
+      "step1": {
+        "number": "01",
+        "title": "Discover",
+        "description": "We dive deep into your business, users, and goals. Through research and strategy sessions, we define the problem worth solving."
+      },
+      "step2": {
+        "number": "02",
+        "title": "Design",
+        "description": "Wireframes become prototypes. We iterate with your feedback until the design feels right—intuitive, beautiful, and on-brand."
+      },
+      "step3": {
+        "number": "03",
+        "title": "Build",
+        "description": "Clean code, modern stack, and regular check-ins. We develop with quality and transparency, keeping you informed throughout."
+      },
+      "step4": {
+        "number": "04",
+        "title": "Launch & Grow",
+        "description": "We deploy, test, and optimize. Post-launch, we measure what matters and help you iterate based on real user data."
+      }
     },
     "packages": {
       "label": "Packages",
       "title": "Clear pricing, no surprises",
-      "viewAll": "View all packages"
+      "viewAll": "View all packages",
+      "mostPopular": "Most Popular"
+    },
+    "testimonials": {
+      "label": "Proof",
+      "title": "What our clients say",
+      "metrics": {
+        "projectsDelivered": "Projects Delivered",
+        "clientSatisfaction": "Client Satisfaction",
+        "averageRating": "Average Rating",
+        "experience": "Experience"
+      }
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "Questions? We've got answers"
     },
     "cta": {
       "title": "Ready to build something great?",
@@ -75,7 +122,13 @@
     "gallery": "Gallery",
     "techStack": "Tech Stack",
     "client": "Client",
-    "timeline": "Timeline"
+    "timeline": "Timeline",
+    "searchPlaceholder": "Search projects...",
+    "filterAll": "All",
+    "filterWeb": "Web",
+    "filterUIUX": "UIUX",
+    "filterSEO": "SEO",
+    "filterMobile": "Mobile"
   },
   "services": {
     "title": "Everything you need to build and grow online",
@@ -94,7 +147,19 @@
     "getStarted": "Get Started",
     "faq": "Pricing FAQ",
     "readyToGetStarted": "Ready to get started?",
-    "readyToGetStartedDescription": "Tell us about your project and we'll get back to you within 24 hours with next steps."
+    "readyToGetStartedDescription": "Tell us about your project and we'll get back to you within 24 hours with next steps.",
+    "faq1": {
+      "question": "What if my project doesn't fit a package?",
+      "answer": "No problem! Our Custom/Retainer option is flexible. We'll scope your project, provide a detailed proposal, and work with you to find the right arrangement."
+    },
+    "faq2": {
+      "question": "Do you require a deposit?",
+      "answer": "Yes, we typically require a 50% deposit to begin work. The remaining 50% is due upon project completion. For larger projects, we can arrange milestone-based payments."
+    },
+    "faq3": {
+      "question": "What's not included in these prices?",
+      "answer": "Third-party costs like hosting, domains, stock photos, or premium plugins are not included. We'll discuss any additional costs upfront during scoping."
+    }
   },
   "about": {
     "title": "A small team doing big things",
@@ -102,8 +167,30 @@
     "workWithUs": "Work With Us",
     "whatWeBelieve": "What we believe",
     "whatWeBelieveDescription": "These aren't just words on a wall—they're how we make decisions every day.",
+    "value1": {
+      "title": "Quality over quantity",
+      "description": "We take on fewer projects to give each one the attention it deserves. No assembly lines, no junior-only handoffs."
+    },
+    "value2": {
+      "title": "Transparency first",
+      "description": "Clear communication, honest timelines, and no scope surprises. You'll always know where your project stands."
+    },
+    "value3": {
+      "title": "Results-driven",
+      "description": "Beautiful design is just the start. We measure success by the outcomes we help you achieve."
+    },
+    "value4": {
+      "title": "Partnership mindset",
+      "description": "We're not just vendors—we're invested in your success. Many of our clients have worked with us for years."
+    },
     "meetTeam": "Meet the team",
     "meetTeamDescription": "The people behind the pixels. Small team, big impact.",
+    "stats": {
+      "founded": "Founded",
+      "projectsCompleted": "Projects Completed",
+      "remoteTeam": "Remote Team",
+      "countriesServed": "Countries Served"
+    },
     "letsBuild": "Let's build something together",
     "letsBuildDescription": "Ready to start your next project? We'd love to hear what you're working on."
   },
@@ -131,10 +218,75 @@
     "emailRequired": "Please enter a valid email address",
     "serviceRequired": "Please select a service type",
     "budgetRequired": "Please select a budget range",
-    "messageRequired": "Message must be at least 10 characters"
+    "messageRequired": "Message must be at least 10 characters",
+    "selectService": "Select a service",
+    "selectRange": "Select a range",
+    "remoteLocation": "Remote-first, Global",
+    "serviceOptions": {
+      "webDevelopment": "Website / Web App",
+      "uiUxDesign": "UI/UX Design",
+      "seoPerformance": "SEO & Performance",
+      "mobileApps": "Mobile App",
+      "other": "Something Else"
+    },
+    "budgetOptions": {
+      "under5k": "Under $5,000",
+      "5k15k": "$5,000 - $15,000",
+      "15k50k": "$15,000 - $50,000",
+      "50kPlus": "$50,000+",
+      "notSure": "Not Sure Yet"
+    }
+  },
+  "footer": {
+    "description": "We build digital products that help businesses grow. From strategy to launch and beyond.",
+    "navigation": "Navigation",
+    "services": "Services",
+    "contact": "Contact",
+    "webDevelopment": "Web Development",
+    "uiUxDesign": "UI/UX Design",
+    "seoPerformance": "SEO & Performance",
+    "mobileApps": "Mobile Apps",
+    "basedRemotely": "Based remotely, working globally.",
+    "copyright": "© {year} Apex Studio. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
   },
   "notFound": {
     "title": "Page not found",
     "description": "Sorry, we couldn't find the page you're looking for. It might have been moved or doesn't exist."
+  },
+  "faqs": {
+    "faq1": {
+      "question": "How long does a typical project take?",
+      "answer": "Project timelines vary based on complexity. A landing page sprint takes 7-10 days, while a full MVP build takes 4-6 weeks. During our initial call, we'll provide a realistic timeline based on your specific requirements and priorities."
+    },
+    "faq2": {
+      "question": "What's your design and development process?",
+      "answer": "We follow a proven 4-phase process: Discover (understanding your goals and users), Design (wireframes and visual design with your feedback), Build (development with regular check-ins), and Launch & Grow (deployment and optimization). You'll have visibility at every step."
+    },
+    "faq3": {
+      "question": "Do you work with startups or only established companies?",
+      "answer": "We work with both! From early-stage startups validating ideas with MVPs to established companies looking to modernize their digital presence. Our packages are designed to fit different stages and budgets."
+    },
+    "faq4": {
+      "question": "What technologies do you use?",
+      "answer": "We specialize in modern web technologies: React, Next.js, TypeScript, and Tailwind CSS for web; React Native for mobile apps. We choose the right stack for each project based on requirements, scalability needs, and your team's capabilities."
+    },
+    "faq5": {
+      "question": "How do you handle revisions and feedback?",
+      "answer": "Collaboration is built into our process. Each project includes defined revision rounds, and we use tools like Figma for design feedback and regular video calls to ensure we're aligned. We don't disappear—we communicate."
+    },
+    "faq6": {
+      "question": "What happens after the project launches?",
+      "answer": "We provide a thorough handover with documentation and training. If you need ongoing support, we offer maintenance retainers. Many clients continue working with us on iterations and new features after launch."
+    },
+    "faq7": {
+      "question": "Can you work with our existing team or codebase?",
+      "answer": "Absolutely. We regularly collaborate with in-house teams and can work within existing codebases. We're experienced in code reviews, documentation, and knowledge transfer to ensure smooth handoffs."
+    },
+    "faq8": {
+      "question": "What's included in your pricing?",
+      "answer": "Our pricing covers everything needed to deliver the project: strategy, design, development, testing, and deployment. There are no hidden fees. We'll provide a detailed scope before starting so you know exactly what you're getting."
+    }
   }
 }
