@@ -1,0 +1,140 @@
+{
+  "common": {
+    "brand": "apex",
+    "bookCall": "Book a Call",
+    "viewWork": "View Work",
+    "getFreeAudit": "Get a Free Mini Audit",
+    "chooseGoal": "Choose your goal",
+    "getLeads": "Get Leads",
+    "improveUX": "Improve UX",
+    "fixSEO": "Fix SEO",
+    "buildApp": "Build App",
+    "learnMore": "Learn more",
+    "startProject": "Start a Project",
+    "seeOurWork": "See Our Work",
+    "getInTouch": "Get in Touch",
+    "backToHome": "Back to Home",
+    "sendMessage": "Send Message",
+    "sending": "Sending...",
+    "sendAnotherMessage": "Send Another Message",
+    "messageSent": "Message Sent!",
+    "thanksForReachingOut": "Thanks for reaching out. We'll review your message and get back to you within 24 hours."
+  },
+  "nav": {
+    "projects": "Projects",
+    "services": "Services",
+    "pricing": "Pricing",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "hero": {
+    "subtitle": "Digital Studio",
+    "title": "We build digital products that",
+    "titleHighlight": "drive results",
+    "description": "From high-converting websites to mobile apps, we help ambitious businesses launch faster and grow smarter with modern design and development."
+  },
+  "home": {
+    "featuredWork": {
+      "label": "Featured Work",
+      "title": "Projects that delivered",
+      "viewAll": "View all projects"
+    },
+    "services": {
+      "label": "What We Do",
+      "title": "Full-service digital studio",
+      "description": "We handle everything from strategy to launch. Pick what you need, or let us build the complete solution."
+    },
+    "process": {
+      "label": "How We Work",
+      "title": "A process built for clarity",
+      "description": "No surprises, no scope creep. Just a proven process that gets you from idea to launch efficiently."
+    },
+    "packages": {
+      "label": "Packages",
+      "title": "Clear pricing, no surprises",
+      "viewAll": "View all packages"
+    },
+    "cta": {
+      "title": "Ready to build something great?",
+      "description": "Let's talk about your project. Book a free 30-minute call and we'll explore how we can help you achieve your goals."
+    }
+  },
+  "projects": {
+    "title": "Projects that delivered results",
+    "description": "From startups to established brands, here's a selection of the digital products we've designed and built.",
+    "ourWork": "Our Work",
+    "noProjects": "No projects found matching your criteria.",
+    "backToProjects": "Back to Projects",
+    "nextProject": "Next Project",
+    "viewProject": "View Project",
+    "readyToStart": "Ready to start your project?",
+    "readyToStartDescription": "Let's discuss how we can help you achieve similar results for your business.",
+    "challenge": "The Challenge",
+    "approach": "Our Approach",
+    "delivered": "What We Delivered",
+    "gallery": "Gallery",
+    "techStack": "Tech Stack",
+    "client": "Client",
+    "timeline": "Timeline"
+  },
+  "services": {
+    "title": "Everything you need to build and grow online",
+    "description": "From strategy to launch and beyond. We offer focused services that deliver measurable results for your business.",
+    "notSure": "Not sure which service you need?",
+    "notSureDescription": "Book a free consultation and we'll help you figure out the best approach for your specific goals.",
+    "bookFreeCall": "Book a Free Call"
+  },
+  "pricing": {
+    "title": "Transparent pricing for every stage",
+    "description": "Productized packages for common needs, or custom scopes for complex projects. No hidden fees, no surprises.",
+    "mostPopular": "Most Popular",
+    "whatsIncluded": "What's included:",
+    "bestFor": "Best for:",
+    "notFor": "Not for:",
+    "getStarted": "Get Started",
+    "faq": "Pricing FAQ",
+    "readyToGetStarted": "Ready to get started?",
+    "readyToGetStartedDescription": "Tell us about your project and we'll get back to you within 24 hours with next steps."
+  },
+  "about": {
+    "title": "A small team doing big things",
+    "description": "We're a remote-first digital studio of designers and developers who believe great work comes from focus, craft, and genuine partnership with our clients.",
+    "workWithUs": "Work With Us",
+    "whatWeBelieve": "What we believe",
+    "whatWeBelieveDescription": "These aren't just words on a wall—they're how we make decisions every day.",
+    "meetTeam": "Meet the team",
+    "meetTeamDescription": "The people behind the pixels. Small team, big impact.",
+    "letsBuild": "Let's build something together",
+    "letsBuildDescription": "Ready to start your next project? We'd love to hear what you're working on."
+  },
+  "contact": {
+    "title": "Let's talk about your project",
+    "description": "Fill out the form below and we'll get back to you within 24 hours. Or if you prefer, reach out directly via email.",
+    "directContact": "Direct Contact",
+    "responseTime": "Response Time",
+    "responseTimeDescription": "We typically respond within 24 hours during business days. For urgent inquiries, please mention it in your message.",
+    "whatHappensNext": "What happens next?",
+    "whatHappensNext1": "1. We'll review your project details",
+    "whatHappensNext2": "2. Schedule a discovery call",
+    "whatHappensNext3": "3. Provide a tailored proposal",
+    "name": "Name",
+    "email": "Email",
+    "company": "Company (Optional)",
+    "serviceType": "Service Type",
+    "budgetRange": "Budget Range",
+    "message": "Message",
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "you@company.com",
+    "companyPlaceholder": "Your company name",
+    "messagePlaceholder": "Tell us about your project...",
+    "nameRequired": "Name must be at least 2 characters",
+    "emailRequired": "Please enter a valid email address",
+    "serviceRequired": "Please select a service type",
+    "budgetRequired": "Please select a budget range",
+    "messageRequired": "Message must be at least 10 characters"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "Sorry, we couldn't find the page you're looking for. It might have been moved or doesn't exist."
+  }
+}

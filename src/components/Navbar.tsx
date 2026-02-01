@@ -1,26 +1,30 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { cn } from "@/lib/utils";
 
-const navLinks = [
-  { href: "/projects", label: "Projects" },
-  { href: "/services", label: "Services" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
-
 export function Navbar() {
+  const t = useTranslations("nav");
+  const tCommon = useTranslations("common");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+
+  const navLinks = [
+    { href: "/projects", label: t("projects") },
+    { href: "/services", label: t("services") },
+    { href: "/pricing", label: t("pricing") },
+    { href: "/about", label: t("about") },
+    { href: "/contact", label: t("contact") },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,14 +75,16 @@ export function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-2">
+          <LanguageSwitcher />
           <ThemeToggle />
           <Button asChild className="rounded-full px-6">
-            <Link href="/contact">Book a Call</Link>
+            <Link href="/contact">{tCommon("bookCall")}</Link>
           </Button>
         </div>
 
         {/* Mobile Menu Button */}
         <div className="flex md:hidden items-center gap-2">
+          <LanguageSwitcher />
           <ThemeToggle />
           <Button
             variant="ghost"
@@ -119,7 +125,7 @@ export function Navbar() {
                 </Link>
               ))}
               <Button asChild className="mt-2 rounded-full">
-                <Link href="/contact">Book a Call</Link>
+                <Link href="/contact">{tCommon("bookCall")}</Link>
               </Button>
             </div>
           </motion.div>

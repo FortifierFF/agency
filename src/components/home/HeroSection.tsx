@@ -1,20 +1,24 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, LineChart, Search, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import Image from "next/image";
 
-const goalButtons = [
-  { label: "Get Leads", icon: Sparkles },
-  { label: "Improve UX", icon: LineChart },
-  { label: "Fix SEO", icon: Search },
-  { label: "Build App", icon: Smartphone },
-];
-
 export function HeroSection() {
+  const t = useTranslations("hero");
+  const tCommon = useTranslations("common");
+
+  const goalButtons = [
+    { key: "getLeads", icon: Sparkles },
+    { key: "improveUX", icon: LineChart },
+    { key: "fixSEO", icon: Search },
+    { key: "buildApp", icon: Smartphone },
+  ];
+
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
       {/* Subtle background gradient */}
@@ -38,21 +42,20 @@ export function HeroSection() {
         <div className="max-w-3xl">
           <AnimatedSection delay={0.1}>
             <p className="text-sm font-medium text-primary mb-4 tracking-wide uppercase">
-              Digital Studio
+              {t("subtitle")}
             </p>
           </AnimatedSection>
 
           <AnimatedSection delay={0.2}>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-6">
-              We build digital products that{" "}
-              <span className="gradient-text">drive results</span>
+              {t("title")}{" "}
+              <span className="gradient-text">{t("titleHighlight")}</span>
             </h1>
           </AnimatedSection>
 
           <AnimatedSection delay={0.3}>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mb-8">
-              From high-converting websites to mobile apps, we help ambitious businesses 
-              launch faster and grow smarter with modern design and development.
+              {t("description")}
             </p>
           </AnimatedSection>
 
@@ -60,29 +63,29 @@ export function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
               <Button asChild size="lg" className="rounded-full px-8">
                 <Link href="/projects">
-                  View Work
+                  {tCommon("viewWork")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full px-8">
-                <Link href="/contact">Get a Free Mini Audit</Link>
+                <Link href="/contact">{tCommon("getFreeAudit")}</Link>
               </Button>
             </div>
           </AnimatedSection>
 
           <AnimatedSection delay={0.5}>
             <div>
-              <p className="text-sm text-muted-foreground mb-3">Choose your goal</p>
+              <p className="text-sm text-muted-foreground mb-3">{tCommon("chooseGoal")}</p>
               <div className="flex flex-wrap gap-2">
                 {goalButtons.map((goal) => (
                   <motion.button
-                    key={goal.label}
+                    key={goal.key}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-secondary text-sm font-medium hover:bg-secondary/80 transition-colors"
                   >
                     <goal.icon className="h-4 w-4 text-primary" />
-                    {goal.label}
+                    {tCommon(goal.key)}
                   </motion.button>
                 ))}
               </div>
