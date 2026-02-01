@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, Globe, Palette, TrendingUp, Smartphone } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { ParticleNetwork } from "@/components/ParticleNetwork";
 import { services } from "@/data/services";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -38,9 +39,18 @@ export function ServicesSection() {
             const Icon = iconMap[service.icon];
             return (
               <AnimatedSection key={service.id} delay={index * 0.1}>
-                <div className="group p-6 rounded-2xl border border-border bg-card hover:shadow-soft hover:border-primary/20 transition-all duration-300 h-full flex flex-col">
-                  <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                    <Icon className="h-6 w-6 text-primary" />
+                <div className="group relative p-6 rounded-2xl border border-border bg-card hover:shadow-soft hover:border-primary/20 transition-all duration-300 h-full flex flex-col overflow-hidden hover:scale-105 sm:hover:scale-110 origin-center">
+                  {/* Particle network effect - behind content */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-2xl z-0">
+                    <ParticleNetwork 
+                      particleCount={15 + index * 2} 
+                      connectionDistance={120}
+                      particleSpeed={0.3 + index * 0.1}
+                    />
+                  </div>
+                  <div className="relative z-10">
+                  <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Icon className="h-6 w-6 text-primary group-hover:rotate-12 transition-transform duration-300" />
                   </div>
                   <h3 className="text-lg font-semibold mb-2">{service.title}</h3>
                   <p className="text-sm text-muted-foreground mb-4 flex-1">
@@ -62,8 +72,9 @@ export function ServicesSection() {
                     className="inline-flex items-center text-sm font-medium text-primary hover:underline underline-offset-4"
                   >
                     {tCommon("learnMore")}
-                    <ArrowRight className="ml-1 h-4 w-4" />
+                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
                   </Link>
+                  </div>
                 </div>
               </AnimatedSection>
             );

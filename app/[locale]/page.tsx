@@ -1,4 +1,5 @@
 import { Layout } from "@/components/Layout";
+import { SectionDivider } from "@/components/SectionDivider";
 import { HeroSection } from "@/components/home/HeroSection";
 import { FeaturedWork } from "@/components/home/FeaturedWork";
 import { ServicesSection } from "@/components/home/ServicesSection";
@@ -19,10 +20,13 @@ export default function Home() {
     <Layout>
       <HeroSection />
       <FeaturedWork />
+      <SectionDivider variant="wave" className="rotate-180"/>
       <ServicesSection />
       <ProcessSection />
+      <SectionDivider variant="wave" className="rotate-180"/>
       <TestimonialsSection />
       <PackagesPreview />
+      <SectionDivider variant="wave" className="rotate-180"/>
       <FAQSection />
       <CTASection />
     </Layout>

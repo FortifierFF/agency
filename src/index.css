@@ -2,9 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Override Tailwind's base border-style for CTA section - must come after @tailwind directives */
 @layer base {
-  /* This override must come after Tailwind's preflight to work */
   section.cta-section,
   section.cta-section *,
   section.cta-section::before,
@@ -111,8 +109,6 @@
     @apply border-border;
   }
 
-  /* Override universal selector for CTA section to prevent diagonal line artifact */
-  /* This must be in base layer and come after the universal selector */
   section.cta-section,
   section.cta-section *,
   section.cta-section::before,
@@ -165,8 +161,17 @@
     @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
-  /* Fix diagonal line artifact in CTA section */
-  /* Completely remove borders to prevent rendering artifacts */
+  /* 3D perspective for testimonials */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  /* Background pattern animation for FAQ */
+  @keyframes patternMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+  }
+
   .cta-section,
   .cta-section *,
   .cta-section::before,

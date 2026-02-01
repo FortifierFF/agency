@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { testimonials } from "@/data/testimonials";
@@ -12,6 +12,19 @@ export function TestimonialsSection() {
   const t = useTranslations("home.testimonials");
   const tCommon = useTranslations("common");
   const [current, setCurrent] = useState(0);
+  const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number }>>([]);
+  const [mounted, setMounted] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  // Magnetic effect
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 300, damping: 30 });
+  const springY = useSpring(y, { stiffness: 300, damping: 30 });
   
   const metrics = [
     { value: "50+", label: t("metrics.projectsDelivered") },
@@ -20,9 +33,44 @@ export function TestimonialsSection() {
     { value: "5+ yrs", label: t("metrics.experience") },
   ];
 
-  const next = () => setCurrent((prev) => (prev + 1) % testimonials.length);
-  const prev = () =>
+  const next = () => {
+    setCurrent((prev) => (prev + 1) % testimonials.length);
+    createParticles();
+  };
+  
+  const prev = () => {
     setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    createParticles();
+  };
+
+  const createParticles = () => {
+    const newParticles = Array.from({ length: 15 }, (_, i) => ({
+      id: Date.now() + i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+    }));
+    setParticles(newParticles);
+    setTimeout(() => setParticles([]), 2000);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    // Calculate distance from top right corner (pinned point)
+    const topRightX = rect.right;
+    const topRightY = rect.top;
+    const distanceX = e.clientX - topRightX;
+    const distanceY = e.clientY - topRightY;
+    // Invert X so left side pops out (positive rotateY when mouse is on left)
+    // Reduce sensitivity significantly
+    x.set(-distanceX * 0.008);
+    y.set(distanceY * 0.008);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   return (
     <section className="section-padding">
@@ -38,31 +86,114 @@ export function TestimonialsSection() {
           </div>
         </AnimatedSection>
 
-        {/* Testimonial Carousel */}
+        {/* Testimonial Carousel with enhanced effects */}
         <AnimatedSection>
-          <div className="max-w-3xl mx-auto mb-16">
-            <div className="relative bg-card rounded-2xl border border-border p-8 md:p-12">
-              <Quote className="h-10 w-10 text-primary/20 mb-6" />
-              <div className="min-h-[160px]">
+          <div className="max-w-3xl mx-auto mb-16 perspective-1000 relative">
+            {/* Animated gradient background */}
+            <motion.div
+              className="absolute inset-0 rounded-2xl opacity-20 blur-3xl"
+              animate={{
+                background: [
+                  "radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.3), transparent 50%)",
+                  "radial-gradient(circle at 100% 100%, hsl(var(--primary) / 0.3), transparent 50%)",
+                  "radial-gradient(circle at 0% 100%, hsl(var(--primary) / 0.3), transparent 50%)",
+                  "radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.3), transparent 50%)",
+                ],
+              }}
+              transition={{
+                duration: 10,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            />
+            
+            <motion.div 
+              ref={cardRef}
+              className="relative bg-card/80 backdrop-blur-xl rounded-2xl border border-border/50 p-8 md:p-12 shadow-2xl overflow-hidden"
+              style={{
+                transformStyle: "preserve-3d",
+                transformOrigin: "top right",
+                rotateY: springX,
+                rotateX: springY,
+              }}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              whileHover={{ 
+                scale: 1.02,
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+              {/* Floating particles */}
+              <AnimatePresence>
+                {particles.map((particle) => (
+                  <motion.div
+                    key={particle.id}
+                    className="absolute w-2 h-2 rounded-full bg-primary"
+                    initial={{
+                      x: `${particle.x}%`,
+                      y: `${particle.y}%`,
+                      scale: 0,
+                      opacity: 1,
+                    }}
+                    animate={{
+                      y: `${particle.y - 100}%`,
+                      scale: [0, 1, 0],
+                      opacity: [1, 1, 0],
+                    }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                      duration: 2,
+                      ease: "easeOut",
+                    }}
+                  />
+                ))}
+              </AnimatePresence>
+              
+              {/* Animated border glow - bouncing effect */}
+              <motion.div
+                className="absolute inset-0 rounded-2xl pointer-events-none"
+                style={{
+                  background: "linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), transparent)",
+                  backgroundSize: "200% 200%",
+                }}
+                animate={{
+                  backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+              
+              <Quote className="h-10 w-10 text-primary/20 mb-6 relative z-10" />
+              <div className="min-h-[160px] relative z-10">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={current}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
+                    initial={{ opacity: 0, y: 20, rotateX: -10 }}
+                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                    exit={{ opacity: 0, y: -20, rotateX: 10 }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    style={{
+                      transformStyle: "preserve-3d",
+                    }}
                   >
                     <p className="text-lg md:text-xl text-foreground mb-8">
                       "{testimonials[current].quote}"
                     </p>
                     <div className="flex items-center gap-4">
-                      <div className="h-12 w-12 rounded-full bg-muted overflow-hidden">
+                      <motion.div 
+                        className="h-12 w-12 rounded-full bg-muted overflow-hidden"
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
                         <img
                           src={testimonials[current].avatar}
                           alt={testimonials[current].author}
                           className="h-full w-full object-cover"
                         />
-                      </div>
+                      </motion.div>
                       <div>
                         <p className="font-semibold">{testimonials[current].author}</p>
                         <p className="text-sm text-muted-foreground">
@@ -111,7 +242,7 @@ export function TestimonialsSection() {
                   />
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
         </AnimatedSection>
 
