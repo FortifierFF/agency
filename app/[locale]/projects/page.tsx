@@ -27,7 +27,7 @@ export default function ProjectsPage() {
     let result = getProjectsByTag(activeTag);
     if (searchQuery.trim()) {
       result = searchProjects(searchQuery).filter((p) =>
-        activeTag === "All" ? true : p.tags.includes(activeTag as any)
+        activeTag === "All" ? true : p.tags.includes(activeTag as "Web" | "UIUX" | "SEO" | "Mobile")
       );
     }
     return result;

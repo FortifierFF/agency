@@ -192,7 +192,7 @@ export const getFeaturedProjects = () => projects.filter(p => p.featured);
 export const getProjectBySlug = (slug: string) => projects.find(p => p.slug === slug);
 
 export const getProjectsByTag = (tag: string) => 
-  tag === "All" ? projects : projects.filter(p => p.tags.includes(tag as any));
+  tag === "All" ? projects : projects.filter(p => p.tags.includes(tag as "Web" | "UIUX" | "SEO" | "Mobile"));
 
 export const searchProjects = (query: string) => 
   projects.filter(p => 
