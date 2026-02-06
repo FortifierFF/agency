@@ -13,10 +13,16 @@ export default function PricingPage() {
   const t = useTranslations("pricing");
   const tNav = useTranslations("nav");
   const tCommon = useTranslations("common");
+  
+  // Pricing page content is temporarily hidden
+  // Uncomment the code below to restore the pricing page
   return (
     <Layout>
-      {/* Hero */}
-      <section className="pt-32 pb-20">
+      {/* Pricing page content commented out - uncomment sections below to restore */}
+      <div></div>
+      
+      {/* Hero section - commented out */}
+      {/* <section className="pt-32 pb-20">
         <div className="container">
           <AnimatedSection>
             <div className="text-center max-w-3xl mx-auto">
@@ -32,10 +38,10 @@ export default function PricingPage() {
             </div>
           </AnimatedSection>
         </div>
-      </section>
+      </section> */}
 
-      {/* Packages */}
-      <section className="pb-20">
+      {/* Packages section - commented out */}
+      {/* <section className="pb-20">
         <div className="container">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {packages.map((pkg, index) => (
@@ -117,10 +123,10 @@ export default function PricingPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
-      {/* FAQ */}
-      <section className="section-padding bg-card">
+      {/* FAQ section - commented out */}
+      {/* <section className="section-padding bg-card">
         <div className="container">
           <AnimatedSection>
             <div className="text-center max-w-2xl mx-auto mb-12">
@@ -157,10 +163,10 @@ export default function PricingPage() {
             </div>
           </AnimatedSection>
         </div>
-      </section>
+      </section> */}
 
-      {/* CTA */}
-      <section className="section-padding bg-primary text-primary-foreground">
+      {/* CTA section - commented out */}
+      {/* <section className="section-padding bg-primary text-primary-foreground">
         <div className="container text-center">
           <AnimatedSection>
             <h2 className="text-3xl font-bold mb-4">{t("readyToGetStarted")}</h2>
@@ -172,7 +178,7 @@ export default function PricingPage() {
             </Button>
           </AnimatedSection>
         </div>
-      </section>
+      </section> */}
     </Layout>
   );
 }

@@ -5,7 +5,8 @@ import { FeaturedWork } from "@/components/home/FeaturedWork";
 import { ServicesSection } from "@/components/home/ServicesSection";
 import { ProcessSection } from "@/components/home/ProcessSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { PackagesPreview } from "@/components/home/PackagesPreview";
+// Pricing section temporarily hidden - uncomment to restore
+// import { PackagesPreview } from "@/components/home/PackagesPreview";
 import { FAQSection } from "@/components/home/FAQSection";
 import { CTASection } from "@/components/home/CTASection";
 import { routing } from "@/i18n/routing";
@@ -25,7 +26,8 @@ export default function Home() {
       <ProcessSection />
       <SectionDivider variant="wave" className="rotate-180"/>
       <TestimonialsSection />
-      <PackagesPreview />
+      {/* Pricing section temporarily hidden - uncomment to restore */}
+      {/* <PackagesPreview /> */}
       <SectionDivider variant="wave" className="rotate-180"/>
       <FAQSection />
       <CTASection />
