@@ -28,8 +28,9 @@ export default function Home() {
       <TestimonialsSection />
       {/* Pricing section temporarily hidden - uncomment to restore */}
       {/* <PackagesPreview /> */}
-      <SectionDivider variant="wave" className="rotate-180"/>
+      {/* <SectionDivider variant="wave" className="rotate-180"/> */}
       <FAQSection />
+      <SectionDivider variant="wave" fill="hsl(var(--primary))"/>
       <CTASection />
     </Layout>
   );

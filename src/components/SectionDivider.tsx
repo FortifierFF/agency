@@ -5,9 +5,14 @@ import { motion } from "framer-motion";
 interface SectionDividerProps {
   variant?: "wave" | "geometric";
   className?: string;
+  fill?: string; // Color for the divider fill (defaults to card background)
 }
 
-export function SectionDivider({ variant = "wave", className = "" }: SectionDividerProps) {
+export function SectionDivider({ 
+  variant = "wave", 
+  className = "", 
+  fill = "hsl(var(--card))" 
+}: SectionDividerProps) {
   if (variant === "geometric") {
     return (
       <div className={`relative h-16 overflow-hidden ${className}`}>
@@ -20,7 +25,7 @@ export function SectionDivider({ variant = "wave", className = "" }: SectionDivi
         >
           <motion.path
             d="M0,60 Q300,20 600,60 T1200,60 L1200,120 L0,120 Z"
-            fill="hsl(var(--card))"
+            fill={fill}
             initial={{ pathLength: 0 }}
             whileInView={{ pathLength: 1 }}
             viewport={{ once: true }}
@@ -43,7 +48,7 @@ export function SectionDivider({ variant = "wave", className = "" }: SectionDivi
       >
         <motion.path
           d="M0,60 Q150,20 300,60 T600,60 T900,60 T1200,60 L1200,120 L0,120 Z"
-          fill="hsl(var(--card))"
+          fill={fill}
           initial={{ pathLength: 0 }}
           whileInView={{ pathLength: 1 }}
           viewport={{ once: true }}

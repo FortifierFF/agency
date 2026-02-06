@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import { Link } from "@/i18n/navigation";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { faqs } from "@/data/faqs";
 import {
@@ -75,7 +76,44 @@ export function FAQSection() {
                         ease: "easeInOut",
                       }}
                     >
-                      {tFaqs(`faq${faq.id}.answer`)}
+                      {faq.id === "8" ? (() => {
+                        const answer = tFaqs(`faq${faq.id}.answer`);
+                        // Check for Bulgarian text
+                        if (answer.includes("разгледайте нашата статия")) {
+                          const parts = answer.split("разгледайте нашата статия");
+                          return (
+                            <div>
+                              {parts[0]}
+                              <Link 
+                                href="/blog/kolko-struva-izrabotka-sait-2026" 
+                                className="text-primary hover:underline font-medium"
+                              >
+                                разгледайте нашата статия за ценообразуването
+                              </Link>
+                              {parts[1] || "."}
+                            </div>
+                          );
+                        }
+                        // Check for English text
+                        if (answer.includes("check out our pricing article")) {
+                          const parts = answer.split("check out our pricing article");
+                          return (
+                            <div>
+                              {parts[0]}
+                              <Link 
+                                href="/blog/kolko-struva-izrabotka-sait-2026" 
+                                className="text-primary hover:underline font-medium"
+                              >
+                                check out our pricing article
+                              </Link>
+                              {parts[1] || "."}
+                            </div>
+                          );
+                        }
+                        return answer;
+                      })() : (
+                        tFaqs(`faq${faq.id}.answer`)
+                      )}
                     </motion.div>
                   </AccordionContent>
                 </AccordionItem>
