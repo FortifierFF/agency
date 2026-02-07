@@ -21,7 +21,8 @@ export function Navbar() {
   const navLinks = [
     { href: "/projects", label: t("projects") },
     { href: "/services", label: t("services") },
-    { href: "/pricing", label: t("pricing") },
+    // Pricing temporarily hidden - uncomment to restore
+    // { href: "/pricing", label: t("pricing") },
     { href: "/about", label: t("about") },
     { href: "/blog", label: t("blog") },
     { href: "/contact", label: t("contact") },

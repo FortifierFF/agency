@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Layout } from "@/components/Layout";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { SocialShare } from "@/components/SocialShare";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -380,6 +381,27 @@ export default function BlogPostPage() {
               <p className="text-primary-foreground/90 text-lg font-medium">
                 {t("investmentConclusion")}
               </p>
+            </div>
+          </AnimatedSection>
+
+          {/* Social Share */}
+          <AnimatedSection>
+            <div className="mt-16 pt-8 border-t border-border">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">{tBlog("shareTitle")}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {tBlog("shareDescription")}
+                  </p>
+                </div>
+                <SocialShare
+                  platforms={["facebook", "twitter", "linkedin", "whatsapp", "viber", "email"]}
+                  title={t("title")}
+                  description={t("subtitle")}
+                  variant="icons"
+                  size="md"
+                />
+              </div>
             </div>
           </AnimatedSection>
 
