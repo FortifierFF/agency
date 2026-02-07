@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Layout } from "@/components/Layout";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Link } from "@/i18n/navigation";
@@ -7,19 +8,20 @@ import { ArrowRight, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-// Blog posts data - can be moved to a separate file later
-const blogPosts = [
-  {
-    slug: "kolko-struva-izrabotka-sait-2026",
-    title: "Колко струва изработка на сайт през 2026?",
-    excerpt: "Пълно ръководство за разходите и факторите, които влияят върху цената на уебсайт. От 250 € до над 10 000 € - какво определя крайната цена?",
-    date: "2026",
-    category: "Ценообразуване",
-    readTime: "8 мин",
-  },
-];
-
 export default function BlogPage() {
+  const t = useTranslations("blog");
+  
+  // Blog posts data - using translations
+  const blogPosts = [
+    {
+      slug: "kolko-struva-izrabotka-sait-2026",
+      title: t("posts.kolko-struva-izrabotka-sait-2026.title"),
+      excerpt: t("posts.kolko-struva-izrabotka-sait-2026.excerpt"),
+      date: "2026",
+      category: t("posts.kolko-struva-izrabotka-sait-2026.category"),
+      readTime: t("posts.kolko-struva-izrabotka-sait-2026.readTime"),
+    },
+  ];
   return (
     <Layout>
       {/* Hero Section */}
@@ -28,13 +30,13 @@ export default function BlogPage() {
           <AnimatedSection>
             <div className="text-center max-w-3xl mx-auto">
               <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-                Блог
+                {t("heroLabel")}
               </p>
               <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
-                Полезни статии и ръководства
+                {t("heroTitle")}
               </h1>
               <p className="text-lg text-muted-foreground">
-                Научете повече за уеб дизайн, разработка и дигитален маркетинг от нашия екип
+                {t("heroDescription")}
               </p>
             </div>
           </AnimatedSection>
@@ -71,7 +73,7 @@ export default function BlogPage() {
                   
                   <Button asChild variant="ghost" className="rounded-full">
                     <Link href={`/blog/${post.slug}`}>
-                      Прочети повече
+                      {t("readMore")}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
@@ -85,7 +87,7 @@ export default function BlogPage() {
             <AnimatedSection>
               <div className="text-center py-20">
                 <p className="text-muted-foreground">
-                  Скоро ще публикуваме нови статии. Следете ни!
+                  {t("emptyState")}
                 </p>
               </div>
             </AnimatedSection>

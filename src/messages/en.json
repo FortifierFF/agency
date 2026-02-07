@@ -293,6 +293,19 @@
   "blog": {
     "backToBlog": "Back to blog",
     "blogLabel": "Blog",
+    "heroLabel": "Blog",
+    "heroTitle": "Helpful articles and guides",
+    "heroDescription": "Learn more about web design, development, and digital marketing from our team",
+    "readMore": "Read more",
+    "emptyState": "We'll be publishing new articles soon. Stay tuned!",
+    "posts": {
+      "kolko-struva-izrabotka-sait-2026": {
+        "title": "How Much Does a Website Cost in 2026?",
+        "excerpt": "A complete guide to costs and factors that influence website pricing. From 250 € to over 10,000 € - what determines the final price?",
+        "category": "Pricing",
+        "readTime": "8 min"
+      }
+    },
     "pricingPost": {
       "title": "How Much Does a Website Cost in 2026?",
       "subtitle": "A complete guide to costs and factors that influence website pricing",
