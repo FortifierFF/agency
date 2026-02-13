@@ -2,13 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { Github, Twitter, Linkedin, Mail } from "lucide-react";
-
-const socialLinks = [
-  { label: "Twitter", href: "#", icon: Twitter },
-  { label: "LinkedIn", href: "#", icon: Linkedin },
-  { label: "GitHub", href: "#", icon: Github },
-];
+import { Mail } from "lucide-react";
+import { SocialLinks } from "@/components/SocialLinks";
 
 export function Footer() {
   const t = useTranslations();
@@ -43,17 +38,17 @@ export function Footer() {
             <p className="mt-4 text-sm text-muted-foreground max-w-xs">
               {tFooter("description")}
             </p>
-            <div className="mt-6 flex gap-3">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  className="h-9 w-9 flex items-center justify-center rounded-full bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-colors"
-                  aria-label={social.label}
-                >
-                  <social.icon className="h-4 w-4" />
-                </a>
-              ))}
+            <div className="mt-6">
+              <SocialLinks
+                links={{
+                  // Default home page URLs - update with your actual profile URLs when ready
+                  twitter: "https://twitter.com",
+                  linkedin: "https://www.linkedin.com",
+                  github: "https://github.com",
+                }}
+                variant="icons"
+                size="sm"
+              />
             </div>
           </div>
 
