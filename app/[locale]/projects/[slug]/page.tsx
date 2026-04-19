@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Clock, Building2 } from "lucide-react";
-import { Layout } from "@/components/Layout";
+import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { getProjectBySlug, projects } from "@/data/projects";
 import { Badge } from "@/components/ui/badge";
@@ -29,68 +29,70 @@ export default function CaseStudyPage({
   const nextProject = projects[(currentIndex + 1) % projects.length];
 
   return (
-    <Layout>
+    <>
       {/* Hero */}
       <section className="pt-32 pb-12">
         <div className="container">
-          <AnimatedSection>
-            <Link
-              href="/projects"
-              className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              {t("backToProjects")}
-            </Link>
-          </AnimatedSection>
+          <CosmicPageHeroShell pad="sm">
+            <AnimatedSection>
+              <Link
+                href="/projects"
+                className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                {t("backToProjects")}
+              </Link>
+            </AnimatedSection>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            <div>
-              <AnimatedSection>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tags.map((tag) => (
-                    <Badge key={tag} variant="outline">
-                      {tag}
-                    </Badge>
+            <div className="grid lg:grid-cols-2 gap-12 items-start">
+              <div>
+                <AnimatedSection>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.tags.map((tag) => (
+                      <Badge key={tag} variant="outline">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                  <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+                    {project.title}
+                  </h1>
+                  <p className="text-lg text-muted-foreground mb-8">
+                    {project.shortSummary}
+                  </p>
+                  <div className="flex flex-wrap gap-6 text-sm">
+                    <div className="flex items-center gap-2">
+                      <Building2 className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-muted-foreground">{t("client")}:</span>
+                      <span className="font-medium">{project.clientName}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-muted-foreground">{t("timeline")}:</span>
+                      <span className="font-medium">{project.timeline}</span>
+                    </div>
+                  </div>
+                </AnimatedSection>
+              </div>
+
+              {/* Results */}
+              <AnimatedSection delay={0.2}>
+                <div className="grid grid-cols-2 gap-4">
+                  {project.resultsMetrics.map((metric) => (
+                    <div
+                      key={metric.label}
+                      className="p-6 rounded-2xl bg-card border border-border text-center"
+                    >
+                      <p className="text-2xl sm:text-3xl font-bold text-primary mb-1">
+                        {metric.value}
+                      </p>
+                      <p className="text-sm text-muted-foreground">{metric.label}</p>
+                    </div>
                   ))}
-                </div>
-                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
-                  {project.title}
-                </h1>
-                <p className="text-lg text-muted-foreground mb-8">
-                  {project.shortSummary}
-                </p>
-                <div className="flex flex-wrap gap-6 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Building2 className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">{t("client")}:</span>
-                    <span className="font-medium">{project.clientName}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">{t("timeline")}:</span>
-                    <span className="font-medium">{project.timeline}</span>
-                  </div>
                 </div>
               </AnimatedSection>
             </div>
-
-            {/* Results */}
-            <AnimatedSection delay={0.2}>
-              <div className="grid grid-cols-2 gap-4">
-                {project.resultsMetrics.map((metric) => (
-                  <div
-                    key={metric.label}
-                    className="p-6 rounded-2xl bg-card border border-border text-center"
-                  >
-                    <p className="text-2xl sm:text-3xl font-bold text-primary mb-1">
-                      {metric.value}
-                    </p>
-                    <p className="text-sm text-muted-foreground">{metric.label}</p>
-                  </div>
-                ))}
-              </div>
-            </AnimatedSection>
-          </div>
+          </CosmicPageHeroShell>
         </div>
       </section>
 
@@ -224,6 +226,6 @@ export default function CaseStudyPage({
           </AnimatedSection>
         </div>
       </section>
-    </Layout>
+    </>
   );
 }

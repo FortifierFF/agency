@@ -166,12 +166,6 @@
     perspective: 1000px;
   }
 
-  /* Background pattern animation for FAQ */
-  @keyframes patternMove {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(50px, 50px); }
-  }
-
   .cta-section,
   .cta-section *,
   .cta-section::before,

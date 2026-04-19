@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Layout } from "@/components/Layout";
+import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, Calendar } from "lucide-react";
@@ -23,23 +23,25 @@ export default function BlogPage() {
     },
   ];
   return (
-    <Layout>
+    <>
       {/* Hero Section */}
       <section className="pt-32 pb-20">
         <div className="container">
-          <AnimatedSection>
-            <div className="text-center max-w-3xl mx-auto">
-              <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-                {t("heroLabel")}
-              </p>
-              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
-                {t("heroTitle")}
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                {t("heroDescription")}
-              </p>
-            </div>
-          </AnimatedSection>
+          <CosmicPageHeroShell className="max-w-4xl mx-auto">
+            <AnimatedSection>
+              <div className="text-center max-w-3xl mx-auto">
+                <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
+                  {t("heroLabel")}
+                </p>
+                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+                  {t("heroTitle")}
+                </h1>
+                <p className="text-lg text-muted-foreground">
+                  {t("heroDescription")}
+                </p>
+              </div>
+            </AnimatedSection>
+          </CosmicPageHeroShell>
         </div>
       </section>
 
@@ -94,6 +96,6 @@ export default function BlogPage() {
           )}
         </div>
       </section>
-    </Layout>
+    </>
   );
 }

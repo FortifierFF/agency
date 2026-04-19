@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { motion, useInView, useAnimation, Variant } from "framer-motion";
+import { CosmicSurfaceContext } from "@/components/home/CosmicSurfaceContext";
 
 interface AnimatedSectionProps {
   children: React.ReactNode;
@@ -39,9 +40,11 @@ export function AnimatedSection({
   direction = "up",
 }: AnimatedSectionProps) {
   const ref = useRef(null);
+  const onCosmicSurface = useContext(CosmicSurfaceContext);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const controls = useAnimation();
-  const variants = getVariants(direction);
+  const effectiveDirection = onCosmicSurface ? "none" : direction;
+  const variants = getVariants(effectiveDirection);
 
   useEffect(() => {
     // Check for reduced motion preference

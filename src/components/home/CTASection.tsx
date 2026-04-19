@@ -30,16 +30,14 @@ export function CTASection() {
           will-change: transform;
         }
       `}} />
-      <section 
-        className="cta-section section-padding bg-primary text-primary-foreground relative overflow-hidden"
-      >
+      <section className="cta-section section-padding relative overflow-hidden bg-transparent text-foreground">
       <div className="container relative z-10">
         <AnimatedSection>
           <div className="text-center max-w-2xl mx-auto">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
             {t("title")}
           </h2>
-          <p className="text-primary-foreground/80 mb-8 text-lg">
+          <p className="mb-8 text-lg text-muted-foreground">
             {t("description")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -1,5 +1,3 @@
-import { Layout } from "@/components/Layout";
-import { SectionDivider } from "@/components/SectionDivider";
 import { HeroSection } from "@/components/home/HeroSection";
 import { FeaturedWork } from "@/components/home/FeaturedWork";
 import { ServicesSection } from "@/components/home/ServicesSection";
@@ -9,6 +7,8 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 // import { PackagesPreview } from "@/components/home/PackagesPreview";
 import { FAQSection } from "@/components/home/FAQSection";
 import { CTASection } from "@/components/home/CTASection";
+import { HomeSectionShell } from "@/components/home/HomeSectionShell";
+import { HomeCosmicScrollBridge } from "@/components/home/HomeCosmicScrollBridge";
 import { routing } from "@/i18n/routing";
 
 // Generate static params for all locales
@@ -18,20 +18,31 @@ export function generateStaticParams() {
 
 export default function Home() {
   return (
-    <Layout>
-      <HeroSection />
-      <FeaturedWork />
-      <SectionDivider variant="wave" className="rotate-180"/>
-      <ServicesSection />
-      <ProcessSection />
-      <SectionDivider variant="wave" className="rotate-180"/>
-      <TestimonialsSection />
+    <div className="relative">
+      <HomeCosmicScrollBridge />
+      <HomeSectionShell homeBgSection="hero">
+        <HeroSection />
+      </HomeSectionShell>
+      <HomeSectionShell homeBgSection="work">
+        <FeaturedWork />
+      </HomeSectionShell>
+      <HomeSectionShell homeBgSection="services">
+        <ServicesSection />
+      </HomeSectionShell>
+      <HomeSectionShell homeBgSection="process">
+        <ProcessSection />
+      </HomeSectionShell>
+      <HomeSectionShell homeBgSection="testimonials">
+        <TestimonialsSection />
+      </HomeSectionShell>
       {/* Pricing section temporarily hidden - uncomment to restore */}
       {/* <PackagesPreview /> */}
-      {/* <SectionDivider variant="wave" className="rotate-180"/> */}
-      <FAQSection />
-      <SectionDivider variant="wave" fill="hsl(var(--primary))"/>
-      <CTASection />
-    </Layout>
+      <HomeSectionShell homeBgSection="faq">
+        <FAQSection />
+      </HomeSectionShell>
+      <HomeSectionShell homeBgSection="cta">
+        <CTASection />
+      </HomeSectionShell>
+    </div>
   );
 }

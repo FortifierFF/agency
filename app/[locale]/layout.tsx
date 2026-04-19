@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Layout } from "@/components/Layout";
 import { Providers } from "./providers";
 
 // Generate static params for all locales
@@ -37,7 +38,8 @@ export default async function LocaleLayout({
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          {children}
+          {/* One shell for the whole locale tree: WebGL cosmos + chrome stay mounted on client navigations. */}
+          <Layout>{children}</Layout>
         </TooltipProvider>
       </Providers>
     </NextIntlClientProvider>

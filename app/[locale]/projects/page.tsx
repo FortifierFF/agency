@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Search } from "lucide-react";
-import { Layout } from "@/components/Layout";
+import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { projects, getProjectsByTag, searchProjects } from "@/data/projects";
 import { Badge } from "@/components/ui/badge";
@@ -34,21 +34,23 @@ export default function ProjectsPage() {
   }, [activeTag, searchQuery]);
 
   return (
-    <Layout>
+    <>
       {/* Hero */}
       <section className="pt-32 pb-12">
         <div className="container">
-          <AnimatedSection>
-            <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-              {t("ourWork")}
-            </p>
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-              {t("title")}
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl">
-              {t("description")}
-            </p>
-          </AnimatedSection>
+          <CosmicPageHeroShell pad="sm">
+            <AnimatedSection>
+              <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
+                {t("ourWork")}
+              </p>
+              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+                {t("title")}
+              </h1>
+              <p className="text-lg text-muted-foreground max-w-2xl">
+                {t("description")}
+              </p>
+            </AnimatedSection>
+          </CosmicPageHeroShell>
         </div>
       </section>
 
@@ -139,6 +141,6 @@ export default function ProjectsPage() {
           )}
         </div>
       </section>
-    </Layout>
+    </>
   );
 }

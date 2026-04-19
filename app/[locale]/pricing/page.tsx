@@ -3,7 +3,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Check, X, ArrowRight } from "lucide-react";
-import { Layout } from "@/components/Layout";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { packages } from "@/data/pricing";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,7 @@ export default function PricingPage() {
   // Pricing page content is temporarily hidden
   // Uncomment the code below to restore the pricing page
   return (
-    <Layout>
+    <>
       {/* Pricing page content commented out - uncomment sections below to restore */}
       <div></div>
       
@@ -179,6 +178,6 @@ export default function PricingPage() {
           </AnimatedSection>
         </div>
       </section> */}
-    </Layout>
+    </>
   );
 }

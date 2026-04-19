@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
-import { Layout } from "@/components/Layout";
+import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -60,41 +60,43 @@ export default function AboutPage() {
     { value: "12", label: t("stats.countriesServed") },
   ];
   return (
-    <Layout>
+    <>
       {/* Hero */}
       <section className="pt-32 pb-20">
         <div className="container">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <AnimatedSection>
-              <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-                {tNav("about")}
-              </p>
-              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
-                {t("title")}
-              </h1>
-              <p className="text-lg text-muted-foreground mb-8">
-                {t("description")}
-              </p>
-              <Button asChild className="rounded-full px-6">
-                <Link href="/contact">
-                  {t("workWithUs")}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </AnimatedSection>
+          <CosmicPageHeroShell>
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <AnimatedSection>
+                <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
+                  {tNav("about")}
+                </p>
+                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+                  {t("title")}
+                </h1>
+                <p className="text-lg text-muted-foreground mb-8">
+                  {t("description")}
+                </p>
+                <Button asChild className="rounded-full px-6">
+                  <Link href="/contact">
+                    {t("workWithUs")}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </AnimatedSection>
 
-            <AnimatedSection delay={0.2}>
-              <div className="aspect-[4/3] rounded-2xl bg-muted border border-border overflow-hidden">
-                <Image
-                  src="/team.jpg"
-                  alt="Team at work"
-                  className="w-full h-full object-cover"
-                  width={800}
-                  height={600}
-                />
-              </div>
-            </AnimatedSection>
-          </div>
+              <AnimatedSection delay={0.2}>
+                <div className="aspect-[4/3] rounded-2xl bg-muted border border-border overflow-hidden">
+                  <Image
+                    src="/team.jpg"
+                    alt="Team at work"
+                    className="w-full h-full object-cover"
+                    width={800}
+                    height={600}
+                  />
+                </div>
+              </AnimatedSection>
+            </div>
+          </CosmicPageHeroShell>
         </div>
       </section>
 
@@ -190,6 +192,6 @@ export default function AboutPage() {
           </AnimatedSection>
         </div>
       </section>
-    </Layout>
+    </>
   );
 }

@@ -39,7 +39,7 @@ export function ServicesSection() {
             const Icon = iconMap[service.icon];
             return (
               <AnimatedSection key={service.id} delay={index * 0.1}>
-                <div className="group relative p-6 rounded-2xl border border-border bg-card hover:shadow-soft hover:border-primary/20 transition-all duration-300 h-full flex flex-col overflow-hidden hover:scale-105 sm:hover:scale-110 origin-center">
+                <div className="group relative flex h-full flex-col origin-center overflow-hidden rounded-2xl border border-border/60 bg-background/25 p-6 backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:border-primary/20 hover:shadow-soft sm:hover:scale-[1.03]">
                   {/* Particle network effect - behind content */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-2xl z-0">
                     <ParticleNetwork 

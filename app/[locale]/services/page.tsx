@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Globe, Palette, TrendingUp, Smartphone, ArrowRight, Check } from "lucide-react";
-import { Layout } from "@/components/Layout";
+import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { services } from "@/data/services";
 import { Button } from "@/components/ui/button";
@@ -20,23 +20,25 @@ export default function ServicesPage() {
   const tNav = useTranslations("nav");
   const tCommon = useTranslations("common");
   return (
-    <Layout>
+    <>
       {/* Hero */}
       <section className="pt-32 pb-20">
         <div className="container">
-          <AnimatedSection>
-            <div className="max-w-3xl">
-              <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-                {tNav("services")}
-              </p>
-              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
-                {t("title")}
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                {t("description")}
-              </p>
-            </div>
-          </AnimatedSection>
+          <CosmicPageHeroShell>
+            <AnimatedSection>
+              <div className="max-w-3xl">
+                <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
+                  {tNav("services")}
+                </p>
+                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+                  {t("title")}
+                </h1>
+                <p className="text-lg text-muted-foreground">
+                  {t("description")}
+                </p>
+              </div>
+            </AnimatedSection>
+          </CosmicPageHeroShell>
         </div>
       </section>
 
@@ -112,6 +114,6 @@ export default function ServicesPage() {
           </AnimatedSection>
         </div>
       </section>
-    </Layout>
+    </>
   );
 }

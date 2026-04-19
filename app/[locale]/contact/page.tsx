@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Mail, MapPin, Send, CheckCircle } from "lucide-react";
-import { Layout } from "@/components/Layout";
+import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -86,23 +86,25 @@ export default function ContactPage() {
   };
 
   return (
-    <Layout>
+    <>
       {/* Hero */}
       <section className="pt-32 pb-12">
         <div className="container">
-          <AnimatedSection>
-            <div className="max-w-2xl">
-              <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
-                {t("title")}
-              </p>
-              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-                {t("title")}
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                {t("description")}
-              </p>
-            </div>
-          </AnimatedSection>
+          <CosmicPageHeroShell pad="sm">
+            <AnimatedSection>
+              <div className="max-w-2xl">
+                <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
+                  {t("title")}
+                </p>
+                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+                  {t("title")}
+                </h1>
+                <p className="text-lg text-muted-foreground">
+                  {t("description")}
+                </p>
+              </div>
+            </AnimatedSection>
+          </CosmicPageHeroShell>
         </div>
       </section>
 
@@ -338,6 +340,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-    </Layout>
+    </>
   );
 }

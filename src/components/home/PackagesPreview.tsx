@@ -15,7 +15,7 @@ export function PackagesPreview() {
   const previewPackages = packages.slice(0, 3);
 
   return (
-    <section className="section-padding bg-card">
+    <section className="section-padding">
       <div className="container">
         <AnimatedSection>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
@@ -41,10 +41,10 @@ export function PackagesPreview() {
           {previewPackages.map((pkg, index) => (
             <AnimatedSection key={pkg.id} delay={index * 0.1}>
               <div
-                className={`relative p-6 rounded-2xl border h-full flex flex-col ${
+                className={`relative flex h-full flex-col rounded-2xl border p-6 backdrop-blur-md ${
                   pkg.popular
-                    ? "border-primary bg-background shadow-glow"
-                    : "border-border bg-background"
+                    ? "border-primary bg-background/30 shadow-glow"
+                    : "border-border/60 bg-background/25"
                 }`}
               >
                 {pkg.popular && (

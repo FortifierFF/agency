@@ -12,7 +12,7 @@ export function FeaturedWork() {
   const projects = getFeaturedProjects();
 
   return (
-    <section className="section-padding bg-card">
+    <section className="section-padding">
       <div className="container">
         <AnimatedSection>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
@@ -39,7 +39,7 @@ export function FeaturedWork() {
             <AnimatedSection key={project.slug} delay={index * 0.1}>
               <Link
                 href={`/projects/${project.slug}`}
-                className="group block bg-background rounded-2xl border border-border overflow-hidden hover:shadow-soft transition-all duration-300"
+                className="group block overflow-hidden rounded-2xl border border-border/60 bg-background/25 backdrop-blur-md transition-all duration-300 hover:border-primary/25 hover:shadow-soft"
               >
                 <div className="aspect-[4/3] bg-muted relative overflow-hidden">
                   <img

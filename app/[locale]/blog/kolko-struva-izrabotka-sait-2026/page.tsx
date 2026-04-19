@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Layout } from "@/components/Layout";
+import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { SocialShare } from "@/components/SocialShare";
 import { Link } from "@/i18n/navigation";
@@ -13,33 +13,35 @@ export default function BlogPostPage() {
   const tBlog = useTranslations("blog");
   const tCommon = useTranslations("common");
   return (
-    <Layout>
+    <>
       {/* Hero Section */}
       <section className="pt-32 pb-12">
         <div className="container max-w-4xl">
-          <AnimatedSection>
-            <Link
-              href="/blog"
-              className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              {tBlog("backToBlog")}
-            </Link>
-          </AnimatedSection>
+          <CosmicPageHeroShell pad="sm">
+            <AnimatedSection>
+              <Link
+                href="/blog"
+                className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                {tBlog("backToBlog")}
+              </Link>
+            </AnimatedSection>
 
-          <AnimatedSection>
-            <div className="mb-8">
-              <span className="text-sm font-medium text-primary uppercase tracking-wide">
-                {tBlog("blogLabel")}
-              </span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
-              {t("title")}
-            </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              {t("subtitle")}
-            </p>
-          </AnimatedSection>
+            <AnimatedSection>
+              <div className="mb-8">
+                <span className="text-sm font-medium text-primary uppercase tracking-wide">
+                  {tBlog("blogLabel")}
+                </span>
+              </div>
+              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+                {t("title")}
+              </h1>
+              <p className="text-xl text-muted-foreground leading-relaxed">
+                {t("subtitle")}
+              </p>
+            </AnimatedSection>
+          </CosmicPageHeroShell>
         </div>
       </section>
 
@@ -395,7 +397,7 @@ export default function BlogPostPage() {
                   </p>
                 </div>
                 <SocialShare
-                  platforms={["facebook", "twitter", "linkedin", "whatsapp", "viber", "email"]}
+                  platforms={["facebook", "twitter", "linkedin", "whatsapp", "viber", "email", "discord"]}
                   title={t("title")}
                   description={t("subtitle")}
                   variant="icons"
@@ -421,6 +423,6 @@ export default function BlogPostPage() {
           </AnimatedSection>
         </div>
       </article>
-    </Layout>
+    </>
   );
 }

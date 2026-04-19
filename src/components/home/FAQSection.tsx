@@ -17,25 +17,6 @@ export function FAQSection() {
   const tFaqs = useTranslations("faqs");
   return (
     <section className="section-padding relative overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]">
-        <div 
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              radial-gradient(circle at 20% 30%, hsl(var(--primary)) 1px, transparent 1px),
-              radial-gradient(circle at 80% 70%, hsl(var(--primary)) 1px, transparent 1px),
-              radial-gradient(circle at 50% 50%, hsl(var(--primary)) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px, 60px 60px, 40px 40px',
-            backgroundPosition: '0 0, 25px 25px, 12px 12px',
-            animation: 'patternMove 20s linear infinite',
-          } as React.CSSProperties}
-        />
-        {/* Large question mark decorations */}
-        <div className="absolute top-10 right-10 text-6xl font-bold text-primary/5 select-none">?</div>
-        <div className="absolute bottom-20 left-10 text-4xl font-bold text-primary/5 select-none">?</div>
-      </div>
       <div className="container relative z-10">
         <AnimatedSection>
           <div className="text-center max-w-2xl mx-auto mb-12">
@@ -55,7 +36,7 @@ export function FAQSection() {
                 <AccordionItem
                   key={faq.id}
                   value={faq.id}
-                  className="border border-border rounded-xl px-6 data-[state=open]:bg-card/50 data-[state=open]:border-primary/30 transition-all duration-300 overflow-hidden group"
+                  className="overflow-hidden rounded-xl border border-border/60 px-6 transition-all duration-300 group data-[state=open]:border-primary/30 data-[state=open]:bg-background/30 data-[state=open]:backdrop-blur-md"
                 >
                   <AccordionTrigger className="text-left font-medium hover:no-underline py-5 group-hover:text-primary transition-colors">
                     <span className="flex items-center gap-3">

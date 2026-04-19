@@ -109,7 +109,7 @@ export function TestimonialsSection() {
             
             <motion.div 
               ref={cardRef}
-              className="relative bg-card/80 backdrop-blur-xl rounded-2xl border border-border/50 p-8 md:p-12 shadow-2xl overflow-hidden"
+              className="relative overflow-hidden rounded-2xl border border-border/50 bg-background/25 p-8 shadow-2xl backdrop-blur-md md:p-12"
               style={{
                 transformStyle: "preserve-3d",
                 transformOrigin: "top right",
@@ -171,13 +171,10 @@ export function TestimonialsSection() {
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={current}
-                    initial={{ opacity: 0, y: 20, rotateX: -10 }}
-                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                    exit={{ opacity: 0, y: -20, rotateX: 10 }}
+                    initial={{ opacity: 0, scale: 0.97 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.97 }}
                     transition={{ duration: 0.5, ease: "easeInOut" }}
-                    style={{
-                      transformStyle: "preserve-3d",
-                    }}
                   >
                     <p className="text-lg md:text-xl text-foreground mb-8">
                       "{testimonials[current].quote}"
@@ -252,7 +249,7 @@ export function TestimonialsSection() {
             {metrics.map((metric) => (
               <div
                 key={metric.label}
-                className="text-center p-6 rounded-2xl bg-card border border-border"
+                className="rounded-2xl border border-border/60 bg-background/20 p-6 text-center backdrop-blur-lg"
               >
                 <p className="text-3xl md:text-4xl font-bold text-primary mb-1">
                   {metric.value}
