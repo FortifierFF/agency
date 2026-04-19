@@ -28,9 +28,7 @@
     "mainNavigation": "Основна навигация",
     "apexStudioHome": "Apex Studio - Начало",
     "closeMenu": "Затвори меню",
-    "openMenu": "Отвори меню",
-    "switchToDarkMode": "Смени на тъмен режим",
-    "switchToLightMode": "Смени на светъл режим"
+    "openMenu": "Отвори меню"
   },
   "nav": {
     "projects": "Проекти",

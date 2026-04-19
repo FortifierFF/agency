@@ -10,13 +10,14 @@ import { cosmicDriver, tickCosmicDriver, tickRouteFlightEnvelope } from "@/lib/c
 import { APEX_INTRO_HYPERSPACE_SETTLED } from "@/lib/cosmicBootEvents";
 import { tickCosmicSectionPresenceStore } from "./cosmicSectionPresenceStore";
 import { createCosmicWarpTunnel } from "./cosmicWarpTunnel";
+import { createCosmicRouteAnchorStars } from "./cosmicRouteAnchorStars";
 
 /** Fog tint — warp streaks read against this; no procedural dome anymore. */
 const COL = { fog: 0x030510 };
 
 /**
  * Boot-only punch on the streak curve (does **not** apply to route flights — those use
- * `routeHyperspace` linearly so trapezoid speed maps 1:1 into motion).
+ * `routeHyperspace`; route flights use the driver’s trapezoid + decel power curve.
  */
 const INTRO_STREAK_CURVE = 3.6;
 
@@ -31,7 +32,11 @@ const STREAK_CAM_Y_BOB = 0.22;
  * slowly than it **chases up** so cruise + accel stay crisp.
  */
 const STREAK_VISUAL_TAU_UP_S = 0.05;
-const STREAK_VISUAL_TAU_DOWN_S = 0.28;
+/**
+ * Ease toward rest after hyperspace. Kept **moderately** short so the camera follows the route’s
+ * steep early decel (`ROUTE_DECEL_POWER`); warp/idle tuning still softens the last miles in `cosmicWarpTunnel`.
+ */
+const STREAK_VISUAL_TAU_DOWN_S = 0.52;
 
 /**
  * Long hitches (tab in background, heavy route like Home) must not integrate warp as one giant
@@ -81,6 +86,10 @@ export function ImmersiveThreeBackground() {
 
     const warpTunnel = createCosmicWarpTunnel(reducedMotion);
     scene.add(warpTunnel.points);
+
+    const routeAnchors = createCosmicRouteAnchorStars(reducedMotion);
+    // After warp points so anchor sprites draw on top; `depthTest: false` on materials as a safety net.
+    scene.add(routeAnchors.group);
 
     const nebulaGeo = new THREE.SphereGeometry(380, 40, 32);
     const nebulaMat = new THREE.MeshBasicMaterial({
@@ -203,11 +212,15 @@ export function ImmersiveThreeBackground() {
 
       // Use the same smoothed value so particle depth cues stay glued to the camera motion.
       warpTunnel.update(streakVisual, delta);
+      routeAnchors.update(delta, streakVisual, streak);
 
       // Subtle idle sway on the (mostly empty) depth group — nebulae stay invisible unless re-enabled.
-      const idleYaw = time * 0.0019 * drift;
+      const idleYaw = time * 0.00038 * drift;
       starGroup.rotation.y = idleYaw;
-      starGroup.rotation.x = Math.sin(time * 0.045) * 0.007;
+      starGroup.rotation.x = Math.sin(time * 0.045) * 0.002;
+
+      // Route anchors stay in fixed scene space (do not copy `starGroup` — that group is pushed in Z
+      // by `streakVisual`, which would drag “constellation” markers toward the camera).
 
       renderer.render(scene, camera);
       rafId = requestAnimationFrame(animate);
@@ -224,6 +237,7 @@ export function ImmersiveThreeBackground() {
       mount.removeChild(renderer.domElement);
 
       warpTunnel.dispose();
+      routeAnchors.dispose();
       nebulaGeo.dispose();
       nebulaMat.dispose();
       nebula2Geo.dispose();

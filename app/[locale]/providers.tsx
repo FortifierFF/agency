@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CosmicExperienceProvider } from "@/context/CosmicExperienceContext";
-import { SiteBootOverlay } from "@/components/SiteBootOverlay";
+import { CosmicBootInit } from "@/components/CosmicBootInit";
 import { CosmicRouteSync } from "@/components/CosmicRouteSync";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ImmersiveThreeBackground } from "@/components/home/ImmersiveThreeBackground";
@@ -14,10 +14,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="light" storageKey="apex-theme">
+      <ThemeProvider storageKey="apex-theme">
         <CosmicExperienceProvider>
           <ScrollToTop />
-          <SiteBootOverlay />
+          <CosmicBootInit />
           <CosmicRouteSync />
           {/*
             Full-site WebGL stars (single canvas). In DevTools, select: [data-cosmos="immersive-webgl"].

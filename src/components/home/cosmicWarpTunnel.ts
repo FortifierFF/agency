@@ -11,8 +11,17 @@ const Z_FAR = -520;
 /** XY half-extent when recycling tunnel stars — larger = particles spawn farther from the forward axis (wider “emitter” on screen). */
 const BASE_SPREAD = 280;
 
-/** `warp` above this = full hyperspace pass; below = calm idle drift (stars stay visible). */
-const HYPERSPACE_WARP_THRESHOLD = 0.02;
+/**
+ * Blend hyperspace vs idle motion across this **warp** band so we never snap from “fast rush” to
+ * slow drift in one frame (that read as snappy even when final idle speed felt right).
+ */
+const WARP_BLEND_TO_IDLE_LO = 0.008;
+const WARP_BLEND_TO_IDLE_HI = 0.062;
+
+function smoothstep(edge0: number, edge1: number, x: number) {
+  const t = Math.min(1, Math.max(0, (x - edge0) / Math.max(edge1 - edge0, 1e-6)));
+  return t * t * (3 - 2 * t);
+}
 
 /**
  * Tunnel **brightness** uses this synthetic `w` into `tunnelOpacityFromWarp` so opacity does **not**
@@ -21,9 +30,9 @@ const HYPERSPACE_WARP_THRESHOLD = 0.02;
  */
 const TUNNEL_BRIGHTNESS_EQUIV_WARP = 1;
 
-/** Forward drift speed in idle (world-ish units × delta) — keep low so only glow matches flight, not speed. */
-const IDLE_TUNNEL_SPEED = 68;
-const IDLE_TUNNEL_ROT = 0.000032;
+/** Forward drift speed in idle (world-ish units × delta) — keep very low so “cosmos at rest” reads calm. */
+const IDLE_TUNNEL_SPEED = 18;
+const IDLE_TUNNEL_ROT = 0.000009;
 
 /** Second cap inside the tunnel so a caller bug cannot spike `delta` in one integration step. */
 const MAX_TUNNEL_DELTA_S = 1 / 55;
@@ -40,7 +49,8 @@ function randomStarColor(out: Float32Array, i: number) {
   out[i * 3 + 2] = bright * (1 - w * 0.14);
 }
 
-function createRoundStarTexture() {
+/** Shared soft-disk sprite for tunnel stars and route “anchor” bodies (same visual language). */
+export function createRoundStarTexture() {
   const size = 96;
   const canvas = document.createElement("canvas");
   canvas.width = size;
@@ -104,42 +114,39 @@ export function createCosmicWarpTunnel(reducedMotion: boolean): CosmicWarpTunnel
     update: (warp, delta) => {
       const dt = Math.min(MAX_TUNNEL_DELTA_S, Math.max(0, delta));
       const w = Math.min(1, Math.max(0, warp));
-      const hyperspace = w > HYPERSPACE_WARP_THRESHOLD;
+      /** 0 = idle-like motion, 1 = full hyperspace motion — eased so the tail into rest is long. */
+      const hs = smoothstep(WARP_BLEND_TO_IDLE_LO, WARP_BLEND_TO_IDLE_HI, w);
       points.visible = true;
 
       let colorsDirty = false;
 
-      if (hyperspace) {
-        material.opacity = reducedMotion
+      material.opacity = reducedMotion
+        ? hs > 0.02
           ? tunnelOpacityFromWarp(0.52)
-          : tunnelOpacityFromWarp(TUNNEL_BRIGHTNESS_EQUIV_WARP);
-        // **Linear** in `warp`: matches trapezoid speed from `cosmicDriver` (no extra pow spike at t≈0).
-        const speed = (reducedMotion ? 0.25 : 0.45) + (reducedMotion ? 90 : 720) * (0.08 + w * 2.85);
-        const spreadMul = 1 + w * 1.05;
+          : 0
+        : tunnelOpacityFromWarp(TUNNEL_BRIGHTNESS_EQUIV_WARP);
 
-        for (let i = 0; i < starCount; i++) {
-          positions[i * 3 + 2] += speed * dt;
+      const idleSpeed = reducedMotion ? 12 : IDLE_TUNNEL_SPEED;
+      const hyperSpeed =
+        (reducedMotion ? 0.25 : 0.45) + (reducedMotion ? 90 : 720) * (0.08 + w * 2.85);
+      const speed = idleSpeed + (hyperSpeed - idleSpeed) * hs;
 
-          if (positions[i * 3 + 2] > Z_NEAR) {
-            recycleStar(i, spreadMul);
-            colorsDirty = true;
-          }
+      const spreadMul = 1 + hs * w * 1.05;
+
+      const idleRot = IDLE_TUNNEL_ROT;
+      const hyperRot = 0.00008 + 0.025 * w;
+      const rotZ = idleRot + (hyperRot - idleRot) * hs;
+
+      for (let i = 0; i < starCount; i++) {
+        positions[i * 3 + 2] += speed * dt;
+
+        if (positions[i * 3 + 2] > Z_NEAR) {
+          recycleStar(i, spreadMul);
+          colorsDirty = true;
         }
-
-        points.rotation.z += dt * (0.00008 + 0.025 * w);
-      } else {
-        // Between flights: same **glow** as cruise flight, but slow drift (brightness ≠ speed).
-        material.opacity = reducedMotion ? 0 : tunnelOpacityFromWarp(TUNNEL_BRIGHTNESS_EQUIV_WARP);
-        const idleSpeed = reducedMotion ? 12 : IDLE_TUNNEL_SPEED;
-        for (let i = 0; i < starCount; i++) {
-          positions[i * 3 + 2] += idleSpeed * dt;
-          if (positions[i * 3 + 2] > Z_NEAR) {
-            recycleStar(i, 1);
-            colorsDirty = true;
-          }
-        }
-        points.rotation.z += dt * IDLE_TUNNEL_ROT;
       }
+
+      points.rotation.z += dt * rotZ;
 
       geometry.attributes.position.needsUpdate = true;
       if (colorsDirty) geometry.attributes.color.needsUpdate = true;

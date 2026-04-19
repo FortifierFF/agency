@@ -7,7 +7,6 @@ import { useTranslations } from "next-intl";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { cn } from "@/lib/utils";
 import { useCosmicExperienceOptional } from "@/context/CosmicExperienceContext";
@@ -44,7 +43,7 @@ const linkItemVariants = {
 const controlsParentVariants = {
   hidden: {},
   show: {
-    // Theme / language / CTA: same direction as links, but in a clearly delayed second wave.
+    // Language / CTA: same direction as links, but in a clearly delayed second wave.
     transition: { staggerChildren: 0.075, delayChildren: 0.64 },
   },
 };
@@ -141,16 +140,13 @@ export function Navbar() {
           </div>
         </motion.div>
 
-        {/* Group 3 — theme, locale, CTA: same direction as links but deliberately late (delayChildren) */}
+        {/* Group 3 — locale, CTA: same direction as links but deliberately late (delayChildren) */}
         <motion.div
           className="hidden md:flex items-center gap-2"
           initial="hidden"
           animate={revealNav ? "show" : "hidden"}
           variants={controlsParentVariants}
         >
-          <motion.div variants={controlItemVariants}>
-            <ThemeToggle />
-          </motion.div>
           <motion.div variants={controlItemVariants}>
             <LanguageSwitcher />
           </motion.div>
@@ -168,9 +164,6 @@ export function Navbar() {
           animate={revealNav ? "show" : "hidden"}
           variants={controlsParentVariants}
         >
-          <motion.div variants={controlItemVariants}>
-            <ThemeToggle />
-          </motion.div>
           <motion.div variants={controlItemVariants}>
             <LanguageSwitcher />
           </motion.div>

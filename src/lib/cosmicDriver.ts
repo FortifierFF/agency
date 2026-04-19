@@ -5,10 +5,22 @@
 import { APEX_ROUTE_HYPERSPACE_SETTLED } from "@/lib/cosmicBootEvents";
 
 export type CosmicDriver = {
-  /** 0..1 — camera “hyperspace” dash on first boot after the loader hits 100%. */
+  /** 0..1 — camera “hyperspace” dash on first boot after the app hands off from the loading phase. */
   introHyperspace: number;
   /** 0..1 — in-app route flight envelope (trapezoid: fast accel, long cruise, smooth decel). */
   routeHyperspace: number;
+  /**
+   * 0 outside the route decel segment; 0→1 linear across `ROUTE_DECEL_MS` when speed ramps down.
+   * Used for “section anchor” stars that grow as the ship settles on the destination page.
+   */
+  routeDecelProgress: number;
+  /** Increments on each new route flight window so WebGL can reset anchor linger state. */
+  routeFlightSerial: number;
+  /**
+   * Set when `pulseIntroHyperspace()` runs (boot handoff). WebGL rAF can start **before** React’s
+   * `CosmicBootInit` effect; home anchors must not read `streakVisual≈0` as “idle” until then.
+   */
+  bootIntroPulsed: boolean;
   /**
    * Idle multiplier for starfield rotation after the jump settles.
    * Starts elevated so motion reads as energetic, then eases down to a very slow drift.
@@ -19,6 +31,9 @@ export type CosmicDriver = {
 export const cosmicDriver: CosmicDriver = {
   introHyperspace: 0,
   routeHyperspace: 0,
+  routeDecelProgress: 0,
+  routeFlightSerial: 0,
+  bootIntroPulsed: false,
   idleDriftMul: 1,
 };
 
@@ -27,13 +42,21 @@ export const cosmicDriver: CosmicDriver = {
  *
  * - `ROUTE_MIN_FLIGHT_MS` — minimum wall time from nav start until decel ends.
  * - `ROUTE_ACCEL_MS` — linear ramp **0 → 1** on `routeHyperspace` (constant acceleration segment).
- * - `ROUTE_DECEL_MS` — linear ramp **1 → 0** (constant deceleration segment).
+ * - `ROUTE_DECEL_MS` — wall-clock length of the falling segment. `routeHyperspace` uses a **power**
+ *   curve `(1−u)^p` (see `ROUTE_DECEL_POWER`) so speed drops quickly when decel **starts** (steep
+ *   v–t edge), then eases into zero. `routeDecelProgress` stays **linear** in `u` for anchor timing.
  * - Plateau length is implied: `ROUTE_MIN_FLIGHT_MS - ROUTE_ACCEL_MS - ROUTE_DECEL_MS` (extended by
  *   `markRouteContentReady()` when the page shell is still loading).
  */
-export const ROUTE_MIN_FLIGHT_MS = 2000;
+export const ROUTE_MIN_FLIGHT_MS = 1600;
 export const ROUTE_ACCEL_MS = 520;
-export const ROUTE_DECEL_MS = 480;
+/** Must stay above `ANCHOR_LEAD_BEFORE_IDLE_MS` (300) in `cosmicRouteAnchorStars.ts`. */
+export const ROUTE_DECEL_MS = 340;
+/**
+ * Decel sample `u` is linear 0→1 across `ROUTE_DECEL_MS`. Hyperspace = `(1−u)^p` — `p>1` yields a
+ * much steeper drop at the start of slowdown (trapezoid “roof” falls off quickly), gentler final tick.
+ */
+export const ROUTE_DECEL_POWER = 2.45;
 
 const ROUTE_MIN_PLATEAU_MS = Math.max(0, ROUTE_MIN_FLIGHT_MS - ROUTE_ACCEL_MS - ROUTE_DECEL_MS);
 
@@ -52,6 +75,7 @@ function clamp01(n: number) {
 }
 
 function beginRouteFlightWindow(now: number) {
+  cosmicDriver.routeFlightSerial += 1;
   const cruiseEnd = now + ROUTE_ACCEL_MS + ROUTE_MIN_PLATEAU_MS;
   const flightEnd = cruiseEnd + ROUTE_DECEL_MS;
   routeFlight = { navStart: now, cruiseEnd, flightEnd, settleDispatched: false };
@@ -83,10 +107,12 @@ export function tickRouteFlightEnvelope(nowMs: number, reducedMotion: boolean) {
   if (reducedMotion) {
     routeFlight = null;
     cosmicDriver.routeHyperspace = 0;
+    cosmicDriver.routeDecelProgress = 0;
     return;
   }
 
   if (!routeFlight) {
+    cosmicDriver.routeDecelProgress = 0;
     return;
   }
 
@@ -94,23 +120,29 @@ export function tickRouteFlightEnvelope(nowMs: number, reducedMotion: boolean) {
   const accelEnd = navStart + ROUTE_ACCEL_MS;
 
   if (nowMs < accelEnd) {
+    cosmicDriver.routeDecelProgress = 0;
     // Linear rise = trapezoid **velocity** rising edge (no cubic “late kick” into cruise).
     cosmicDriver.routeHyperspace = clamp01((nowMs - navStart) / ROUTE_ACCEL_MS);
     return;
   }
 
   if (nowMs < cruiseEnd) {
+    cosmicDriver.routeDecelProgress = 0;
     cosmicDriver.routeHyperspace = 1;
     return;
   }
 
   if (nowMs < flightEnd) {
-    // Linear fall = trapezoid velocity falling edge.
-    cosmicDriver.routeHyperspace = clamp01(1 - (nowMs - cruiseEnd) / ROUTE_DECEL_MS);
+    const u = clamp01((nowMs - cruiseEnd) / ROUTE_DECEL_MS);
+    // Anchors key off linear wall time through the decel segment.
+    cosmicDriver.routeDecelProgress = u;
+    // Speed curve: steep early decel (high |dv/du| at u≈0), soft touchdown at u→1.
+    cosmicDriver.routeHyperspace = clamp01(Math.pow(1 - u, ROUTE_DECEL_POWER));
     return;
   }
 
   cosmicDriver.routeHyperspace = 0;
+  cosmicDriver.routeDecelProgress = 0;
   if (!routeFlight.settleDispatched && typeof window !== "undefined") {
     routeFlight.settleDispatched = true;
     window.dispatchEvent(new CustomEvent(APEX_ROUTE_HYPERSPACE_SETTLED));
@@ -118,8 +150,9 @@ export function tickRouteFlightEnvelope(nowMs: number, reducedMotion: boolean) {
   routeFlight = null;
 }
 
-/** Fire once right after the percentage loader completes (first visit in this SPA session). */
+/** Fire once on first app handoff into intro hyperspace (first visit in this SPA session). */
 export function pulseIntroHyperspace() {
+  cosmicDriver.bootIntroPulsed = true;
   cosmicDriver.introHyperspace = 1;
   cosmicDriver.idleDriftMul = 4.5;
 }
@@ -143,6 +176,7 @@ export function tickCosmicDriver(elapsed: number, reducedMotion: boolean) {
   if (reducedMotion) {
     cosmicDriver.introHyperspace = 0;
     cosmicDriver.routeHyperspace = 0;
+    cosmicDriver.routeDecelProgress = 0;
     cosmicDriver.idleDriftMul = 1;
     routeFlight = null;
     return;
@@ -157,8 +191,8 @@ export function tickCosmicDriver(elapsed: number, reducedMotion: boolean) {
     cosmicDriver.routeHyperspace *= routeDecay;
   }
 
-  const targetIdle = 0.028;
-  cosmicDriver.idleDriftMul += (targetIdle - cosmicDriver.idleDriftMul) * Math.min(1, elapsed * 0.85);
+  const targetIdle = 0.022;
+  cosmicDriver.idleDriftMul += (targetIdle - cosmicDriver.idleDriftMul) * Math.min(1, elapsed * 0.16);
 }
 
 /**

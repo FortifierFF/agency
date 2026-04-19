@@ -21,8 +21,6 @@ export type CosmicLandingPhase = "loading" | "hyperspace" | "landed";
 
 type CosmicExperienceValue = {
   landingPhase: CosmicLandingPhase;
-  /** 0–100 while the boot overlay is driving fake progress. */
-  loaderProgress: number;
   /** True once the user has finished the first boot in this SPA lifetime (no reload). */
   bootFinished: boolean;
   /**
@@ -34,9 +32,7 @@ type CosmicExperienceValue = {
   routeArrivalGeneration: number;
   /** True while a route transition is flying through space. */
   routeTransitionActive: boolean;
-  /** Mark progress during boot (fonts, images, etc.). */
-  setLoaderProgress: (n: number) => void;
-  /** Called when the overlay reaches 100% — starts hyperspace + navbar reveal. */
+  /** Starts intro hyperspace + navbar reveal (no blocking loader UI). */
   completeBootLoader: () => void;
   /** Skip boot (e.g. reduced motion fast path). */
   skipBootMinimal: () => void;
@@ -54,20 +50,18 @@ const CosmicExperienceContext = createContext<CosmicExperienceValue | null>(null
 
 export function CosmicExperienceProvider({ children }: { children: ReactNode }) {
   const [landingPhase, setLandingPhase] = useState<CosmicLandingPhase>("loading");
-  const [loaderProgress, setLoaderProgressState] = useState(0);
   const [bootFinished, setBootFinished] = useState(false);
   const [routeVisualHold, setRouteVisualHold] = useState(false);
   const [routeArrivalGeneration, setRouteArrivalGeneration] = useState(0);
   const [routeTransitionActive, setRouteTransitionActive] = useState(false);
   const bootTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const setLoaderProgress = useCallback((n: number) => {
-    setLoaderProgressState((prev) => Math.max(prev, Math.min(100, Math.round(n))));
-  }, []);
+  /** Prevents double intro hyperspace when Strict Mode remounts the boot child in dev. */
+  const bootHandoffStartedRef = useRef(false);
 
   const completeBootLoader = useCallback(() => {
+    if (bootHandoffStartedRef.current) return;
+    bootHandoffStartedRef.current = true;
     if (typeof window !== "undefined") window.scrollTo(0, 0);
-    setLoaderProgressState(100);
     setLandingPhase("hyperspace");
     setBootFinished(true);
     pulseIntroHyperspace();
@@ -79,8 +73,9 @@ export function CosmicExperienceProvider({ children }: { children: ReactNode }) 
   }, []);
 
   const skipBootMinimal = useCallback(() => {
+    if (bootHandoffStartedRef.current) return;
+    bootHandoffStartedRef.current = true;
     if (typeof window !== "undefined") window.scrollTo(0, 0);
-    setLoaderProgressState(100);
     setLandingPhase("landed");
     setBootFinished(true);
   }, []);
@@ -139,12 +134,10 @@ export function CosmicExperienceProvider({ children }: { children: ReactNode }) 
   const value = useMemo(
     () => ({
       landingPhase,
-      loaderProgress,
       bootFinished,
       routeVisualHold,
       routeArrivalGeneration,
       routeTransitionActive,
-      setLoaderProgress,
       completeBootLoader,
       skipBootMinimal,
       triggerRouteHyperspace,
@@ -154,12 +147,10 @@ export function CosmicExperienceProvider({ children }: { children: ReactNode }) 
     }),
     [
       landingPhase,
-      loaderProgress,
       bootFinished,
       routeVisualHold,
       routeArrivalGeneration,
       routeTransitionActive,
-      setLoaderProgress,
       completeBootLoader,
       skipBootMinimal,
       triggerRouteHyperspace,

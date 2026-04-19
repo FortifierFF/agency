@@ -1,78 +1,49 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, type ReactNode } from "react";
 
-type Theme = "dark" | "light" | "system";
-
+/**
+ * Dark-only theme shell. Older builds stored "light" in localStorage; we clear
+ * that key on mount so the document never flips back after hydration.
+ * The root `app/layout.tsx` also sets `className="dark"` on `<html>` for first paint.
+ */
 type ThemeProviderProps = {
-  children: React.ReactNode;
-  defaultTheme?: Theme;
+  children: ReactNode;
+  /** Ignored — kept so call sites do not need churn. */
+  defaultTheme?: "dark" | "light" | "system";
   storageKey?: string;
 };
 
 type ThemeProviderState = {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
+  theme: "dark";
+  /** No-op — there is no alternate theme to switch to. */
+  setTheme: (_theme: "dark" | "light" | "system") => void;
 };
 
-const initialState: ThemeProviderState = {
-  theme: "system",
-  setTheme: () => null,
+const darkOnlyValue: ThemeProviderState = {
+  theme: "dark",
+  setTheme: () => {},
 };
 
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
+const ThemeProviderContext = createContext<ThemeProviderState | null>(null);
 
 export function ThemeProvider({
   children,
-  defaultTheme = "system",
-  storageKey = "vite-ui-theme",
-  ...props
+  storageKey = "apex-theme",
 }: ThemeProviderProps) {
-  // Initialize with defaultTheme, then load from localStorage in useEffect
-  const [theme, setTheme] = useState<Theme>(defaultTheme);
-  const [mounted, setMounted] = useState(false);
-
-  // Load theme from localStorage on mount (client-side only)
   useEffect(() => {
-    setMounted(true);
-    const storedTheme = localStorage.getItem(storageKey) as Theme | null;
-    if (storedTheme) {
-      setTheme(storedTheme);
+    try {
+      localStorage.removeItem(storageKey);
+    } catch {
+      // Private mode / blocked storage — still force class on <html>.
     }
+    const root = document.documentElement;
+    root.classList.remove("light");
+    root.classList.add("dark");
   }, [storageKey]);
 
-  useEffect(() => {
-    if (!mounted) return;
-
-    const root = window.document.documentElement;
-
-    root.classList.remove("light", "dark");
-
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light";
-
-      root.classList.add(systemTheme);
-      return;
-    }
-
-    root.classList.add(theme);
-  }, [theme, mounted]);
-
-  const value = {
-    theme,
-    setTheme: (theme: Theme) => {
-      if (typeof window !== "undefined") {
-        localStorage.setItem(storageKey, theme);
-      }
-      setTheme(theme);
-    },
-  };
-
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <ThemeProviderContext.Provider value={darkOnlyValue}>
       {children}
     </ThemeProviderContext.Provider>
   );
@@ -80,9 +51,8 @@ export function ThemeProvider({
 
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext);
-
-  if (context === undefined)
+  if (!context) {
     throw new Error("useTheme must be used within a ThemeProvider");
-
+  }
   return context;
 };

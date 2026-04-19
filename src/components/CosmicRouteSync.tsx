@@ -3,6 +3,7 @@
 import { usePathname } from "@/i18n/navigation";
 import { useLayoutEffect, useRef } from "react";
 import { useCosmicExperience } from "@/context/CosmicExperienceContext";
+import { syncCosmicRouteAnchorFromPathname } from "@/lib/cosmicRouteAnchorStore";
 
 /**
  * In-app navigations: start the route transition + trapezoid WebGL flight before paint so the
@@ -14,6 +15,9 @@ export function CosmicRouteSync() {
   const { triggerRouteHyperspace, bootFinished, beginRouteTransition } = useCosmicExperience();
 
   useLayoutEffect(() => {
+    // Commit before `beginRouteTransition` so WebGL decel reads destination count + layout key.
+    syncCosmicRouteAnchorFromPathname(pathname);
+
     if (prev.current === null) {
       prev.current = pathname;
       return;
