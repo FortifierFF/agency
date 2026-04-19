@@ -3,6 +3,8 @@ import {
   readHomeSectionLayouts,
   type HomeBgSectionId,
 } from "./homeBackgroundSections";
+import { getCosmicRouteAnchorLayoutKey } from "@/lib/cosmicRouteAnchorStore";
+import { getHeroBallEntranceProgress, isHomeAnchorsSurfaceReady } from "./homeAnchorScreenBridge";
 
 function smoothstep(edge0: number, edge1: number, x: number) {
   const t = Math.min(1, Math.max(0, (x - edge0) / Math.max(edge1 - edge0, 0.0001)));
@@ -61,48 +63,142 @@ function heroPresenceBias(p: number, scrollY: number) {
   return p;
 }
 
-let cache: Map<HomeBgSectionId, number> = new Map();
+/** Smallest plate scale when a section is “at” its anchor ball (10–12% matches art direction). */
+const PLATE_SCALE_AT_BALL = 0.11;
+
+let presenceCache: Map<HomeBgSectionId, number> = new Map();
+/** Literal CSS scale factor (ball → full). Same keys as presence; home uses ball choreography. */
+let plateScaleCache: Map<HomeBgSectionId, number> = new Map();
 const listeners = new Set<() => void>();
+
+function layoutCenterY(
+  id: HomeBgSectionId,
+  index: number,
+  layoutMap: Map<HomeBgSectionId, { top: number; height: number }>,
+  vh: number
+) {
+  const layout = layoutMap.get(id);
+  if (layout) return layout.top + Math.max(96, layout.height) * 0.34;
+  return index * vh * 0.92 + vh * 0.28;
+}
+
+/**
+ * Scroll-driven scales for `/`: current section shrinks toward its ball while the next grows from
+ * its ball, with overlap so the incoming plate starts before the outgoing hits ~ball size.
+ */
+function computeHomePlateScalesFromScroll(
+  scrollY: number,
+  vh: number,
+  layoutMap: Map<HomeBgSectionId, { top: number; height: number }>,
+  nowMs: number
+): number[] {
+  const n = HOME_BG_SECTION_ORDER.length;
+  const scales = new Array<number>(n).fill(PLATE_SCALE_AT_BALL);
+  const centers = HOME_BG_SECTION_ORDER.map((id, idx) => layoutCenterY(id, idx, layoutMap, vh));
+
+  if (!isHomeAnchorsSurfaceReady()) {
+    return scales;
+  }
+
+  const entranceT = getHeroBallEntranceProgress(nowMs);
+  if (entranceT < 1) {
+    const e = 1 - Math.pow(1 - entranceT, 2.55);
+    scales[0] = lerp(PLATE_SCALE_AT_BALL, 1, e);
+    return scales;
+  }
+
+  const s = scrollY + vh * 0.38;
+  const S0 = centers[0]!;
+
+  if (s < S0) {
+    scales[0] = 1;
+    return scales;
+  }
+
+  const lastC = centers[n - 1]!;
+  if (s >= lastC) {
+    scales[n - 1] = 1;
+    return scales;
+  }
+
+  for (let i = 0; i < n - 1; i++) {
+    const c0 = centers[i]!;
+    const c1 = centers[i + 1]!;
+    if (s >= c0 && s < c1) {
+      const u = (s - c0) / Math.max(c1 - c0, 1e-4);
+      // Outgoing eases down first; incoming eases up on a slightly delayed window (~10–15% overlap).
+      scales[i] = lerp(1, PLATE_SCALE_AT_BALL, smoothstep(0, 0.78, u));
+      scales[i + 1] = lerp(PLATE_SCALE_AT_BALL, 1, smoothstep(0.52, 1, u));
+      return scales;
+    }
+  }
+
+  scales[0] = 1;
+  return scales;
+}
 
 function recomputePresences() {
   const reduced =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const vh = typeof window !== "undefined" ? window.innerHeight : 900;
   const scrollY = typeof window !== "undefined" ? window.scrollY : 0;
   const layoutMap = ensureLayoutMap();
+  const layoutKey = typeof window !== "undefined" ? getCosmicRouteAnchorLayoutKey() : "/";
 
-  const next = new Map<HomeBgSectionId, number>();
+  const nextPresence = new Map<HomeBgSectionId, number>();
+  const nextPlate = new Map<HomeBgSectionId, number>();
 
-  for (let i = 0; i < HOME_BG_SECTION_ORDER.length; i++) {
-    const id = HOME_BG_SECTION_ORDER[i]!;
-    const progress = chapterProgressForSection(id, i, scrollY, vh, reduced, layoutMap);
-    let presence = presenceFromChapterProgress(progress);
+  const onHome = layoutKey === "/";
 
-    if (id === "hero") {
-      presence = heroPresenceBias(presence, scrollY);
+  if (onHome && !reduced) {
+    const nowMs = typeof performance !== "undefined" ? performance.now() : 0;
+    const plateScales = computeHomePlateScalesFromScroll(scrollY, vh, layoutMap, nowMs);
+    for (let i = 0; i < HOME_BG_SECTION_ORDER.length; i++) {
+      const id = HOME_BG_SECTION_ORDER[i]!;
+      const sc = plateScales[i] ?? PLATE_SCALE_AT_BALL;
+      nextPlate.set(id, sc);
+      // Normalize into 0..1 for legacy consumers (blur curves) without crushing the ball state.
+      const p = clamp01((sc - PLATE_SCALE_AT_BALL) / (1 - PLATE_SCALE_AT_BALL + 1e-5));
+      nextPresence.set(id, Math.max(0.015, p));
     }
+  } else {
+    for (let i = 0; i < HOME_BG_SECTION_ORDER.length; i++) {
+      const id = HOME_BG_SECTION_ORDER[i]!;
+      const progress = chapterProgressForSection(id, i, scrollY, vh, reduced, layoutMap);
+      let presence = presenceFromChapterProgress(progress);
 
-    // Small tail overlap so adjacent sections can coexist during transitions,
-    // but without the one-way clipping behavior from the old chain-gate approach.
-    if (i > 0) {
-      const prevId = HOME_BG_SECTION_ORDER[i - 1]!;
-      const prevPresence = next.get(prevId) ?? 0;
-      if (prevPresence > 0.08) {
-        presence = Math.max(presence, smoothstep(0.18, 0.74, 1 - prevPresence) * 0.92);
+      if (id === "hero") {
+        presence = heroPresenceBias(presence, scrollY);
       }
-    }
 
-    next.set(id, clamp01(presence));
+      if (i > 0) {
+        const prevId = HOME_BG_SECTION_ORDER[i - 1]!;
+        const prevPresence = nextPresence.get(prevId) ?? 0;
+        if (prevPresence > 0.08) {
+          presence = Math.max(presence, smoothstep(0.18, 0.74, 1 - prevPresence) * 0.92);
+        }
+      }
+
+      presence = clamp01(presence);
+      nextPresence.set(id, presence);
+      // Reduced / non-home: plates stay at readable scale; motion comes from opacity/depth only.
+      nextPlate.set(id, reduced || !onHome ? 1 : lerp(PLATE_SCALE_AT_BALL, 1, presence));
+    }
   }
 
-  cache = next;
+  presenceCache = nextPresence;
+  plateScaleCache = nextPlate;
   listeners.forEach((fn) => fn());
 }
 
 export function getCosmicSectionPresenceSnapshot(): Map<HomeBgSectionId, number> {
-  return cache;
+  return presenceCache;
+}
+
+/** Plate scale used by `CosmicSectionFrame` (literal `scale()` factor, ball → 1). */
+export function getSectionPlateScale(sectionId: HomeBgSectionId): number {
+  return plateScaleCache.get(sectionId) ?? 1;
 }
 
 export function subscribeCosmicSectionPresence(cb: () => void) {
@@ -115,5 +211,5 @@ export function tickCosmicSectionPresenceStore() {
 }
 
 export function getSectionPresenceForWebGL(id: HomeBgSectionId): number {
-  return cache.get(id) ?? 0;
+  return presenceCache.get(id) ?? 0;
 }

@@ -11,6 +11,9 @@ import { APEX_INTRO_HYPERSPACE_SETTLED } from "@/lib/cosmicBootEvents";
 import { tickCosmicSectionPresenceStore } from "./cosmicSectionPresenceStore";
 import { createCosmicWarpTunnel } from "./cosmicWarpTunnel";
 import { createCosmicRouteAnchorStars } from "./cosmicRouteAnchorStars";
+import { getCosmicRouteAnchorLayoutKey, getCosmicRouteSectionAnchorCount } from "@/lib/cosmicRouteAnchorStore";
+import { getRouteAnchorWorldPosition } from "@/lib/cosmicRouteAnchorLayoutPositions";
+import { setHomeAnchorViewportPixels } from "./homeAnchorScreenBridge";
 
 /** Fog tint — warp streaks read against this; no procedural dome anymore. */
 const COL = { fog: 0x030510 };
@@ -90,6 +93,9 @@ export function ImmersiveThreeBackground() {
     const routeAnchors = createCosmicRouteAnchorStars(reducedMotion);
     // After warp points so anchor sprites draw on top; `depthTest: false` on materials as a safety net.
     scene.add(routeAnchors.group);
+
+    /** Project route anchor world positions to CSS pixels for home section `transform-origin`. */
+    const projVec = new THREE.Vector3();
 
     const nebulaGeo = new THREE.SphereGeometry(380, 40, 32);
     const nebulaMat = new THREE.MeshBasicMaterial({
@@ -223,6 +229,29 @@ export function ImmersiveThreeBackground() {
       // by `streakVisual`, which would drag “constellation” markers toward the camera).
 
       renderer.render(scene, camera);
+
+      // Home: push projected ball centers each frame so DOM plates can use `transform-origin` at the
+      // same screen locations as the WebGL sprites (camera sway included).
+      if (!reducedMotion) {
+        const layoutKey = getCosmicRouteAnchorLayoutKey();
+        const anchorN = getCosmicRouteSectionAnchorCount();
+        if (layoutKey === "/" && anchorN > 0) {
+          const rect = renderer.domElement.getBoundingClientRect();
+          const pts: { x: number; y: number }[] = [];
+          for (let i = 0; i < anchorN; i++) {
+            getRouteAnchorWorldPosition(layoutKey, i, projVec);
+            projVec.project(camera);
+            pts.push({
+              x: rect.left + (projVec.x * 0.5 + 0.5) * rect.width,
+              y: rect.top + (-projVec.y * 0.5 + 0.5) * rect.height,
+            });
+          }
+          setHomeAnchorViewportPixels(pts);
+          // Hero timed “grow from ball” uses `performance.now()` — refresh without waiting on scroll.
+          tickCosmicSectionPresenceStore();
+        }
+      }
+
       rafId = requestAnimationFrame(animate);
     };
 
