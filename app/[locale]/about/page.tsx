@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
+import { CosmicRouteSectionShell } from "@/components/CosmicRouteSectionShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -62,8 +63,8 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="pt-32 pb-20">
-        <div className="container">
+      <section className="pt-28 pb-16 min-h-[92svh] flex items-center">
+        <div className="container md:min-h-[640px] flex items-center">
           <CosmicPageHeroShell>
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <AnimatedSection>
@@ -101,8 +102,9 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="section-padding bg-card">
-        <div className="container">
+      <CosmicRouteSectionShell anchorIndex={1}>
+        <section className="section-padding bg-card">
+          <div className="container">
           <AnimatedSection>
             <div className="max-w-2xl mb-12">
               <h2 className="text-3xl font-bold mb-4">{t("whatWeBelieve")}</h2>
@@ -122,12 +124,14 @@ export default function AboutPage() {
               </AnimatedSection>
             ))}
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </CosmicRouteSectionShell>
 
       {/* Team */}
-      <section className="section-padding">
-        <div className="container">
+      <CosmicRouteSectionShell anchorIndex={2}>
+        <section className="section-padding">
+          <div className="container">
           <AnimatedSection>
             <div className="text-center max-w-2xl mx-auto mb-12">
               <h2 className="text-3xl font-bold mb-4">{t("meetTeam")}</h2>
@@ -157,12 +161,14 @@ export default function AboutPage() {
               </AnimatedSection>
             ))}
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </CosmicRouteSectionShell>
 
       {/* Stats */}
-      <section className="section-padding bg-card">
-        <div className="container">
+      <CosmicRouteSectionShell anchorIndex={3}>
+        <section className="section-padding bg-card">
+          <div className="container">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <AnimatedSection key={stat.label} delay={index * 0.1}>
@@ -175,12 +181,14 @@ export default function AboutPage() {
               </AnimatedSection>
             ))}
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </CosmicRouteSectionShell>
 
       {/* CTA */}
-      <section className="section-padding bg-primary text-primary-foreground">
-        <div className="container text-center">
+      <CosmicRouteSectionShell anchorIndex={4}>
+        <section className="section-padding bg-primary text-primary-foreground">
+          <div className="container text-center">
           <AnimatedSection>
             <h2 className="text-3xl font-bold mb-4">{t("letsBuild")}</h2>
             <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
@@ -190,8 +198,9 @@ export default function AboutPage() {
               <Link href="/contact">{tCommon("getInTouch")}</Link>
             </Button>
           </AnimatedSection>
-        </div>
-      </section>
+          </div>
+        </section>
+      </CosmicRouteSectionShell>
     </>
   );
 }

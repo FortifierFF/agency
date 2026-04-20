@@ -29,7 +29,7 @@ const ThemeProviderContext = createContext<ThemeProviderState | null>(null);
 
 export function ThemeProvider({
   children,
-  storageKey = "apex-theme",
+  storageKey = "pal-theme",
 }: ThemeProviderProps) {
   useEffect(() => {
     try {

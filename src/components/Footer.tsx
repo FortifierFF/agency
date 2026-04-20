@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Mail } from "lucide-react";
+import Image from "next/image";
 import { SocialLinks } from "@/components/SocialLinks";
 
 export function Footer() {
@@ -32,8 +33,17 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link href="/" className="text-xl font-bold tracking-tight">
-              apex<span className="text-primary">.</span>
+            <Link
+              href="/"
+              className="inline-flex rounded-xl border border-white/12 bg-white/90 shadow-[0_0_20px_rgba(95,145,255,0.14)] overflow-hidden h-[6rem] w-[12rem] flex items-center justify-center"
+            >
+              <Image
+                src="/PAL-web-studio.png"
+                alt="PAL Studio"
+                width={132}
+                height={46}
+                className="h-[15rem] w-auto rounded-[8px] object-contain"
+              />
             </Link>
             <p className="mt-4 text-sm text-muted-foreground max-w-xs">
               {tFooter("description")}

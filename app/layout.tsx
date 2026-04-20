@@ -5,7 +5,7 @@ import "../src/index.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Apex Studio - Digital Studio Showcase",
+  title: "PAL Studio - Digital Studio Showcase",
   description: "A digital studio that delivers results",
 };
 

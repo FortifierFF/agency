@@ -1,6 +1,6 @@
 {
   "common": {
-    "brand": "apex",
+    "brand": "PAL Studio",
     "bookCall": "Book a Call",
     "viewWork": "View Work",
     "getFreeAudit": "Get a Free Mini Audit",
@@ -26,7 +26,7 @@
     "nextTestimonial": "Next testimonial",
     "goToTestimonial": "Go to testimonial {number}",
     "mainNavigation": "Main navigation",
-    "apexStudioHome": "Apex Studio - Home",
+    "apexStudioHome": "PAL Studio - Home",
     "closeMenu": "Close menu",
     "openMenu": "Open menu"
   },
@@ -246,7 +246,7 @@
     "seoPerformance": "SEO & Performance",
     "mobileApps": "Mobile Apps",
     "basedRemotely": "Based remotely, working globally.",
-    "copyright": "© {year} Apex Studio. All rights reserved.",
+    "copyright": "© {year} PAL Studio. All rights reserved.",
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service"
   },

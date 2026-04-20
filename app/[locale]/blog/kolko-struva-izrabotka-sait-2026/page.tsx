@@ -1,22 +1,50 @@
 "use client";
 
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
+import { CosmicRouteSectionShell } from "@/components/CosmicRouteSectionShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { SocialShare } from "@/components/SocialShare";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { usePathname } from "@/i18n/navigation";
+import {
+  getRouteAnchorScreenVersion,
+  isRouteAnchorsSurfaceReady,
+  subscribeRouteAnchorScreen,
+} from "@/components/home/routeAnchorScreenBridge";
 
 export default function BlogPostPage() {
   const t = useTranslations("blog.pricingPost");
   const tBlog = useTranslations("blog");
   const tCommon = useTranslations("common");
+  const pathname = usePathname();
+  const layoutKey = pathname.replace(/\/+$/, "") || "/";
+  useSyncExternalStore(subscribeRouteAnchorScreen, getRouteAnchorScreenVersion, () => 0);
+  const routeReady = isRouteAnchorsSurfaceReady(layoutKey);
+  const [contentReady, setContentReady] = useState(false);
+
+  useEffect(() => {
+    setContentReady(false);
+  }, [layoutKey]);
+
+  useEffect(() => {
+    if (!routeReady) {
+      setContentReady(false);
+      return;
+    }
+    // Keep post body synced with hero entry so text never appears before hero on route settle.
+    const id = window.setTimeout(() => setContentReady(true), 980);
+    return () => window.clearTimeout(id);
+  }, [routeReady]);
+
   return (
     <>
       {/* Hero Section */}
-      <section className="pt-32 pb-12">
-        <div className="container max-w-4xl">
+      <section className="pt-28 pb-16 min-h-[92svh] flex items-center">
+        <div className="container max-w-4xl md:min-h-[640px] flex items-center">
           <CosmicPageHeroShell pad="sm">
             <AnimatedSection>
               <Link
@@ -46,8 +74,10 @@ export default function BlogPostPage() {
       </section>
 
       {/* Article Content */}
-      <article className="pb-20">
-        <div className="container max-w-4xl">
+      {contentReady ? (
+        <CosmicRouteSectionShell anchorIndex={1}>
+          <article className="pb-20">
+            <div className="container max-w-4xl">
           {/* Introduction */}
           <AnimatedSection>
             <div className="prose prose-lg dark:prose-invert max-w-none">
@@ -421,8 +451,14 @@ export default function BlogPostPage() {
               </Button>
             </div>
           </AnimatedSection>
-        </div>
-      </article>
+            </div>
+          </article>
+        </CosmicRouteSectionShell>
+      ) : (
+        <article className="pb-20">
+          <div className="container max-w-4xl" />
+        </article>
+      )}
     </>
   );
 }

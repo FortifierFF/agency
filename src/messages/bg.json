@@ -1,6 +1,6 @@
 {
   "common": {
-    "brand": "apex",
+    "brand": "PAL Studio",
     "bookCall": "Резервирай обаждане",
     "viewWork": "Виж работата",
     "getFreeAudit": "Безплатен мини одит",
@@ -26,7 +26,7 @@
     "nextTestimonial": "Следващ отзив",
     "goToTestimonial": "Отиди на отзив {number}",
     "mainNavigation": "Основна навигация",
-    "apexStudioHome": "Apex Studio - Начало",
+    "apexStudioHome": "PAL Studio - Начало",
     "closeMenu": "Затвори меню",
     "openMenu": "Отвори меню"
   },
@@ -246,7 +246,7 @@
     "seoPerformance": "SEO и Производителност",
     "mobileApps": "Мобилни приложения",
     "basedRemotely": "Базирани дистанционно, работим глобално.",
-    "copyright": "© {year} Apex Studio. Всички права запазени.",
+    "copyright": "© {year} PAL Studio. Всички права запазени.",
     "privacyPolicy": "Политика за поверителност",
     "termsOfService": "Условия за ползване"
   },

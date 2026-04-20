@@ -3,6 +3,7 @@ import { cosmicDriver, ROUTE_DECEL_MS } from "@/lib/cosmicDriver";
 import { getCosmicRouteAnchorLayoutKey, getCosmicRouteSectionAnchorCount } from "@/lib/cosmicRouteAnchorStore";
 import { getRouteAnchorWorldPosition } from "@/lib/cosmicRouteAnchorLayoutPositions";
 import { markHomeRouteAnchorsSurfaceReady } from "./homeAnchorScreenBridge";
+import { markRouteAnchorsSurfaceReady } from "./routeAnchorScreenBridge";
 
 export type CosmicRouteAnchorStars = {
   group: THREE.Group;
@@ -243,6 +244,9 @@ export function createCosmicRouteAnchorStars(reducedMotion: boolean): CosmicRout
     }
 
     const v = phase === "stable" && visualN > 0 ? 1 : arrivalA;
+    if (!reducedMotion && phase === "stable" && visualN > 0) {
+      markRouteAnchorsSurfaceReady(visualKey);
+    }
     // Homepage: once anchors settle, let the DOM hero plate start its timed “grow from ball” choreo.
     if (!reducedMotion && phase === "stable" && visualKey === "/" && visualN > 0) {
       markHomeRouteAnchorsSurfaceReady();

@@ -14,6 +14,13 @@
   }
 }
 
+/* Radix/RemoveScroll can lock body on open menus. Keep page scroll + scrollbar visible. */
+body[data-scroll-locked] {
+  overflow: auto !important;
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 @layer base {
@@ -199,18 +206,28 @@
     --nav-ring-angle: 0deg;
     padding: var(--nav-ring-w);
     box-sizing: border-box;
-    background: conic-gradient(
-      from var(--nav-ring-angle),
-      hsl(328 92% 62%),
-      hsl(268 88% 62%),
-      hsl(218 92% 60%),
-      hsl(188 86% 54%),
-      hsl(142 84% 52%),
-      hsl(92 90% 56%),
-      hsl(48 96% 58%),
-      hsl(12 92% 60%),
-      hsl(328 92% 62%)
-    );
+    /* Dual clockwise comets: one arc + mirrored arc 180deg opposite, moving in sync. */
+    background:
+      conic-gradient(
+        from var(--nav-ring-angle),
+        rgba(150, 205, 255, 0) 0deg,
+        rgba(150, 205, 255, 0) 270deg,
+        rgba(140, 195, 255, 0.08) 292deg,
+        rgba(150, 210, 255, 0.26) 320deg,
+        rgba(170, 228, 255, 0.55) 342deg,
+        rgba(230, 250, 255, 0.98) 356deg,
+        rgba(150, 205, 255, 0) 360deg
+      ),
+      conic-gradient(
+        from calc(var(--nav-ring-angle) + 180deg),
+        rgba(150, 205, 255, 0) 0deg,
+        rgba(150, 205, 255, 0) 270deg,
+        rgba(140, 195, 255, 0.08) 292deg,
+        rgba(150, 210, 255, 0.26) 320deg,
+        rgba(170, 228, 255, 0.55) 342deg,
+        rgba(230, 250, 255, 0.98) 356deg,
+        rgba(150, 205, 255, 0) 360deg
+      );
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);

@@ -14,6 +14,7 @@ import { createCosmicRouteAnchorStars } from "./cosmicRouteAnchorStars";
 import { getCosmicRouteAnchorLayoutKey, getCosmicRouteSectionAnchorCount } from "@/lib/cosmicRouteAnchorStore";
 import { getRouteAnchorWorldPosition } from "@/lib/cosmicRouteAnchorLayoutPositions";
 import { getHeroBallEntranceProgress, setHomeAnchorViewportPixels } from "./homeAnchorScreenBridge";
+import { setRouteAnchorViewportPixels } from "./routeAnchorScreenBridge";
 
 /** Fog tint — warp streaks read against this; no procedural dome anymore. */
 const COL = { fog: 0x030510 };
@@ -235,7 +236,7 @@ export function ImmersiveThreeBackground() {
       if (!reducedMotion) {
         const layoutKey = getCosmicRouteAnchorLayoutKey();
         const anchorN = getCosmicRouteSectionAnchorCount();
-        if (layoutKey === "/" && anchorN > 0) {
+        if (anchorN > 0) {
           const rect = renderer.domElement.getBoundingClientRect();
           const pts: { x: number; y: number }[] = [];
           for (let i = 0; i < anchorN; i++) {
@@ -246,11 +247,14 @@ export function ImmersiveThreeBackground() {
               y: rect.top + (-projVec.y * 0.5 + 0.5) * rect.height,
             });
           }
-          setHomeAnchorViewportPixels(pts);
+          setRouteAnchorViewportPixels(layoutKey, pts);
+          if (layoutKey === "/") {
+            setHomeAnchorViewportPixels(pts);
+          }
           // Only tick presence from WebGL while the timed hero entrance runs — after that, scroll
           // drives `tickCosmicSectionPresenceStore`; doing both every rAF re-read layout and fights
           // the frozen scroll-band snapshot (see `invalidateHomeScrollBandSnap`).
-          if (getHeroBallEntranceProgress(performance.now()) < 1) {
+          if (layoutKey === "/" && getHeroBallEntranceProgress(performance.now()) < 1) {
             tickCosmicSectionPresenceStore();
           }
         }

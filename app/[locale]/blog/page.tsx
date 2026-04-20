@@ -1,15 +1,42 @@
 "use client";
 
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
+import { CosmicRouteSectionShell } from "@/components/CosmicRouteSectionShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { usePathname } from "@/i18n/navigation";
+import {
+  getRouteAnchorScreenVersion,
+  isRouteAnchorsSurfaceReady,
+  subscribeRouteAnchorScreen,
+} from "@/components/home/routeAnchorScreenBridge";
 
 export default function BlogPage() {
   const t = useTranslations("blog");
+  const pathname = usePathname();
+  const layoutKey = pathname.replace(/\/+$/, "") || "/";
+  useSyncExternalStore(subscribeRouteAnchorScreen, getRouteAnchorScreenVersion, () => 0);
+  const routeReady = isRouteAnchorsSurfaceReady(layoutKey);
+  const [contentReady, setContentReady] = useState(false);
+
+  useEffect(() => {
+    setContentReady(false);
+  }, [layoutKey]);
+
+  useEffect(() => {
+    if (!routeReady) {
+      setContentReady(false);
+      return;
+    }
+    // Match hero shell route-entry timing so list content never pops before hero appears.
+    const id = window.setTimeout(() => setContentReady(true), 980);
+    return () => window.clearTimeout(id);
+  }, [routeReady]);
   
   // Blog posts data - using translations
   const blogPosts = [
@@ -25,11 +52,11 @@ export default function BlogPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="pt-32 pb-20">
-        <div className="container">
+      <section className="pt-28 pb-16 min-h-[92svh] flex items-center">
+        <div className="container md:min-h-[640px] flex items-center">
           <CosmicPageHeroShell className="max-w-4xl mx-auto">
             <AnimatedSection>
-              <div className="text-center max-w-3xl mx-auto">
+              <div className="text-start max-w-3xl mx-auto">
                 <p className="text-sm font-medium text-primary mb-2 uppercase tracking-wide">
                   {t("heroLabel")}
                 </p>
@@ -45,9 +72,11 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* Blog Posts */}
-      <section className="pb-20">
-        <div className="container max-w-4xl">
+      {/* Blog Posts — gated to hero entry timing so both arrive together */}
+      {contentReady ? (
+        <CosmicRouteSectionShell anchorIndex={1}>
+          <section className="pb-20">
+            <div className="container max-w-4xl">
           <div className="space-y-8">
             {blogPosts.map((post, index) => (
               <AnimatedSection key={post.slug} delay={index * 0.1}>
@@ -94,8 +123,14 @@ export default function BlogPage() {
               </div>
             </AnimatedSection>
           )}
-        </div>
-      </section>
+            </div>
+          </section>
+        </CosmicRouteSectionShell>
+      ) : (
+        <section className="pb-20">
+          <div className="container max-w-4xl" />
+        </section>
+      )}
     </>
   );
 }

@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Globe, Palette, TrendingUp, Smartphone, ArrowRight, Check } from "lucide-react";
 import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
+import { CosmicRouteSectionShell } from "@/components/CosmicRouteSectionShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { services } from "@/data/services";
 import { Button } from "@/components/ui/button";
@@ -22,8 +23,8 @@ export default function ServicesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="pt-32 pb-20">
-        <div className="container">
+      <section className="pt-28 pb-16 min-h-[92svh] flex items-center">
+        <div className="container md:min-h-[640px] flex items-center">
           <CosmicPageHeroShell>
             <AnimatedSection>
               <div className="max-w-3xl">
@@ -43,8 +44,9 @@ export default function ServicesPage() {
       </section>
 
       {/* Services Detail */}
-      <section className="pb-20">
-        <div className="container">
+      <CosmicRouteSectionShell anchorIndex={1}>
+        <section className="pb-20">
+          <div className="container">
           <div className="space-y-24">
             {services.map((service, index) => {
               const Icon = iconMap[service.icon];
@@ -95,12 +97,14 @@ export default function ServicesPage() {
               );
             })}
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </CosmicRouteSectionShell>
 
       {/* CTA */}
-      <section className="section-padding bg-primary text-primary-foreground">
-        <div className="container text-center">
+      <CosmicRouteSectionShell anchorIndex={2}>
+        <section className="section-padding bg-primary text-primary-foreground">
+          <div className="container text-center">
           <AnimatedSection>
             <h2 className="text-3xl font-bold mb-4">
               {t("notSure")}
@@ -112,8 +116,9 @@ export default function ServicesPage() {
               <Link href="/contact">{t("bookFreeCall")}</Link>
             </Button>
           </AnimatedSection>
-        </div>
-      </section>
+          </div>
+        </section>
+      </CosmicRouteSectionShell>
     </>
   );
 }

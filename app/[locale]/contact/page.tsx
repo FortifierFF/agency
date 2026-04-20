@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Mail, MapPin, Send, CheckCircle } from "lucide-react";
 import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
+import { CosmicRouteSectionShell } from "@/components/CosmicRouteSectionShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -88,8 +89,8 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="pt-32 pb-12">
-        <div className="container">
+      <section className="pt-28 pb-16 min-h-[92svh] flex items-center">
+        <div className="container md:min-h-[640px] flex items-center">
           <CosmicPageHeroShell pad="sm">
             <AnimatedSection>
               <div className="max-w-2xl">
@@ -109,8 +110,9 @@ export default function ContactPage() {
       </section>
 
       {/* Form Section */}
-      <section className="pb-20">
-        <div className="container">
+      <CosmicRouteSectionShell anchorIndex={1}>
+        <section className="pb-20">
+          <div className="container">
           <div className="grid lg:grid-cols-3 gap-12">
             {/* Form */}
             <div className="lg:col-span-2">
@@ -338,8 +340,9 @@ export default function ContactPage() {
               </AnimatedSection>
             </div>
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </CosmicRouteSectionShell>
     </>
   );
 }

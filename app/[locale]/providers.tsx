@@ -14,7 +14,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider storageKey="apex-theme">
+      <ThemeProvider storageKey="pal-theme">
         <CosmicExperienceProvider>
           <ScrollToTop />
           <CosmicBootInit />

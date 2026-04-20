@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { cn } from "@/lib/utils";
@@ -108,10 +109,21 @@ export function Navbar() {
         <motion.div initial="hidden" animate={revealNav ? "show" : "hidden"} variants={logoVariants}>
           <Link
             href="/"
-            className="text-xl font-bold tracking-tight text-foreground/95 drop-shadow-[0_0_18px_rgba(255,255,255,0.08)]"
+            className="relative inline-flex overflow-hidden rounded-xl border border-white/28 bg-white/12 p-2 shadow-[0_0_24px_rgba(140,180,255,0.24)] backdrop-blur-md transition-colors hover:bg-white/15 w-[6rem] h-[4rem] flex items-center justify-center"
             aria-label={tCommon("apexStudioHome")}
           >
-            apex<span className="text-primary">.</span>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-[3px] rounded-[8px] bg-[radial-gradient(circle_at_30%_35%,rgba(205,230,255,0.62)_0%,rgba(172,210,248,0.46)_44%,rgba(105,145,225,0.2)_100%)]"
+            />
+            <Image
+              src="/PAL-web-studio.png"
+              alt="PAL Studio"
+              width={124}
+              height={44}
+              priority
+              className="relative z-10 h-8 w-auto scale-[2.6] rounded-[8px] object-contain brightness-[1.82] contrast-[1.62] saturate-[1.28] drop-shadow-[0_0_13px_rgba(150,205,255,0.42)] sm:h-9"
+            />
           </Link>
         </motion.div>
 
@@ -125,12 +137,12 @@ export function Navbar() {
           <div className="flex flex-row flex-wrap items-center justify-center gap-1">
             {navLinks.map((link) => (
               <motion.div key={link.href} variants={linkItemVariants} className="flex">
-                <div className="nav-link-rainbow-ring rounded-full">
-                  <span className="nav-link-rainbow-spin rounded-full" aria-hidden />
+                <div className="nav-link-rainbow-ring rounded-[6px]">
+                  <span className="nav-link-rainbow-spin rounded-[6px]" aria-hidden />
                   <Link
                     href={link.href}
                     className={cn(
-                      "relative z-10 block rounded-full px-4 py-2 text-sm font-medium backdrop-blur-sm transition-colors",
+                      "relative z-10 block rounded-[6px] px-4 py-2 text-sm font-medium backdrop-blur-sm transition-colors",
                       "bg-background/92 dark:bg-background/78",
                       pathname === link.href
                         ? "text-foreground ring-1 ring-white/12"
@@ -199,12 +211,12 @@ export function Navbar() {
           >
             <div className="container flex flex-col gap-2 py-4">
               {navLinks.map((link) => (
-                <div key={link.href} className="nav-link-rainbow-ring rounded-lg">
-                  <span className="nav-link-rainbow-spin rounded-lg" aria-hidden />
+                <div key={link.href} className="nav-link-rainbow-ring rounded-[6px]">
+                  <span className="nav-link-rainbow-spin rounded-[6px]" aria-hidden />
                   <Link
                     href={link.href}
                     className={cn(
-                      "relative z-10 block rounded-lg px-4 py-3 text-sm font-medium transition-colors",
+                      "relative z-10 block rounded-[6px] px-4 py-3 text-sm font-medium transition-colors",
                       "bg-background/92 dark:bg-background/78",
                       pathname === link.href
                         ? "text-foreground ring-1 ring-white/12"
