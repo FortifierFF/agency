@@ -13,7 +13,7 @@ import { createCosmicWarpTunnel } from "./cosmicWarpTunnel";
 import { createCosmicRouteAnchorStars } from "./cosmicRouteAnchorStars";
 import { getCosmicRouteAnchorLayoutKey, getCosmicRouteSectionAnchorCount } from "@/lib/cosmicRouteAnchorStore";
 import { getRouteAnchorWorldPosition } from "@/lib/cosmicRouteAnchorLayoutPositions";
-import { setHomeAnchorViewportPixels } from "./homeAnchorScreenBridge";
+import { getHeroBallEntranceProgress, setHomeAnchorViewportPixels } from "./homeAnchorScreenBridge";
 
 /** Fog tint — warp streaks read against this; no procedural dome anymore. */
 const COL = { fog: 0x030510 };
@@ -247,8 +247,12 @@ export function ImmersiveThreeBackground() {
             });
           }
           setHomeAnchorViewportPixels(pts);
-          // Hero timed “grow from ball” uses `performance.now()` — refresh without waiting on scroll.
-          tickCosmicSectionPresenceStore();
+          // Only tick presence from WebGL while the timed hero entrance runs — after that, scroll
+          // drives `tickCosmicSectionPresenceStore`; doing both every rAF re-read layout and fights
+          // the frozen scroll-band snapshot (see `invalidateHomeScrollBandSnap`).
+          if (getHeroBallEntranceProgress(performance.now()) < 1) {
+            tickCosmicSectionPresenceStore();
+          }
         }
       }
 

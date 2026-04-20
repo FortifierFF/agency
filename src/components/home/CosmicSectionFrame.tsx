@@ -92,9 +92,23 @@ export function CosmicSectionFrame({ sectionId, children }: CosmicSectionFramePr
     setOriginCss(`${ox}px ${oy}px`);
   }, [sectionId, isHero, plateScale, presence]);
 
+  // Mild Z tied **only** to scale (not scroll) — reads as depth toward the ball without the old
+  // `presence`/`scroll`-driven Z that fought layout and felt like vertical “correction” jitter.
+  const zEase = (1 - clamp01(scaleGeo)) * -42;
+
+  // `pointer-events: none` on an ancestor disables hit-testing for descendants **unless** they set
+  // `pointer-events: auto`. We keep the glass shell non-interactive and only opt the **content**
+  // column in when the plate is actually usable — avoids dead zones + matches spec inheritance.
+  const contentPointer =
+    plateScale > 0.16 || opacity > 0.06 ? ("auto" as const) : ("none" as const);
+
   return (
     <div className="mx-auto w-full max-w-[100vw] px-0 sm:px-0">
-      <div ref={layoutMeasureRef} className="relative w-full">
+      <div
+        ref={layoutMeasureRef}
+        className="relative w-full pointer-events-none isolate"
+        style={{ perspective: "2000px", transformStyle: "flat" }}
+      >
         <div
           className={[
             "relative overflow-hidden rounded-2xl border p-[1px] shadow-2xl",
@@ -108,11 +122,12 @@ export function CosmicSectionFrame({ sectionId, children }: CosmicSectionFramePr
           data-cosmic-plate-scale={plateScale.toFixed(4)}
           data-cosmic-section-index={sectionIndex}
           style={{
-            transform: `scale(${scaleGeo})`,
+            transform: `scale(${scaleGeo}) translateZ(${zEase}px)`,
             transformOrigin: originCss,
+            transformStyle: "preserve-3d",
             backfaceVisibility: "hidden",
             opacity,
-            pointerEvents: opacity < 0.03 ? "none" : "auto",
+            pointerEvents: "none",
             willChange: "transform, opacity",
             boxShadow: isHero
               ? `0 0 0 1px rgba(255,255,255,0.07) inset, 0 ${shadowSpread}px 120px rgba(0,0,0,${shadowLift}), 0 0 110px rgba(110,130,220,${0.08 + t * 0.12})`
@@ -153,6 +168,7 @@ export function CosmicSectionFrame({ sectionId, children }: CosmicSectionFramePr
                 : "relative z-10 rounded-[0.95rem] bg-gradient-to-b from-white/18 to-white/5 p-1 dark:from-white/10 dark:to-slate-950/40 sm:p-2",
               "[transform:translateZ(0)]",
             ].join(" ")}
+            style={{ pointerEvents: contentPointer }}
           >
             <CosmicSurfaceProvider>{children}</CosmicSurfaceProvider>
           </div>

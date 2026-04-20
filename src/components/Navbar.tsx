@@ -68,6 +68,7 @@ export function Navbar() {
   const landingPhase = cosmic?.landingPhase ?? "landed";
   const reduceMotion = useReducedMotion();
 
+  /** Projects, Services, About, Blog, Contact — rainbow border hover lives only on these. */
   const navLinks = [
     { href: "/projects", label: t("projects") },
     { href: "/services", label: t("services") },
@@ -124,17 +125,21 @@ export function Navbar() {
           <div className="flex flex-row flex-wrap items-center justify-center gap-1">
             {navLinks.map((link) => (
               <motion.div key={link.href} variants={linkItemVariants} className="flex">
-                <Link
-                  href={link.href}
-                  className={cn(
-                    "px-4 py-2 text-sm font-medium rounded-full transition-colors backdrop-blur-sm",
-                    pathname === link.href
-                      ? "text-foreground bg-white/12 ring-1 ring-white/12"
-                      : "text-muted-foreground hover:text-foreground hover:bg-white/8"
-                  )}
-                >
-                  {link.label}
-                </Link>
+                <div className="nav-link-rainbow-ring rounded-full">
+                  <span className="nav-link-rainbow-spin rounded-full" aria-hidden />
+                  <Link
+                    href={link.href}
+                    className={cn(
+                      "relative z-10 block rounded-full px-4 py-2 text-sm font-medium backdrop-blur-sm transition-colors",
+                      "bg-background/92 dark:bg-background/78",
+                      pathname === link.href
+                        ? "text-foreground ring-1 ring-white/12"
+                        : "text-muted-foreground hover:text-foreground hover:bg-white/8"
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -192,20 +197,23 @@ export function Navbar() {
             transition={{ duration: 0.2 }}
             className="md:hidden glass border-t border-border"
           >
-            <div className="container py-4 flex flex-col gap-2">
+            <div className="container flex flex-col gap-2 py-4">
               {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "px-4 py-3 text-sm font-medium rounded-lg transition-colors",
-                    pathname === link.href
-                      ? "text-foreground bg-secondary"
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                  )}
-                >
-                  {link.label}
-                </Link>
+                <div key={link.href} className="nav-link-rainbow-ring rounded-lg">
+                  <span className="nav-link-rainbow-spin rounded-lg" aria-hidden />
+                  <Link
+                    href={link.href}
+                    className={cn(
+                      "relative z-10 block rounded-lg px-4 py-3 text-sm font-medium transition-colors",
+                      "bg-background/92 dark:bg-background/78",
+                      pathname === link.href
+                        ? "text-foreground ring-1 ring-white/12"
+                        : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                </div>
               ))}
               <Button asChild className="mt-2 rounded-full">
                 <Link href="/contact">{tCommon("bookCall")}</Link>

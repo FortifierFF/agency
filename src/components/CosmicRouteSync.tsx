@@ -5,6 +5,7 @@ import { useLayoutEffect, useRef } from "react";
 import { useCosmicExperience } from "@/context/CosmicExperienceContext";
 import { syncCosmicRouteAnchorFromPathname } from "@/lib/cosmicRouteAnchorStore";
 import { resetHomeAnchorScreenBridge } from "@/components/home/homeAnchorScreenBridge";
+import { invalidateHomeScrollBandSnap } from "@/components/home/cosmicSectionPresenceStore";
 
 /**
  * In-app navigations: start the route transition + trapezoid WebGL flight before paint so the
@@ -21,6 +22,7 @@ export function CosmicRouteSync() {
 
     if (prev.current !== null && prev.current !== pathname) {
       resetHomeAnchorScreenBridge();
+      invalidateHomeScrollBandSnap();
     }
 
     if (prev.current === null) {

@@ -166,6 +166,67 @@
     perspective: 1000px;
   }
 
+  @property --nav-ring-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+  }
+
+  @keyframes nav-rainbow-flow {
+    to {
+      --nav-ring-angle: 360deg;
+    }
+  }
+
+  /**
+   * Primary nav route links only: 2px rainbow **border ring** on hover (center stays transparent).
+   */
+  .nav-link-rainbow-ring {
+    --nav-ring-w: 2px;
+    position: relative;
+    display: inline-flex;
+    isolation: isolate;
+    border: 1px solid transparent;
+  }
+  .nav-link-rainbow-spin {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.16s ease;
+    --nav-ring-angle: 0deg;
+    padding: var(--nav-ring-w);
+    box-sizing: border-box;
+    background: conic-gradient(
+      from var(--nav-ring-angle),
+      hsl(328 92% 62%),
+      hsl(268 88% 62%),
+      hsl(218 92% 60%),
+      hsl(188 86% 54%),
+      hsl(142 84% 52%),
+      hsl(92 90% 56%),
+      hsl(48 96% 58%),
+      hsl(12 92% 60%),
+      hsl(328 92% 62%)
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+  .nav-link-rainbow-ring:hover .nav-link-rainbow-spin {
+    opacity: 1;
+    animation: nav-rainbow-flow 2.25s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-link-rainbow-ring:hover .nav-link-rainbow-spin {
+      animation: none;
+      opacity: 0.85;
+    }
+  }
+
   .cta-section,
   .cta-section *,
   .cta-section::before,

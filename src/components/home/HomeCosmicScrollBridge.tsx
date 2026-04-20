@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect } from "react";
-import { tickCosmicSectionPresenceStore } from "./cosmicSectionPresenceStore";
+import { invalidateHomeScrollBandSnap, tickCosmicSectionPresenceStore } from "./cosmicSectionPresenceStore";
 
 /**
  * One scroll/resize listener for all cosmic sections — updates the shared presence store
@@ -17,18 +17,24 @@ export function HomeCosmicScrollBridge() {
 
   useEffect(() => {
     let raf = 0;
-    const onScrollOrResize = () => {
+    const flush = () => {
       if (raf) return;
       raf = requestAnimationFrame(() => {
         raf = 0;
         tickCosmicSectionPresenceStore();
       });
     };
-    window.addEventListener("scroll", onScrollOrResize, { passive: true });
-    window.addEventListener("resize", onScrollOrResize);
+    const onScroll = () => flush();
+    const onResize = () => {
+      // Viewport height shifts band math; drop frozen centers so the next tick re-snaps cleanly.
+      invalidateHomeScrollBandSnap();
+      flush();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
     return () => {
-      window.removeEventListener("scroll", onScrollOrResize);
-      window.removeEventListener("resize", onScrollOrResize);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
       if (raf) cancelAnimationFrame(raf);
     };
   }, []);

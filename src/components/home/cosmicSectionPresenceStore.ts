@@ -66,6 +66,14 @@ function heroPresenceBias(p: number, scrollY: number) {
 /** Smallest plate scale when a section is “at” its anchor ball (10–12% matches art direction). */
 const PLATE_SCALE_AT_BALL = 0.11;
 
+/**
+ * Document-Y band centers for home scroll choreography, **snapshotted once** after the hero
+ * entrance finishes. Re-reading `getBoundingClientRect()` every frame while plates `scale()`
+ * changes ancestor bounds → moving thresholds → feedback jitter (“shake”). Cleared on resize
+ * and route changes via `invalidateHomeScrollBandSnap()`.
+ */
+let snappedHomeBandCenters: number[] | null = null;
+
 let presenceCache: Map<HomeBgSectionId, number> = new Map();
 /** Literal CSS scale factor (ball → full). Same keys as presence; home uses ball choreography. */
 let plateScaleCache: Map<HomeBgSectionId, number> = new Map();
@@ -82,6 +90,10 @@ function layoutCenterY(
   return index * vh * 0.92 + vh * 0.28;
 }
 
+export function invalidateHomeScrollBandSnap() {
+  snappedHomeBandCenters = null;
+}
+
 /**
  * Scroll-driven scales for `/`: current section shrinks toward its ball while the next grows from
  * its ball, with overlap so the incoming plate starts before the outgoing hits ~ball size.
@@ -89,12 +101,11 @@ function layoutCenterY(
 function computeHomePlateScalesFromScroll(
   scrollY: number,
   vh: number,
-  layoutMap: Map<HomeBgSectionId, { top: number; height: number }>,
+  centers: readonly number[],
   nowMs: number
 ): number[] {
   const n = HOME_BG_SECTION_ORDER.length;
   const scales = new Array<number>(n).fill(PLATE_SCALE_AT_BALL);
-  const centers = HOME_BG_SECTION_ORDER.map((id, idx) => layoutCenterY(id, idx, layoutMap, vh));
 
   if (!isHomeAnchorsSurfaceReady()) {
     return scales;
@@ -153,7 +164,22 @@ function recomputePresences() {
 
   if (onHome && !reduced) {
     const nowMs = typeof performance !== "undefined" ? performance.now() : 0;
-    const plateScales = computeHomePlateScalesFromScroll(scrollY, vh, layoutMap, nowMs);
+    const entranceT = getHeroBallEntranceProgress(nowMs);
+    // Freeze scroll thresholds after hero entrance: live DOM reads would chase our own `scale()`.
+    if (
+      snappedHomeBandCenters === null &&
+      isHomeAnchorsSurfaceReady() &&
+      entranceT >= 1 &&
+      typeof window !== "undefined"
+    ) {
+      snappedHomeBandCenters = HOME_BG_SECTION_ORDER.map((id, idx) =>
+        layoutCenterY(id, idx, layoutMap, vh)
+      );
+    }
+    const centers =
+      snappedHomeBandCenters ??
+      HOME_BG_SECTION_ORDER.map((id, idx) => layoutCenterY(id, idx, layoutMap, vh));
+    const plateScales = computeHomePlateScalesFromScroll(scrollY, vh, centers, nowMs);
     for (let i = 0; i < HOME_BG_SECTION_ORDER.length; i++) {
       const id = HOME_BG_SECTION_ORDER[i]!;
       const sc = plateScales[i] ?? PLATE_SCALE_AT_BALL;
