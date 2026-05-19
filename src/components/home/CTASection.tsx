@@ -24,10 +24,9 @@ export function CTASection() {
           outline: none !important;
           box-shadow: none !important;
         }
-        /* Force new rendering layer to prevent artifacts */
+        /* Stable layer without promoting the whole strip — avoids extra compositor work while scrolling. */
         .cta-section {
           transform: translateZ(0);
-          will-change: transform;
         }
       `}} />
       <section className="cta-section section-padding relative overflow-hidden bg-transparent text-foreground">

@@ -8,8 +8,16 @@ import { Button } from "@/components/ui/button";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { useCosmicExperienceOptional } from "@/context/CosmicExperienceContext";
 
+type HeroSectionProps = {
+  /**
+   * When true, hero is rendered **inside** `CosmicPageHeroShell` (same stack as About). Omit the
+   * outer full-screen section and the duplicate inner glass card — the shell provides the plate.
+   */
+  cosmicShell?: boolean;
+};
+
 /** Hero is typography-forward; the fixed WebGL layer provides the space backdrop (no local fills). */
-export function HeroSection() {
+export function HeroSection({ cosmicShell = false }: HeroSectionProps) {
   const t = useTranslations("hero");
   const tCommon = useTranslations("common");
   const cosmic = useCosmicExperienceOptional();
@@ -22,6 +30,85 @@ export function HeroSection() {
     { key: "fixSEO", icon: Search },
     { key: "buildApp", icon: Smartphone },
   ];
+
+  const inner = (
+    <>
+      <div className="relative z-10 mx-auto w-full max-w-4xl [transform:translateZ(0)]">
+        <AnimatedSection delay={contentDelayBase}>
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/10 px-3 py-1.5 text-[11px] uppercase tracking-[0.24em] text-primary/95 sm:text-xs">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_14px_rgba(150,170,255,0.8)]" />
+            {t("subtitle")}
+          </div>
+        </AnimatedSection>
+
+        <AnimatedSection delay={contentDelayBase + 0.1}>
+          <h1 className="mb-6 max-w-5xl text-4xl font-bold leading-[1.02] tracking-[-0.04em] text-foreground sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.2rem]">
+            {t("title")}{" "}
+            <span className="gradient-text drop-shadow-[0_0_22px_rgba(170,180,255,0.24)]">{t("titleHighlight")}</span>
+          </h1>
+        </AnimatedSection>
+
+        <AnimatedSection delay={contentDelayBase + 0.2}>
+          <p className="mb-9 max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl">
+            {t("description")}
+          </p>
+        </AnimatedSection>
+
+        <AnimatedSection delay={contentDelayBase + 0.3}>
+          <div className="mb-12 flex flex-col gap-4 sm:flex-row">
+            <Button asChild size="lg" className="rounded-full px-8 shadow-[0_0_24px_rgba(120,150,255,0.14)]">
+              <Link href="/projects">
+                {tCommon("viewWork")}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="rounded-full border-white/14 bg-white/5 px-8 text-foreground hover:bg-white/10">
+              <Link href="/contact">{tCommon("getFreeAudit")}</Link>
+            </Button>
+          </div>
+        </AnimatedSection>
+
+        <AnimatedSection delay={contentDelayBase + 0.42}>
+          <div>
+            <p className="mb-3 text-sm text-muted-foreground">{tCommon("chooseGoal")}</p>
+            <div className="flex flex-wrap gap-2.5">
+              {goalButtons.map((goal) => (
+                <motion.button
+                  key={goal.key}
+                  type="button"
+                  whileHover={{ scale: 1.02, y: -1 }}
+                  whileTap={{ scale: 0.985 }}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2.5 text-sm font-medium text-foreground/90 transition-colors hover:bg-white/14"
+                >
+                  <goal.icon className="h-4 w-4 text-primary" />
+                  {tCommon(goal.key)}
+                </motion.button>
+              ))}
+            </div>
+          </div>
+        </AnimatedSection>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.15, duration: 0.55 }}
+        className={cosmicShell ? "pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2" : "absolute bottom-8 left-1/2 -translate-x-1/2"}
+      >
+        <motion.div
+          animate={{ scale: [1, 1.06, 1], opacity: [0.55, 0.9, 0.55] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-muted-foreground/30 p-2"
+        >
+          <div className="h-2 w-1 rounded-full bg-muted-foreground/50" />
+        </motion.div>
+      </motion.div>
+    </>
+  );
+
+  if (cosmicShell) {
+    return <div className="relative w-full">{inner}</div>;
+  }
 
   return (
     <section className="relative flex min-h-screen items-center overflow-x-hidden overflow-y-visible pt-24 pb-10 sm:pt-28">
@@ -42,79 +129,10 @@ export function HeroSection() {
             <div className="pointer-events-none absolute bottom-5 right-5 h-10 w-10 rounded-br-2xl border-b border-r border-primary/25" />
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
-            <div className="relative z-10 max-w-4xl [transform:translateZ(0)]">
-              <AnimatedSection delay={contentDelayBase}>
-                <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/10 px-3 py-1.5 text-[11px] uppercase tracking-[0.24em] text-primary/95 sm:text-xs">
-                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_14px_rgba(150,170,255,0.8)]" />
-                  {t("subtitle")}
-                </div>
-              </AnimatedSection>
-
-              <AnimatedSection delay={contentDelayBase + 0.1}>
-                <h1 className="mb-6 max-w-5xl text-4xl font-bold leading-[1.02] tracking-[-0.04em] text-foreground sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.2rem]">
-                  {t("title")}{" "}
-                  <span className="gradient-text drop-shadow-[0_0_22px_rgba(170,180,255,0.24)]">{t("titleHighlight")}</span>
-                </h1>
-              </AnimatedSection>
-
-              <AnimatedSection delay={contentDelayBase + 0.2}>
-                <p className="mb-9 max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl">
-                  {t("description")}
-                </p>
-              </AnimatedSection>
-
-              <AnimatedSection delay={contentDelayBase + 0.3}>
-                <div className="mb-12 flex flex-col gap-4 sm:flex-row">
-                  <Button asChild size="lg" className="rounded-full px-8 shadow-[0_0_24px_rgba(120,150,255,0.14)]">
-                    <Link href="/projects">
-                      {tCommon("viewWork")}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg" className="rounded-full border-white/14 bg-white/5 px-8 text-foreground hover:bg-white/10">
-                    <Link href="/contact">{tCommon("getFreeAudit")}</Link>
-                  </Button>
-                </div>
-              </AnimatedSection>
-
-              <AnimatedSection delay={contentDelayBase + 0.42}>
-                <div>
-                  <p className="mb-3 text-sm text-muted-foreground">{tCommon("chooseGoal")}</p>
-                  <div className="flex flex-wrap gap-2.5">
-                    {goalButtons.map((goal) => (
-                      <motion.button
-                        key={goal.key}
-                        type="button"
-                        whileHover={{ scale: 1.02, y: -1 }}
-                        whileTap={{ scale: 0.985 }}
-                        className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2.5 text-sm font-medium text-foreground/90 transition-colors hover:bg-white/14"
-                      >
-                        <goal.icon className="h-4 w-4 text-primary" />
-                        {tCommon(goal.key)}
-                      </motion.button>
-                    ))}
-                  </div>
-                </div>
-              </AnimatedSection>
-            </div>
+            {inner}
           </div>
         </div>
       </div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.15, duration: 0.55 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ scale: [1, 1.06, 1], opacity: [0.55, 0.9, 0.55] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-muted-foreground/30 p-2"
-        >
-          <div className="h-2 w-1 rounded-full bg-muted-foreground/50" />
-        </motion.div>
-      </motion.div>
     </section>
   );
 }

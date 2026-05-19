@@ -53,7 +53,8 @@ export function ParticleNetwork({
     // Use minimum DPR of 2 to match mobile sharpness (mobile typically has DPR 2-3)
     const resizeCanvas = () => {
       const rect = canvas.getBoundingClientRect();
-      const dpr = Math.max(window.devicePixelRatio || 1, 2);
+      // Cap DPR so large “retina” values do not blow up fill rate on big monitors (was Math.max(..., 2)).
+      const dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
       dprRef.current = dpr;
       
       // Store display size for consistent boundary checking
@@ -101,10 +102,11 @@ export function ParticleNetwork({
     
     resizeCanvas();
     initParticles();
-    window.addEventListener("resize", () => {
+    const onResize = () => {
       resizeCanvas();
       initParticles();
-    });
+    };
+    window.addEventListener("resize", onResize);
 
     // Animation loop - optimized for smooth 60fps performance
     const animate = () => {
@@ -178,7 +180,7 @@ export function ParticleNetwork({
     animate();
 
     return () => {
-      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("resize", onResize);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }

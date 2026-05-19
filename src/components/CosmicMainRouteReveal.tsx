@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "@/i18n/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import { useCosmicExperienceOptional } from "@/context/CosmicExperienceContext";
 
@@ -8,11 +7,9 @@ import { useCosmicExperienceOptional } from "@/context/CosmicExperienceContext";
  * Wraps routed page content so in-app navigations feel like the first load:
  * hidden during the route hyperspace pulse, then a short “arrive from deep space” motion.
  *
- * The home page (`/`) already uses scroll-linked `CosmicSectionFrame` plates — we skip the
- * extra whole-page motion there to avoid double depth cues.
+ * Home uses the same shells and the same whole-page arrival motion as inner routes (e.g. About).
  */
 export function CosmicMainRouteReveal({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
   const cosmic = useCosmicExperienceOptional();
   const reduceMotion = useReducedMotion();
 
@@ -33,8 +30,8 @@ export function CosmicMainRouteReveal({ children }: { children: React.ReactNode 
     );
   }
 
-  const isHome = pathname === "/";
-  if (routeArrivalGeneration === 0 || isHome) {
+  // Same post-navigation motion on every route (including `/`) so home and About feel identical.
+  if (routeArrivalGeneration === 0) {
     return <>{children}</>;
   }
 

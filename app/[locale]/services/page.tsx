@@ -16,8 +16,11 @@ const iconMap: Record<string, React.ElementType> = {
   Smartphone,
 };
 
+type ServiceId = "web-development" | "ui-ux-design" | "seo-performance" | "mobile-apps";
+
 export default function ServicesPage() {
   const t = useTranslations("services");
+  const tHomeServices = useTranslations("home.services");
   const tNav = useTranslations("nav");
   const tCommon = useTranslations("common");
   return (
@@ -51,6 +54,9 @@ export default function ServicesPage() {
             {services.map((service, index) => {
               const Icon = iconMap[service.icon];
               const isEven = index % 2 === 0;
+              const id = service.id as ServiceId;
+              const deliverables = tHomeServices.raw(`items.${id}.deliverables`) as string[];
+              const title = tHomeServices(`items.${id}.title`);
 
               return (
                 <AnimatedSection key={service.id}>
@@ -64,12 +70,12 @@ export default function ServicesPage() {
                       <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
                         <Icon className="h-7 w-7 text-primary" />
                       </div>
-                      <h2 className="text-3xl font-bold mb-4">{service.title}</h2>
+                      <h2 className="text-3xl font-bold mb-4">{title}</h2>
                       <p className="text-muted-foreground mb-8">
-                        {service.description}
+                        {tHomeServices(`items.${id}.description`)}
                       </p>
                       <ul className="grid sm:grid-cols-2 gap-3 mb-8">
-                        {service.deliverables.map((item) => (
+                        {deliverables.map((item) => (
                           <li key={item} className="flex items-start gap-2">
                             <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                             <span className="text-sm">{item}</span>
@@ -87,7 +93,7 @@ export default function ServicesPage() {
                       <div className="aspect-[4/3] rounded-2xl bg-muted border border-border overflow-hidden">
                         <img
                           src="/placeholder.svg"
-                          alt={service.title}
+                          alt={title}
                           className="w-full h-full object-cover"
                         />
                       </div>

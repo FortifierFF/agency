@@ -4,8 +4,6 @@ import { usePathname } from "@/i18n/navigation";
 import { useLayoutEffect, useRef } from "react";
 import { useCosmicExperience } from "@/context/CosmicExperienceContext";
 import { syncCosmicRouteAnchorFromPathname } from "@/lib/cosmicRouteAnchorStore";
-import { resetHomeAnchorScreenBridge } from "@/components/home/homeAnchorScreenBridge";
-import { invalidateHomeScrollBandSnap } from "@/components/home/cosmicSectionPresenceStore";
 import { resetRouteAnchorScreenBridge } from "@/components/home/routeAnchorScreenBridge";
 
 /**
@@ -22,9 +20,7 @@ export function CosmicRouteSync() {
     syncCosmicRouteAnchorFromPathname(pathname);
 
     if (prev.current !== null && prev.current !== pathname) {
-      resetHomeAnchorScreenBridge();
       resetRouteAnchorScreenBridge();
-      invalidateHomeScrollBandSnap();
     }
 
     if (prev.current === null) {

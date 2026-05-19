@@ -1,6 +1,7 @@
 /**
- * Section ids on `HomeSectionShell` (`data-home-bg-section`) for scroll layout reads (`readHomeSectionLayouts`).
- * Order is the narrative order down the home page — keep in sync with `page.tsx`.
+ * Ordered home narrative sections (hero + bodies). Used for `resolveRouteSectionAnchorCount("/")`
+ * so WebGL projects one anchor per shell index (0 = hero, 1…N = `CosmicRouteSectionShell`).
+ * Optional `readHomeSectionLayouts()` measures `[data-home-bg-section]` if you add those markers back for tooling.
  */
 export const HOME_BG_SECTION_ORDER = [
   "hero",

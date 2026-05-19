@@ -38,6 +38,14 @@ export const cosmicDriver: CosmicDriver = {
 };
 
 /**
+ * Boot-only: exponential decay on `introHyperspace` each frame in `tickCosmicDriver`
+ * (`introHyperspace *= exp(-elapsed * this)`).
+ * Lower = longer ride. `3.51` ≈ **1s** to the `ImmersiveThreeBackground` settle band; **÷1.2** adds
+ * ~20% more wall time (~**1.2s**). In-app routes still use `STREAK_VISUAL_TAU_DOWN_S` for streak smoothing.
+ */
+export const INTRO_HYPERSPACE_DECAY_PER_S = 2.925;
+
+/**
  * Trapezoid “speed vs time” for in-app route flights (tune these first).
  *
  * - `ROUTE_MIN_FLIGHT_MS` — minimum wall time from nav start until decel ends.
@@ -46,23 +54,34 @@ export const cosmicDriver: CosmicDriver = {
  *   curve `(1−u)^p` (see `ROUTE_DECEL_POWER`) so speed drops quickly when decel **starts** (steep
  *   v–t edge), then eases into zero. `routeDecelProgress` stays **linear** in `u` for anchor timing.
  * - Plateau length is implied: `ROUTE_MIN_FLIGHT_MS - ROUTE_ACCEL_MS - ROUTE_DECEL_MS` (extended by
- *   `markRouteContentReady()` when the page shell is still loading).
+ *   `markRouteContentReady()` when the page shell is still loading — **capped** by
+ *   `ROUTE_CONTENT_READY_MAX_EXTEND_MS` so slow RSC cannot stretch cruise forever).
  */
-export const ROUTE_MIN_FLIGHT_MS = 1600;
-export const ROUTE_ACCEL_MS = 520;
-/** Must stay above `ANCHOR_LEAD_BEFORE_IDLE_MS` (300) in `cosmicRouteAnchorStars.ts`. */
-export const ROUTE_DECEL_MS = 340;
+/** Minimum wall time from nav start until decel **ends** (accel + plateau + decel). */
+export const ROUTE_MIN_FLIGHT_MS = 600;
+/** Linear ramp 0→1 on `routeHyperspace` during accel. */
+export const ROUTE_ACCEL_MS = 280;
+/** Wall time of the falling segment; keep ≥ ~220 so anchor choreography has room vs idle tail. */
+export const ROUTE_DECEL_MS = 220;
 /**
  * Decel sample `u` is linear 0→1 across `ROUTE_DECEL_MS`. Hyperspace = `(1−u)^p` — `p>1` yields a
  * much steeper drop at the start of slowdown (trapezoid “roof” falls off quickly), gentler final tick.
  */
 export const ROUTE_DECEL_POWER = 2.45;
 
+/**
+ * `RouteFlightController` calls `markRouteContentReady()` on layout + rAF. Uncapped, that did
+ * `cruiseEnd = max(cruiseEnd, now)` forever, so the ship cruised until React went idle — ignoring
+ * `ROUTE_MIN_FLIGHT_MS`. We only allow this much **extra** delay after the planned `cruiseEnd`.
+ */
+export const ROUTE_CONTENT_READY_MAX_EXTEND_MS = 240;
+
 const ROUTE_MIN_PLATEAU_MS = Math.max(0, ROUTE_MIN_FLIGHT_MS - ROUTE_ACCEL_MS - ROUTE_DECEL_MS);
 
 type RouteFlightState = {
   navStart: number;
   cruiseEnd: number;
+  cruiseEndMax: number;
   flightEnd: number;
   /** Prevents firing the settle event twice if two rAF ticks land past `flightEnd`. */
   settleDispatched: boolean;
@@ -76,21 +95,31 @@ function clamp01(n: number) {
 
 function beginRouteFlightWindow(now: number) {
   cosmicDriver.routeFlightSerial += 1;
-  const cruiseEnd = now + ROUTE_ACCEL_MS + ROUTE_MIN_PLATEAU_MS;
+  const plannedCruiseEnd = now + ROUTE_ACCEL_MS + ROUTE_MIN_PLATEAU_MS;
+  const cruiseEnd = plannedCruiseEnd;
   const flightEnd = cruiseEnd + ROUTE_DECEL_MS;
-  routeFlight = { navStart: now, cruiseEnd, flightEnd, settleDispatched: false };
+  routeFlight = {
+    navStart: now,
+    cruiseEnd,
+    /** Ceiling for `markRouteContentReady` — `plannedCruiseEnd + ROUTE_CONTENT_READY_MAX_EXTEND_MS`. */
+    cruiseEndMax: plannedCruiseEnd + ROUTE_CONTENT_READY_MAX_EXTEND_MS,
+    flightEnd,
+    settleDispatched: false,
+  };
   // Start each flight from a hard zero so no decay residue feeds the first paint as “instant max”.
   cosmicDriver.routeHyperspace = 0;
 }
 
 /**
- * If the next route is still mounting (slow RSC, large trees), call this so `cruiseEnd` moves
- * with `performance.now()` — the ship stays at full thrust until work catches up, then decels.
+ * If the next route is still mounting (slow RSC, large trees), call this so `cruiseEnd` can move
+ * forward with `performance.now()` — but only up to `cruiseEndMax` (see `ROUTE_CONTENT_READY_MAX_EXTEND_MS`).
  */
 export function markRouteContentReady() {
   if (!routeFlight) return;
   const now = performance.now();
-  routeFlight.cruiseEnd = Math.max(routeFlight.cruiseEnd, now);
+  // Keep “wait for paint” behavior, but never push decel past `cruiseEndMax` (fixes endless cruise).
+  const pushed = Math.max(routeFlight.cruiseEnd, now);
+  routeFlight.cruiseEnd = Math.min(pushed, routeFlight.cruiseEndMax);
   routeFlight.flightEnd = routeFlight.cruiseEnd + ROUTE_DECEL_MS;
 }
 
@@ -182,7 +211,7 @@ export function tickCosmicDriver(elapsed: number, reducedMotion: boolean) {
     return;
   }
 
-  const introDecay = Math.exp(-elapsed * 1.45);
+  const introDecay = Math.exp(-elapsed * INTRO_HYPERSPACE_DECAY_PER_S);
   cosmicDriver.introHyperspace *= introDecay;
 
   // Timed route flights own `routeHyperspace`; fall back to exponential decay between pulses.

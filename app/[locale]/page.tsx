@@ -7,8 +7,8 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 // import { PackagesPreview } from "@/components/home/PackagesPreview";
 import { FAQSection } from "@/components/home/FAQSection";
 import { CTASection } from "@/components/home/CTASection";
-import { HomeSectionShell } from "@/components/home/HomeSectionShell";
-import { HomeCosmicScrollBridge } from "@/components/home/HomeCosmicScrollBridge";
+import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
+import { CosmicRouteSectionShell } from "@/components/CosmicRouteSectionShell";
 import { routing } from "@/i18n/routing";
 
 // Generate static params for all locales
@@ -16,33 +16,48 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+/**
+ * Home uses the **same** composition as `about/page.tsx`: one hero `<section>` + `CosmicPageHeroShell`,
+ * then each block wrapped only by `CosmicRouteSectionShell` (no extra outer section/div shell).
+ */
 export default function Home() {
   return (
-    <div className="relative">
-      <HomeCosmicScrollBridge />
-      <HomeSectionShell homeBgSection="hero">
-        <HeroSection />
-      </HomeSectionShell>
-      <HomeSectionShell homeBgSection="work">
+    <>
+      {/* Hero — same outer layout classes as About */}
+      <section className="pt-28 pb-16 min-h-[92svh] flex items-center">
+        <div className="container md:min-h-[640px] flex items-center">
+          <CosmicPageHeroShell className="w-full">
+            <HeroSection cosmicShell />
+          </CosmicPageHeroShell>
+        </div>
+      </section>
+
+      <CosmicRouteSectionShell anchorIndex={1}>
         <FeaturedWork />
-      </HomeSectionShell>
-      <HomeSectionShell homeBgSection="services">
+      </CosmicRouteSectionShell>
+
+      <CosmicRouteSectionShell anchorIndex={2}>
         <ServicesSection />
-      </HomeSectionShell>
-      <HomeSectionShell homeBgSection="process">
+      </CosmicRouteSectionShell>
+
+      <CosmicRouteSectionShell anchorIndex={3}>
         <ProcessSection />
-      </HomeSectionShell>
-      <HomeSectionShell homeBgSection="testimonials">
+      </CosmicRouteSectionShell>
+
+      <CosmicRouteSectionShell anchorIndex={4}>
         <TestimonialsSection />
-      </HomeSectionShell>
+      </CosmicRouteSectionShell>
+
       {/* Pricing section temporarily hidden - uncomment to restore */}
       {/* <PackagesPreview /> */}
-      <HomeSectionShell homeBgSection="faq">
+
+      <CosmicRouteSectionShell anchorIndex={5}>
         <FAQSection />
-      </HomeSectionShell>
-      <HomeSectionShell homeBgSection="cta">
+      </CosmicRouteSectionShell>
+
+      <CosmicRouteSectionShell anchorIndex={6}>
         <CTASection />
-      </HomeSectionShell>
-    </div>
+      </CosmicRouteSectionShell>
+    </>
   );
 }

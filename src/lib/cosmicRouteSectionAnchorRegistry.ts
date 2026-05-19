@@ -1,6 +1,6 @@
 import { HOME_BG_SECTION_ORDER } from "@/components/home/homeBackgroundSections";
 
-/** Matches `app/[locale]/page.tsx` section shells — bump when home sections change. */
+/** Matches `app/[locale]/page.tsx` cosmic shells: hero (index 0) + one `CosmicRouteSectionShell` per body block. */
 const HOME_SECTION_COUNT = HOME_BG_SECTION_ORDER.length;
 
 /**

@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Mail } from "lucide-react";
-import Image from "next/image";
 import { SocialLinks } from "@/components/SocialLinks";
+import { SiteLogo } from "@/components/SiteLogo";
 
 export function Footer() {
   const t = useTranslations();
@@ -29,29 +29,24 @@ export function Footer() {
   };
   return (
     <footer className="border-t border-border bg-card" role="contentinfo">
-      <div className="container py-12 md:py-16">
+      <div className="w-full max-w-none px-4 py-12 sm:px-6 md:py-16 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link
+            <SiteLogo
               href="/"
-              className="inline-flex rounded-xl border border-white/12 bg-white/90 shadow-[0_0_20px_rgba(95,145,255,0.14)] overflow-hidden h-[6rem] w-[12rem] flex items-center justify-center"
-            >
-              <Image
-                src="/PAL-web-studio.png"
-                alt="PAL Studio"
-                width={132}
-                height={46}
-                className="h-[15rem] w-auto rounded-[8px] object-contain"
-              />
-            </Link>
+              linkAriaLabel={t("common.apexStudioHome")}
+              alt={t("common.brand")}
+              variant="footer"
+              wrapperClassName="h-[80px] w-[140px]"
+              className="scale-[1.75]"
+            />
             <p className="mt-4 text-sm text-muted-foreground max-w-xs">
               {tFooter("description")}
             </p>
             <div className="mt-6">
               <SocialLinks
                 links={{
-                  // Default home page URLs - update with your actual profile URLs when ready
                   twitter: "https://twitter.com",
                   linkedin: "https://www.linkedin.com",
                   github: "https://github.com",

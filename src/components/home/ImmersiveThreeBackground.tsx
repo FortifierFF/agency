@@ -8,12 +8,10 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { cosmicDriver, tickCosmicDriver, tickRouteFlightEnvelope } from "@/lib/cosmicDriver";
 import { APEX_INTRO_HYPERSPACE_SETTLED } from "@/lib/cosmicBootEvents";
-import { tickCosmicSectionPresenceStore } from "./cosmicSectionPresenceStore";
 import { createCosmicWarpTunnel } from "./cosmicWarpTunnel";
-import { createCosmicRouteAnchorStars } from "./cosmicRouteAnchorStars";
+import { createCosmicRouteAnchorReadiness } from "./cosmicRouteAnchorReadiness";
 import { getCosmicRouteAnchorLayoutKey, getCosmicRouteSectionAnchorCount } from "@/lib/cosmicRouteAnchorStore";
 import { getRouteAnchorWorldPosition } from "@/lib/cosmicRouteAnchorLayoutPositions";
-import { getHeroBallEntranceProgress, setHomeAnchorViewportPixels } from "./homeAnchorScreenBridge";
 import { setRouteAnchorViewportPixels } from "./routeAnchorScreenBridge";
 
 /** Fog tint — warp streaks read against this; no procedural dome anymore. */
@@ -37,10 +35,10 @@ const STREAK_CAM_Y_BOB = 0.22;
  */
 const STREAK_VISUAL_TAU_UP_S = 0.05;
 /**
- * Ease toward rest after hyperspace. Kept **moderately** short so the camera follows the route’s
- * steep early decel (`ROUTE_DECEL_POWER`); warp/idle tuning still softens the last miles in `cosmicWarpTunnel`.
+ * Ease toward rest after hyperspace. **Shorter** than before so the camera/warp tail matches a
+ * shorter route trapezoid; paired with `ROUTE_CONTENT_READY_MAX_EXTEND_MS` in `cosmicDriver`.
  */
-const STREAK_VISUAL_TAU_DOWN_S = 0.52;
+const STREAK_VISUAL_TAU_DOWN_S = 0.26;
 
 /**
  * Long hitches (tab in background, heavy route like Home) must not integrate warp as one giant
@@ -91,9 +89,7 @@ export function ImmersiveThreeBackground() {
     const warpTunnel = createCosmicWarpTunnel(reducedMotion);
     scene.add(warpTunnel.points);
 
-    const routeAnchors = createCosmicRouteAnchorStars(reducedMotion);
-    // After warp points so anchor sprites draw on top; `depthTest: false` on materials as a safety net.
-    scene.add(routeAnchors.group);
+    const routeAnchorReadiness = createCosmicRouteAnchorReadiness(reducedMotion);
 
     /** Project route anchor world positions to CSS pixels for home section `transform-origin`. */
     const projVec = new THREE.Vector3();
@@ -131,8 +127,6 @@ export function ImmersiveThreeBackground() {
     const rim = new THREE.PointLight(0xb292ff, 1.05, 100);
     rim.position.set(4, 2, -4);
     scene.add(key, fill, rim);
-
-    tickCosmicSectionPresenceStore();
 
     let mouseX = 0;
     let mouseY = 0;
@@ -219,20 +213,17 @@ export function ImmersiveThreeBackground() {
 
       // Use the same smoothed value so particle depth cues stay glued to the camera motion.
       warpTunnel.update(streakVisual, delta);
-      routeAnchors.update(delta, streakVisual, streak);
+      routeAnchorReadiness.update(delta, streakVisual, streak);
 
       // Subtle idle sway on the (mostly empty) depth group — nebulae stay invisible unless re-enabled.
       const idleYaw = time * 0.00038 * drift;
       starGroup.rotation.y = idleYaw;
       starGroup.rotation.x = Math.sin(time * 0.045) * 0.002;
 
-      // Route anchors stay in fixed scene space (do not copy `starGroup` — that group is pushed in Z
-      // by `streakVisual`, which would drag “constellation” markers toward the camera).
-
       renderer.render(scene, camera);
 
-      // Home: push projected ball centers each frame so DOM plates can use `transform-origin` at the
-      // same screen locations as the WebGL sprites (camera sway included).
+      // Project logical anchor positions (same math as before sprites were removed) so DOM plates
+      // can use `transform-origin` at matching screen coordinates (camera sway included).
       if (!reducedMotion) {
         const layoutKey = getCosmicRouteAnchorLayoutKey();
         const anchorN = getCosmicRouteSectionAnchorCount();
@@ -248,15 +239,6 @@ export function ImmersiveThreeBackground() {
             });
           }
           setRouteAnchorViewportPixels(layoutKey, pts);
-          if (layoutKey === "/") {
-            setHomeAnchorViewportPixels(pts);
-          }
-          // Only tick presence from WebGL while the timed hero entrance runs — after that, scroll
-          // drives `tickCosmicSectionPresenceStore`; doing both every rAF re-read layout and fights
-          // the frozen scroll-band snapshot (see `invalidateHomeScrollBandSnap`).
-          if (layoutKey === "/" && getHeroBallEntranceProgress(performance.now()) < 1) {
-            tickCosmicSectionPresenceStore();
-          }
         }
       }
 
@@ -274,7 +256,7 @@ export function ImmersiveThreeBackground() {
       mount.removeChild(renderer.domElement);
 
       warpTunnel.dispose();
-      routeAnchors.dispose();
+      routeAnchorReadiness.dispose();
       nebulaGeo.dispose();
       nebulaMat.dispose();
       nebula2Geo.dispose();

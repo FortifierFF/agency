@@ -173,28 +173,36 @@ body[data-scroll-locked] {
     perspective: 1000px;
   }
 
-  @property --nav-ring-angle {
+  @property --comet-ring-angle {
     syntax: "<angle>";
     inherits: false;
     initial-value: 0deg;
   }
 
-  @keyframes nav-rainbow-flow {
+  @keyframes comet-border-flow {
     to {
-      --nav-ring-angle: 360deg;
+      --comet-ring-angle: 360deg;
     }
   }
 
   /**
-   * Primary nav route links only: 2px rainbow **border ring** on hover (center stays transparent).
+   * Clockwise comet highlight on the border (hover). Used on nav links + home process cards.
+   * Center stays transparent via mask; dual conic gradients = two lights 180° apart.
    */
+  .comet-border-ring,
   .nav-link-rainbow-ring {
-    --nav-ring-w: 2px;
+    --comet-ring-w: 2px;
     position: relative;
-    display: inline-flex;
     isolation: isolate;
     border: 1px solid transparent;
   }
+  .comet-border-ring {
+    display: flex;
+  }
+  .nav-link-rainbow-ring {
+    display: inline-flex;
+  }
+  .comet-border-spin,
   .nav-link-rainbow-spin {
     pointer-events: none;
     position: absolute;
@@ -203,13 +211,12 @@ body[data-scroll-locked] {
     border-radius: inherit;
     opacity: 0;
     transition: opacity 0.16s ease;
-    --nav-ring-angle: 0deg;
-    padding: var(--nav-ring-w);
+    --comet-ring-angle: 0deg;
+    padding: var(--comet-ring-w);
     box-sizing: border-box;
-    /* Dual clockwise comets: one arc + mirrored arc 180deg opposite, moving in sync. */
     background:
       conic-gradient(
-        from var(--nav-ring-angle),
+        from var(--comet-ring-angle),
         rgba(150, 205, 255, 0) 0deg,
         rgba(150, 205, 255, 0) 270deg,
         rgba(140, 195, 255, 0.08) 292deg,
@@ -219,7 +226,7 @@ body[data-scroll-locked] {
         rgba(150, 205, 255, 0) 360deg
       ),
       conic-gradient(
-        from calc(var(--nav-ring-angle) + 180deg),
+        from calc(var(--comet-ring-angle) + 180deg),
         rgba(150, 205, 255, 0) 0deg,
         rgba(150, 205, 255, 0) 270deg,
         rgba(140, 195, 255, 0.08) 292deg,
@@ -233,11 +240,13 @@ body[data-scroll-locked] {
     mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     mask-composite: exclude;
   }
+  .comet-border-ring:hover .comet-border-spin,
   .nav-link-rainbow-ring:hover .nav-link-rainbow-spin {
     opacity: 1;
-    animation: nav-rainbow-flow 2.25s linear infinite;
+    animation: comet-border-flow 2.25s linear infinite;
   }
   @media (prefers-reduced-motion: reduce) {
+    .comet-border-ring:hover .comet-border-spin,
     .nav-link-rainbow-ring:hover .nav-link-rainbow-spin {
       animation: none;
       opacity: 0.85;

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, Globe, Palette, TrendingUp, Smartphone } from "lucide-react";
@@ -14,9 +15,13 @@ const iconMap: Record<string, React.ElementType> = {
   Smartphone,
 };
 
+type ServiceId = "web-development" | "ui-ux-design" | "seo-performance" | "mobile-apps";
+
 export function ServicesSection() {
   const t = useTranslations("home.services");
   const tCommon = useTranslations("common");
+  /** Particle canvases used to mount for every card and each ran a 60fps loop even while invisible — mount only on hover. */
+  const [particleServiceId, setParticleServiceId] = useState<string | null>(null);
   return (
     <section className="section-padding">
       <div className="container">
@@ -34,30 +39,38 @@ export function ServicesSection() {
           </div>
         </AnimatedSection>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((service, index) => {
             const Icon = iconMap[service.icon];
+            const id = service.id as ServiceId;
+            const deliverables = t.raw(`items.${id}.deliverables`) as string[];
             return (
-              <AnimatedSection key={service.id} delay={index * 0.1}>
-                <div className="group relative flex h-full flex-col origin-center overflow-hidden rounded-2xl border border-border/60 bg-background/25 p-6 backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:border-primary/20 hover:shadow-soft sm:hover:scale-[1.03]">
-                  {/* Particle network effect - behind content */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-2xl z-0">
-                    <ParticleNetwork 
-                      particleCount={15 + index * 2} 
-                      connectionDistance={120}
-                      particleSpeed={0.3 + index * 0.1}
-                    />
+              <AnimatedSection key={service.id} delay={index * 0.1} className="h-full">
+                <div
+                  className="group relative flex h-full flex-col origin-center overflow-hidden rounded-2xl border border-border/60 bg-background/25 p-6 backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:border-primary/20 hover:shadow-soft sm:hover:scale-[1.03]"
+                  onMouseEnter={() => setParticleServiceId(service.id)}
+                  onMouseLeave={() => setParticleServiceId((id) => (id === service.id ? null : id))}
+                >
+                  {/* Particle network: mount only while hovered so we do not run 4 canvas rAF loops on scroll. */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-2xl z-0 pointer-events-none">
+                    {particleServiceId === service.id ? (
+                      <ParticleNetwork
+                        particleCount={15 + index * 2}
+                        connectionDistance={120}
+                        particleSpeed={0.3 + index * 0.1}
+                      />
+                    ) : null}
                   </div>
-                  <div className="relative z-10">
+                  <div className="relative z-10 flex flex-1 flex-col">
                   <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                     <Icon className="h-6 w-6 text-primary group-hover:rotate-12 transition-transform duration-300" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{service.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-4 flex-1">
-                    {service.description}
+                  <h3 className="text-lg font-semibold mb-2">{t(`items.${id}.title`)}</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {t(`items.${id}.description`)}
                   </p>
-                  <ul className="space-y-2 mb-4">
-                    {service.deliverables.slice(0, 4).map((item) => (
+                  <ul className="mb-4 flex-1 space-y-2">
+                    {deliverables.slice(0, 4).map((item) => (
                       <li
                         key={item}
                         className="text-sm text-muted-foreground flex items-start gap-2"
@@ -69,7 +82,7 @@ export function ServicesSection() {
                   </ul>
                   <Link
                     href={`/services#${service.id}`}
-                    className="inline-flex items-center text-sm font-medium text-primary hover:underline underline-offset-4"
+                    className="mt-auto inline-flex shrink-0 items-center text-sm font-medium text-primary hover:underline underline-offset-4"
                   >
                     {tCommon("learnMore")}
                     <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />

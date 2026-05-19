@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
-import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { testimonials } from "@/data/testimonials";
@@ -11,15 +11,26 @@ import { Button } from "@/components/ui/button";
 export function TestimonialsSection() {
   const t = useTranslations("home.testimonials");
   const tCommon = useTranslations("common");
+  const reduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement | null>(null);
+  /** Off-screen: skip infinite Framer loops (they still tick layout/style every frame). */
+  const [inView, setInView] = useState(false);
   const [current, setCurrent] = useState(0);
   const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number }>>([]);
-  const [mounted, setMounted] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
-    setMounted(true);
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => setInView(e.isIntersecting),
+      { threshold: 0.06, rootMargin: "80px 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
-  
+
+  const allowHeavyMotion = inView && !reduceMotion;
   // Magnetic effect
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -73,7 +84,7 @@ export function TestimonialsSection() {
   };
 
   return (
-    <section className="section-padding">
+    <section ref={sectionRef} className="section-padding">
       <div className="container">
         <AnimatedSection>
           <div className="text-center max-w-2xl mx-auto mb-16">
@@ -90,81 +101,97 @@ export function TestimonialsSection() {
         <AnimatedSection>
           <div className="max-w-3xl mx-auto mb-16 perspective-1000 relative">
             {/* Animated gradient background */}
-            <motion.div
-              className="absolute inset-0 rounded-2xl opacity-20 blur-3xl"
-              animate={{
-                background: [
-                  "radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.3), transparent 50%)",
-                  "radial-gradient(circle at 100% 100%, hsl(var(--primary) / 0.3), transparent 50%)",
-                  "radial-gradient(circle at 0% 100%, hsl(var(--primary) / 0.3), transparent 50%)",
-                  "radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.3), transparent 50%)",
-                ],
-              }}
-              transition={{
-                duration: 10,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-            />
-            
+            {allowHeavyMotion ? (
+              <motion.div
+                className="absolute inset-0 rounded-2xl opacity-20 blur-3xl"
+                animate={{
+                  background: [
+                    "radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.3), transparent 50%)",
+                    "radial-gradient(circle at 100% 100%, hsl(var(--primary) / 0.3), transparent 50%)",
+                    "radial-gradient(circle at 0% 100%, hsl(var(--primary) / 0.3), transparent 50%)",
+                    "radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.3), transparent 50%)",
+                  ],
+                }}
+                transition={{
+                  duration: 10,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              />
+            ) : (
+              <div
+                aria-hidden
+                className="absolute inset-0 rounded-2xl opacity-20 blur-3xl bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.25),transparent_55%)]"
+              />
+            )}
+
             <motion.div 
               ref={cardRef}
               className="relative overflow-hidden rounded-2xl border border-border/50 bg-background/25 p-8 shadow-2xl backdrop-blur-md md:p-12"
-              style={{
-                transformStyle: "preserve-3d",
-                transformOrigin: "top right",
-                rotateY: springX,
-                rotateX: springY,
-              }}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              whileHover={{ 
-                scale: 1.02,
-              }}
+              style={
+                allowHeavyMotion
+                  ? {
+                      transformStyle: "preserve-3d",
+                      transformOrigin: "top right",
+                      rotateY: springX,
+                      rotateX: springY,
+                    }
+                  : { transformStyle: "flat" as const }
+              }
+              onMouseMove={allowHeavyMotion ? handleMouseMove : undefined}
+              onMouseLeave={allowHeavyMotion ? handleMouseLeave : undefined}
+              whileHover={allowHeavyMotion ? { scale: 1.02 } : undefined}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
-              {/* Floating particles */}
-              <AnimatePresence>
-                {particles.map((particle) => (
-                  <motion.div
-                    key={particle.id}
-                    className="absolute w-2 h-2 rounded-full bg-primary"
-                    initial={{
-                      x: `${particle.x}%`,
-                      y: `${particle.y}%`,
-                      scale: 0,
-                      opacity: 1,
-                    }}
-                    animate={{
-                      y: `${particle.y - 100}%`,
-                      scale: [0, 1, 0],
-                      opacity: [1, 1, 0],
-                    }}
-                    exit={{ opacity: 0 }}
-                    transition={{
-                      duration: 2,
-                      ease: "easeOut",
-                    }}
-                  />
-                ))}
-              </AnimatePresence>
-              
-              {/* Animated border glow - bouncing effect */}
-              <motion.div
-                className="absolute inset-0 rounded-2xl pointer-events-none"
-                style={{
-                  background: "linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), transparent)",
-                  backgroundSize: "200% 200%",
-                }}
-                animate={{
-                  backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
+              {allowHeavyMotion ? (
+                <AnimatePresence>
+                  {particles.map((particle) => (
+                    <motion.div
+                      key={particle.id}
+                      className="absolute w-2 h-2 rounded-full bg-primary"
+                      initial={{
+                        x: `${particle.x}%`,
+                        y: `${particle.y}%`,
+                        scale: 0,
+                        opacity: 1,
+                      }}
+                      animate={{
+                        y: `${particle.y - 100}%`,
+                        scale: [0, 1, 0],
+                        opacity: [1, 1, 0],
+                      }}
+                      exit={{ opacity: 0 }}
+                      transition={{
+                        duration: 2,
+                        ease: "easeOut",
+                      }}
+                    />
+                  ))}
+                </AnimatePresence>
+              ) : null}
+
+              {allowHeavyMotion ? (
+                <motion.div
+                  className="absolute inset-0 rounded-2xl pointer-events-none"
+                  style={{
+                    background: "linear-gradient(45deg, transparent, hsl(var(--primary) / 0.1), transparent)",
+                    backgroundSize: "200% 200%",
+                  }}
+                  animate={{
+                    backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+              ) : (
+                <div
+                  aria-hidden
+                  className="absolute inset-0 rounded-2xl pointer-events-none opacity-40 bg-[linear-gradient(45deg,transparent,hsl(var(--primary)/0.08),transparent)]"
+                />
+              )}
               
               <Quote className="h-10 w-10 text-primary/20 mb-6 relative z-10" />
               <div className="min-h-[160px] relative z-10">

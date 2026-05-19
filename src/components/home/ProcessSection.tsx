@@ -62,21 +62,20 @@ export function ProcessSection() {
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4">
           {steps.map((step, index) => (
             <AnimatedSection key={step.number} delay={index * 0.08}>
-              <div className="group relative flex h-full flex-col rounded-2xl border border-border/60 bg-background/25 p-6 shadow-sm backdrop-blur-md transition-shadow duration-300 hover:border-primary/25 hover:shadow-md">
-                <div
-                  aria-hidden
-                  className="absolute inset-x-0 top-0 h-px rounded-t-2xl bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                />
-                <div className="mb-4 flex items-start justify-between gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-primary/20 bg-primary/10">
-                    <step.icon className="h-6 w-6 text-primary" />
+              <div className="comet-border-ring group relative flex h-full flex-col rounded-2xl">
+                <span className="comet-border-spin rounded-2xl" aria-hidden />
+                <div className="relative z-10 flex h-full flex-col rounded-[14px] border border-border/60 bg-background/25 p-6 shadow-sm backdrop-blur-md transition-shadow duration-300 group-hover:shadow-md">
+                  <div className="mb-4 flex items-start justify-between gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-primary/20 bg-primary/10">
+                      <step.icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <span className="text-2xl font-bold tabular-nums text-foreground/15">
+                      {step.number}
+                    </span>
                   </div>
-                  <span className="text-2xl font-bold tabular-nums text-foreground/15">
-                    {step.number}
-                  </span>
+                  <h3 className="mb-2 text-lg font-semibold tracking-tight">{step.title}</h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{step.description}</p>
                 </div>
-                <h3 className="mb-2 text-lg font-semibold tracking-tight">{step.title}</h3>
-                <p className="text-sm leading-relaxed text-muted-foreground">{step.description}</p>
               </div>
             </AnimatedSection>
           ))}

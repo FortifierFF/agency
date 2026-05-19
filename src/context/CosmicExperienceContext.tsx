@@ -69,7 +69,7 @@ export function CosmicExperienceProvider({ children }: { children: ReactNode }) 
     // Fallback if WebGL never mounts or the settle signal is missed (should be rare).
     bootTimer.current = setTimeout(() => {
       setLandingPhase((phase) => (phase === "hyperspace" ? "landed" : phase));
-    }, 5200);
+    }, 2640);
   }, []);
 
   const skipBootMinimal = useCallback(() => {

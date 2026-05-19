@@ -24,11 +24,18 @@ export function resetRouteAnchorScreenBridge() {
   notify();
 }
 
-/** WebGL rAF: pushes projected points for the active layout key. */
+/**
+ * WebGL rAF: pushes projected screen points for the active layout key.
+ * Do **not** `notify()` on every call — that was forcing every `CosmicRouteSectionShell` (and the
+ * hero shell) to re-render at display rate; long pages like home stacked many shells and melted
+ * scroll performance. Consumers read `getRouteAnchorViewportPoint` inside their own scroll/resize
+ * (or imperative) ticks instead of subscribing to per-frame pixel churn.
+ */
 export function setRouteAnchorViewportPixels(layoutKey: string, points: readonly AnchorViewportPoint[]) {
+  const keyChanged = projectedLayoutKey !== layoutKey;
   projectedLayoutKey = layoutKey;
   projectedPoints = points.length ? [...points] : [];
-  notify();
+  if (keyChanged) notify();
 }
 
 /** Called once when route anchors finish incoming and stay visible on the destination page. */

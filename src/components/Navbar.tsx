@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { SiteLogo } from "@/components/SiteLogo";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { cn } from "@/lib/utils";
 import { useCosmicExperienceOptional } from "@/context/CosmicExperienceContext";
@@ -100,36 +100,38 @@ export function Navbar() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
         isScrolled
-          ? "glass shadow-soft py-3 backdrop-blur-xl bg-background/45 border-b border-white/10"
-          : "bg-transparent py-5"
+          ? "glass shadow-soft backdrop-blur-xl bg-background/45"
+          : "bg-transparent"
       )}
     >
-      <nav className="container flex items-center justify-between gap-3" aria-label={tCommon("mainNavigation")}>
-        {/* Group 1 — brand mark slides in from the left */}
-        <motion.div initial="hidden" animate={revealNav ? "show" : "hidden"} variants={logoVariants}>
-          <Link
+      <nav
+        className="flex w-full max-w-none items-stretch justify-between gap-3 px-4 sm:px-6 lg:px-8"
+        aria-label={tCommon("mainNavigation")}
+      >
+        {/* Group 1 — brand mark slides in from the left; self-stretch so logo frame matches nav row height */}
+        <motion.div
+          className="flex"
+          initial="hidden"
+          animate={revealNav ? "show" : "hidden"}
+          variants={logoVariants}
+        >
+          <SiteLogo
             href="/"
-            className="relative inline-flex overflow-hidden rounded-xl border border-white/28 bg-white/12 p-2 shadow-[0_0_24px_rgba(140,180,255,0.24)] backdrop-blur-md transition-colors hover:bg-white/15 w-[6rem] h-[4rem] flex items-center justify-center"
-            aria-label={tCommon("apexStudioHome")}
-          >
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-[3px] rounded-[8px] bg-[radial-gradient(circle_at_30%_35%,rgba(205,230,255,0.62)_0%,rgba(172,210,248,0.46)_44%,rgba(105,145,225,0.2)_100%)]"
-            />
-            <Image
-              src="/PAL-web-studio.png"
-              alt="PAL Studio"
-              width={124}
-              height={44}
-              priority
-              className="relative z-10 h-8 w-auto scale-[2.6] rounded-[8px] object-contain brightness-[1.82] contrast-[1.62] saturate-[1.28] drop-shadow-[0_0_13px_rgba(150,205,255,0.42)] sm:h-9"
-            />
-          </Link>
+            linkAriaLabel={tCommon("apexStudioHome")}
+            alt={tCommon("brand")}
+            variant="nav"
+            priority
+            wrapperClassName={cn(
+              "w-[120px] transition-[height] duration-300 ease-in-out",
+              isScrolled ? "h-[70px]" : "h-[80px]"
+            )}
+            className="scale-[1.25]"
+          />
         </motion.div>
 
         {/* Group 2 — primary routes: each chip arrives from the right and locks flush in the row */}
         <motion.div
-          className="hidden md:flex flex-1 items-center justify-center"
+          className="hidden md:flex flex-1 items-center justify-center self-center"
           initial="hidden"
           animate={revealNav ? "show" : "hidden"}
           variants={linkParentVariants}
@@ -159,7 +161,7 @@ export function Navbar() {
 
         {/* Group 3 — locale, CTA: same direction as links but deliberately late (delayChildren) */}
         <motion.div
-          className="hidden md:flex items-center gap-2"
+          className="hidden md:flex items-center gap-2 self-center"
           initial="hidden"
           animate={revealNav ? "show" : "hidden"}
           variants={controlsParentVariants}
@@ -176,7 +178,7 @@ export function Navbar() {
 
         {/* Mobile: compact controls + menu */}
         <motion.div
-          className="flex md:hidden items-center gap-2"
+          className="flex md:hidden items-center gap-2 self-center"
           initial="hidden"
           animate={revealNav ? "show" : "hidden"}
           variants={controlsParentVariants}
@@ -209,7 +211,7 @@ export function Navbar() {
             transition={{ duration: 0.2 }}
             className="md:hidden glass border-t border-border"
           >
-            <div className="container flex flex-col gap-2 py-4">
+            <div className="flex w-full max-w-none flex-col gap-2 px-4 py-4 sm:px-6 lg:px-8">
               {navLinks.map((link) => (
                 <div key={link.href} className="nav-link-rainbow-ring rounded-[6px]">
                   <span className="nav-link-rainbow-spin rounded-[6px]" aria-hidden />
