@@ -1,8 +1,6 @@
 /**
- * Scroll band for cosmic plates (matches `CosmicRouteSectionShell` / `CosmicPageHeroShell`):
- * - enter: (vh * 0.92 - rect.top) / (vh * 0.72)
- * - exit:  (rect.bottom - vh * 0.08) / (vh * 0.72)
- * - phase ≈ min(enter, exit) after easing / last-section pin
+ * Scroll band for cosmic plates — see `cosmicPlateScrollBand.ts` for enter/exit lines & bands.
+ * phase ≈ min(enter, exit) after easing / last-section pin.
  *
  * In the center band (high phase), content stays fully opaque so cards/backdrop-blur
  * do not look see-through over the starfield. Edges still fade with scroll.

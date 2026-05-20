@@ -109,9 +109,10 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Form Section */}
+      {/* Form section — mb-8 (2rem) between cosmic plate and footer */}
+      <div className="mb-8">
       <CosmicRouteSectionShell anchorIndex={1}>
-        <section className="pb-20">
+        <section className="pt-8 pb-8">
           <div className="container">
           <div className="grid lg:grid-cols-3 gap-12">
             {/* Form */}
@@ -343,6 +344,7 @@ export default function ContactPage() {
           </div>
         </section>
       </CosmicRouteSectionShell>
+      </div>
     </>
   );
 }

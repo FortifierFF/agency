@@ -213,12 +213,15 @@ export function Navbar() {
           >
             <div className="flex w-full max-w-none flex-col gap-2 px-4 py-4 sm:px-6 lg:px-8">
               {navLinks.map((link) => (
-                <div key={link.href} className="nav-link-rainbow-ring rounded-[6px]">
+                <div
+                  key={link.href}
+                  className="nav-link-rainbow-ring flex w-full rounded-[6px]"
+                >
                   <span className="nav-link-rainbow-spin rounded-[6px]" aria-hidden />
                   <Link
                     href={link.href}
                     className={cn(
-                      "relative z-10 block rounded-[6px] px-4 py-3 text-sm font-medium transition-colors",
+                      "relative z-10 block w-full rounded-[6px] px-4 py-3 text-sm font-medium transition-colors",
                       "bg-background/92 dark:bg-background/78",
                       pathname === link.href
                         ? "text-foreground ring-1 ring-white/12"
@@ -229,7 +232,7 @@ export function Navbar() {
                   </Link>
                 </div>
               ))}
-              <Button asChild className="mt-2 rounded-full">
+              <Button asChild className="mt-2 w-full rounded-full">
                 <Link href="/contact">{tCommon("bookCall")}</Link>
               </Button>
             </div>

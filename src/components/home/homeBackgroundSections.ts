@@ -1,6 +1,6 @@
 /**
- * Ordered home narrative sections (hero + bodies). Used for `resolveRouteSectionAnchorCount("/")`
- * so WebGL projects one anchor per shell index (0 = hero, 1…N = `CosmicRouteSectionShell`).
+ * Ordered home narrative sections (hero + bodies). `resolveRouteSectionAnchorCount("/")` uses
+ * `length - 1` wheel stars — the `cta` entry is the blue shell with no star (About pattern).
  * Optional `readHomeSectionLayouts()` measures `[data-home-bg-section]` if you add those markers back for tooling.
  */
 export const HOME_BG_SECTION_ORDER = [

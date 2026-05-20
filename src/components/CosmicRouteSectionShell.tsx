@@ -19,34 +19,58 @@ import {
   isRouteAnchorsSurfaceReady,
   subscribeRouteAnchorScreen,
 } from "@/components/home/routeAnchorScreenBridge";
+import {
+  computeCosmicPlateEnterLeg,
+  computeCosmicPlateExitLeg,
+} from "@/lib/cosmicPlateScrollBand";
 import { computeCosmicPlateOpacity } from "@/lib/cosmicPlateViewportOpacity";
+import { cn } from "@/lib/utils";
 
-function clamp01(n: number) {
-  return Math.min(1, Math.max(0, n));
-}
+/** Starfield gap between card plates — not used on blue CTA (`tone="primary"`) so it can meet the footer. */
+const SECTION_SHELL_GAP_CLASS = "mb-10";
 
 /** Past this eased value, use `transform: none` so text is not rasterized at ~0.999 scale (soft in Chrome). */
 const PLATE_SHARP_EASE_THRESHOLD = 0.997;
 
+/** Blue CTA plate — same as dark `bg-primary` / `--primary`; always painted, opacity ramps on scroll. */
+const PRIMARY_PLATE_BG = "#3c83f6";
+/** Peak opacity on the blue strip (slightly below 1 to soften compositing over the starfield). */
+const PRIMARY_PLATE_MAX_OPACITY = 0.99;
+
+/** Solid surface behind section content (About “What we believe” uses `card`). */
+export type CosmicRouteSectionTone = "card" | "primary";
+
+const toneClassName: Record<CosmicRouteSectionTone, string> = {
+  card: "bg-card text-foreground",
+  primary: "text-primary-foreground",
+};
+
 type CosmicRouteSectionShellProps = {
   anchorIndex: number;
   children: ReactNode;
+  /** Opaque plate — default matches About values section (`bg-card`). */
+  tone?: CosmicRouteSectionTone;
 };
 
 /**
  * Section plates: hidden until route anchors are ready, then each section scales from/to its
- * assigned anchor index as it enters/leaves the viewport (home and inner routes use the same shell).
+ * assigned anchor index as it enters/leaves the viewport.
+ *
+ * Blue CTA (`tone="primary"`): no wheel anchor for its index (registry count excludes it) → scales
+ * from plate center like About. Other shells use projected star origins when available.
  */
-export function CosmicRouteSectionShell({ anchorIndex, children }: CosmicRouteSectionShellProps) {
+export function CosmicRouteSectionShell({
+  anchorIndex,
+  children,
+  tone = "card",
+}: CosmicRouteSectionShellProps) {
   const pathname = usePathname();
   const layoutKey = pathname.replace(/\/+$/, "") || "/";
   const hostRef = useRef<HTMLDivElement | null>(null);
-  /** Imperative origin — avoids React render + layout on every WebGL anchor push. */
   const plateRef = useRef<HTMLDivElement | null>(null);
   const [phase, setPhase] = useState(0);
   const [lastSectionPin, setLastSectionPin] = useState(false);
   const pinRefs = useRef(createCosmicLastSectionPinRefs(0));
-  /** Throttle React commits: scroll can fire many times per frame; phase rarely needs sub‑1‰ precision. */
   const lastPublishedPhase = useRef(-1);
   const lastPublishedPin = useRef(false);
 
@@ -58,9 +82,10 @@ export function CosmicRouteSectionShell({ anchorIndex, children }: CosmicRouteSe
     return registerCosmicRouteSectionShellAnchor(layoutKey, anchorIndex);
   }, [layoutKey, anchorIndex]);
 
-  // Only re-render when the bridge signals layout/readiness changes — not on every projected pixel tick.
   useSyncExternalStore(subscribeRouteAnchorScreen, getRouteAnchorScreenVersion, () => 0);
   const ready = isRouteAnchorsSurfaceReady(layoutKey);
+
+  const plateFullWidth = tone === "primary";
 
   useEffect(() => {
     setPhase(0);
@@ -91,8 +116,8 @@ export function CosmicRouteSectionShell({ anchorIndex, children }: CosmicRouteSe
 
       const rect = el.getBoundingClientRect();
       const vh = Math.max(1, window.innerHeight);
-      const enter = clamp01((vh * 0.92 - rect.top) / (vh * 0.72));
-      const exit = clamp01((rect.bottom - vh * 0.08) / (vh * 0.72));
+      const enter = computeCosmicPlateEnterLeg(rect.top, vh);
+      const exit = computeCosmicPlateExitLeg(rect.bottom, vh);
       const { phase: p, pinActive } = computeLastSectionViewportPhase(
         isLastSection,
         enter,
@@ -101,9 +126,13 @@ export function CosmicRouteSectionShell({ anchorIndex, children }: CosmicRouteSe
         pinRefs.current
       );
 
-      const point = getRouteAnchorViewportPoint(layoutKey, anchorIndex);
-      if (point && rect.width >= 4 && rect.height >= 4) {
-        plate.style.transformOrigin = `${point.x - rect.left}px ${point.y - rect.top}px`;
+      if (!plateFullWidth) {
+        const point = getRouteAnchorViewportPoint(layoutKey, anchorIndex);
+        if (point && rect.width >= 4 && rect.height >= 4) {
+          plate.style.transformOrigin = `${point.x - rect.left}px ${point.y - rect.top}px`;
+        } else {
+          plate.style.transformOrigin = "";
+        }
       } else {
         plate.style.transformOrigin = "";
       }
@@ -132,34 +161,49 @@ export function CosmicRouteSectionShell({ anchorIndex, children }: CosmicRouteSe
       window.removeEventListener("resize", queueTick);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [layoutKey, anchorIndex, isLastSection, ready]);
+  }, [layoutKey, anchorIndex, isLastSection, ready, plateFullWidth]);
 
   const eased = phase >= 1 ? 1 : 1 - Math.pow(1 - phase, 2.2);
   const easedForTransform = eased >= PLATE_SHARP_EASE_THRESHOLD ? 1 : eased;
+  const plateOpacity = computeCosmicPlateOpacity(phase, ready);
+
   const scale = 0.11 + (1 - 0.11) * easedForTransform;
   const z = -170 + 124 * easedForTransform;
   const atSharpRest = easedForTransform >= 1;
-  const opacity = computeCosmicPlateOpacity(phase, ready);
+
+  const plateTransform = atSharpRest
+    ? "none"
+    : `translate3d(0, 0, ${z}px) scale(${scale})`;
 
   return (
     <div
       ref={hostRef}
-      className="w-full"
+      className={cn(
+        "w-full",
+        !plateFullWidth && SECTION_SHELL_GAP_CLASS,
+        !plateFullWidth && "flex justify-center"
+      )}
       style={{
-        perspective: atSharpRest ? undefined : "2000px",
+        perspective: !atSharpRest ? "2000px" : undefined,
         perspectiveOrigin: "50% 50%",
-        // Pinned last plate should paint above neighbors while scrolling toward the footer.
         zIndex: lastSectionPin ? 28 : undefined,
       }}
     >
       <div
         ref={plateRef}
-        className="antialiased text-foreground"
+        className={cn(
+          "antialiased",
+          plateFullWidth ? "w-full" : "container overflow-hidden rounded-2xl",
+          toneClassName[tone]
+        )}
         style={{
-          transform: atSharpRest ? "none" : `translate3d(0, 0, ${z}px) scale(${scale})`,
-          transformStyle: atSharpRest ? undefined : ("preserve-3d" as const),
-          backfaceVisibility: atSharpRest ? undefined : "hidden",
-          opacity,
+          transform: plateTransform,
+          transformStyle: !atSharpRest ? "preserve-3d" : undefined,
+          backfaceVisibility: !atSharpRest ? "hidden" : undefined,
+          backgroundColor: plateFullWidth ? PRIMARY_PLATE_BG : undefined,
+          opacity: plateFullWidth
+            ? Math.min(plateOpacity, PRIMARY_PLATE_MAX_OPACITY)
+            : plateOpacity,
           pointerEvents: phase > 0.08 ? "auto" : "none",
         }}
       >

@@ -55,7 +55,7 @@ export default function Home() {
         <FAQSection />
       </CosmicRouteSectionShell>
 
-      <CosmicRouteSectionShell anchorIndex={6}>
+      <CosmicRouteSectionShell anchorIndex={6} tone="primary">
         <CTASection />
       </CosmicRouteSectionShell>
     </>

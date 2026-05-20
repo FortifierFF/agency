@@ -23,6 +23,7 @@ export default function ServicesPage() {
   const tHomeServices = useTranslations("home.services");
   const tNav = useTranslations("nav");
   const tCommon = useTranslations("common");
+
   return (
     <>
       {/* Hero */}
@@ -46,20 +47,19 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Services Detail */}
-      <CosmicRouteSectionShell anchorIndex={1}>
-        <section className="pb-20">
-          <div className="container">
-          <div className="space-y-24">
-            {services.map((service, index) => {
-              const Icon = iconMap[service.icon];
-              const isEven = index % 2 === 0;
-              const id = service.id as ServiceId;
-              const deliverables = tHomeServices.raw(`items.${id}.deliverables`) as string[];
-              const title = tHomeServices(`items.${id}.title`);
+      {/* One cosmic plate per service — same pattern as About (values / team / stats). */}
+      {services.map((service, index) => {
+        const Icon = iconMap[service.icon];
+        const isEven = index % 2 === 0;
+        const id = service.id as ServiceId;
+        const deliverables = tHomeServices.raw(`items.${id}.deliverables`) as string[];
+        const title = tHomeServices(`items.${id}.title`);
 
-              return (
-                <AnimatedSection key={service.id}>
+        return (
+          <CosmicRouteSectionShell key={service.id} anchorIndex={index + 1}>
+            <section className="section-padding">
+              <div className="container">
+                <AnimatedSection>
                   <div
                     id={service.id}
                     className={`grid lg:grid-cols-2 gap-12 items-center ${
@@ -100,28 +100,25 @@ export default function ServicesPage() {
                     </div>
                   </div>
                 </AnimatedSection>
-              );
-            })}
-          </div>
-          </div>
-        </section>
-      </CosmicRouteSectionShell>
+              </div>
+            </section>
+          </CosmicRouteSectionShell>
+        );
+      })}
 
-      {/* CTA */}
-      <CosmicRouteSectionShell anchorIndex={2}>
-        <section className="section-padding bg-primary text-primary-foreground">
+      {/* CTA — same as About closing strip */}
+      <CosmicRouteSectionShell anchorIndex={services.length + 1} tone="primary">
+        <section className="section-padding">
           <div className="container text-center">
-          <AnimatedSection>
-            <h2 className="text-3xl font-bold mb-4">
-              {t("notSure")}
-            </h2>
-            <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-              {t("notSureDescription")}
-            </p>
-            <Button asChild size="lg" variant="secondary" className="rounded-full px-8">
-              <Link href="/contact">{t("bookFreeCall")}</Link>
-            </Button>
-          </AnimatedSection>
+            <AnimatedSection>
+              <h2 className="text-3xl font-bold mb-4">{t("notSure")}</h2>
+              <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
+                {t("notSureDescription")}
+              </p>
+              <Button asChild size="lg" variant="secondary" className="rounded-full px-8">
+                <Link href="/contact">{t("bookFreeCall")}</Link>
+              </Button>
+            </AnimatedSection>
           </div>
         </section>
       </CosmicRouteSectionShell>

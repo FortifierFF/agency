@@ -103,7 +103,7 @@ export default function AboutPage() {
 
       {/* Values */}
       <CosmicRouteSectionShell anchorIndex={1}>
-        <section className="section-padding bg-card">
+        <section className="section-padding">
           <div className="container">
           <AnimatedSection>
             <div className="max-w-2xl mb-12">
@@ -167,7 +167,7 @@ export default function AboutPage() {
 
       {/* Stats */}
       <CosmicRouteSectionShell anchorIndex={3}>
-        <section className="section-padding bg-card">
+        <section className="section-padding">
           <div className="container">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
@@ -186,8 +186,8 @@ export default function AboutPage() {
       </CosmicRouteSectionShell>
 
       {/* CTA */}
-      <CosmicRouteSectionShell anchorIndex={4}>
-        <section className="section-padding bg-primary text-primary-foreground">
+      <CosmicRouteSectionShell anchorIndex={4} tone="primary">
+        <section className="section-padding">
           <div className="container text-center">
           <AnimatedSection>
             <h2 className="text-3xl font-bold mb-4">{t("letsBuild")}</h2>

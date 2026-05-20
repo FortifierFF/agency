@@ -29,14 +29,14 @@ export function CTASection() {
           transform: translateZ(0);
         }
       `}} />
-      <section className="cta-section section-padding relative overflow-hidden bg-transparent text-foreground">
+      <section className="cta-section section-padding relative overflow-hidden">
       <div className="container relative z-10">
         <AnimatedSection>
           <div className="text-center max-w-2xl mx-auto">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
             {t("title")}
           </h2>
-          <p className="mb-8 text-lg text-muted-foreground">
+          <p className="mb-8 text-lg text-primary-foreground/80">
             {t("description")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
