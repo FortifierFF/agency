@@ -77,7 +77,7 @@ export default function BlogPostPage() {
       {contentReady ? (
         <CosmicRouteSectionShell anchorIndex={1}>
           <article className="pb-20">
-            <div className="container max-w-4xl">
+            <div className="container max-w-4xl py-8 md:py-16">
           {/* Introduction */}
           <AnimatedSection>
             <div className="prose prose-lg dark:prose-invert max-w-none">

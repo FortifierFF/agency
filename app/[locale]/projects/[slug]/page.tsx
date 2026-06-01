@@ -122,7 +122,7 @@ export default function CaseStudyPage({
 
       <CosmicRouteSectionShell anchorIndex={2}>
         <section className="section-padding">
-          <div className="container">
+          <div className="container space-y-16">
             <div className="grid md:grid-cols-2 gap-12">
               <AnimatedSection>
                 <div>
@@ -137,55 +137,41 @@ export default function CaseStudyPage({
                 </div>
               </AnimatedSection>
             </div>
-          </div>
-        </section>
-      </CosmicRouteSectionShell>
 
-      <CosmicRouteSectionShell anchorIndex={3}>
-        <section className="section-padding">
-          <div className="container">
-            <AnimatedSection>
-              <h2 className="text-2xl font-bold mb-8">{t("delivered")}</h2>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {deliverables.map((item, index) => (
-                  <div
-                    key={item}
-                    className="p-4 rounded-xl bg-background border border-border"
-                  >
-                    <span className="text-sm text-primary font-medium mr-2">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span className="text-sm">{item}</span>
-                  </div>
-                ))}
+            <AnimatedSection delay={0.15}>
+              <div>
+                <h2 className="text-2xl font-bold mb-8">{t("delivered")}</h2>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {deliverables.map((item, index) => (
+                    <div
+                      key={item}
+                      className="p-4 rounded-xl bg-background border border-border"
+                    >
+                      <span className="text-sm text-primary font-medium mr-2">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="text-sm">{item}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </AnimatedSection>
-          </div>
-        </section>
-      </CosmicRouteSectionShell>
 
-      <CosmicRouteSectionShell anchorIndex={4}>
-        <section className="section-padding">
-          <div className="container">
-            <AnimatedSection>
-              <h2 className="text-2xl font-bold mb-8">{t("techStack")}</h2>
-              <div className="flex flex-wrap gap-3">
-                {project.techStack.map((tech) => (
-                  <Badge key={tech} variant="secondary" className="px-4 py-2 text-sm">
-                    {tech}
-                  </Badge>
-                ))}
+            <AnimatedSection delay={0.2}>
+              <div>
+                <h2 className="text-2xl font-bold mb-8">{t("techStack")}</h2>
+                <div className="flex flex-wrap gap-3">
+                  {project.techStack.map((tech) => (
+                    <Badge key={tech} variant="secondary" className="px-4 py-2 text-sm">
+                      {tech}
+                    </Badge>
+                  ))}
+                </div>
               </div>
             </AnimatedSection>
-          </div>
-        </section>
-      </CosmicRouteSectionShell>
 
-      <CosmicRouteSectionShell anchorIndex={5}>
-        <section className="section-padding">
-          <div className="container">
-            <AnimatedSection>
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <AnimatedSection delay={0.25}>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pt-4 border-t border-border">
                 <div>
                   <p className="text-sm text-muted-foreground mb-2">{t("nextProject")}</p>
                   <h3 className="text-2xl font-bold">{tNext("title")}</h3>
@@ -202,7 +188,7 @@ export default function CaseStudyPage({
         </section>
       </CosmicRouteSectionShell>
 
-      <CosmicRouteSectionShell anchorIndex={6} tone="primary">
+      <CosmicRouteSectionShell anchorIndex={3} tone="primary">
         <section className="section-padding">
           <div className="container text-center">
             <AnimatedSection>

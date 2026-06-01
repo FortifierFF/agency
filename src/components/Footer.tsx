@@ -15,7 +15,6 @@ export function Footer() {
     navigation: [
       { label: tNav("projects"), href: "/projects" },
       { label: tNav("services"), href: "/services" },
-      { label: tNav("pricing"), href: "/pricing" },
       { label: tNav("about"), href: "/about" },
       { label: tNav("blog"), href: "/blog" },
       { label: tNav("contact"), href: "/contact" },

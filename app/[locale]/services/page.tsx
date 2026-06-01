@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Globe, Palette, TrendingUp, Smartphone, ArrowRight, Check } from "lucide-react";
@@ -90,11 +91,13 @@ export default function ServicesPage() {
                       </Button>
                     </div>
                     <div className={isEven ? "lg:order-2" : ""}>
-                      <div className="aspect-[4/3] rounded-2xl bg-muted border border-border overflow-hidden">
-                        <img
-                          src="/placeholder.svg"
+                      <div className="relative aspect-[4/3] rounded-2xl bg-muted border border-border overflow-hidden">
+                        <Image
+                          src={service.image}
                           alt={title}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 1024px) 100vw, 50vw"
                         />
                       </div>
                     </div>

@@ -5,6 +5,8 @@ export interface Service {
   description: string;
   deliverables: string[];
   icon: string;
+  /** Public asset under `/services/`. */
+  image: string;
 }
 
 export const services: Service[] = [
@@ -21,7 +23,8 @@ export const services: Service[] = [
       "API integrations",
       "Performance optimization"
     ],
-    icon: "Globe"
+    icon: "Globe",
+    image: "/services/Websites-and-webapps.png",
   },
   {
     id: "ui-ux-design",
@@ -36,7 +39,8 @@ export const services: Service[] = [
       "Usability testing",
       "Design handoff documentation"
     ],
-    icon: "Palette"
+    icon: "Palette",
+    image: "/services/ui-ux-design.png",
   },
   {
     id: "seo-performance",
@@ -51,7 +55,8 @@ export const services: Service[] = [
       "Performance monitoring",
       "Analytics setup & reporting"
     ],
-    icon: "TrendingUp"
+    icon: "TrendingUp",
+    image: "/services/seo.png",
   },
   {
     id: "mobile-apps",
@@ -66,8 +71,9 @@ export const services: Service[] = [
       "Push notifications",
       "Offline functionality"
     ],
-    icon: "Smartphone"
-  }
+    icon: "Smartphone",
+    image: "/services/mobile-apps.png",
+  },
 ];
 
 export const getServiceById = (id: string) => services.find(s => s.id === id);

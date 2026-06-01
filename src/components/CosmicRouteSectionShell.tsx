@@ -24,6 +24,7 @@ import {
   computeCosmicPlateExitLeg,
 } from "@/lib/cosmicPlateScrollBand";
 import { computeCosmicPlateOpacity } from "@/lib/cosmicPlateViewportOpacity";
+import { COSMIC_SECTION_MIN_VIEWPORT_CLASS } from "@/lib/cosmicSectionLayout";
 import { cn } from "@/lib/utils";
 
 /** Starfield gap between card plates — not used on blue CTA (`tone="primary"`) so it can meet the footer. */
@@ -207,7 +208,9 @@ export function CosmicRouteSectionShell({
           pointerEvents: phase > 0.08 ? "auto" : "none",
         }}
       >
-        {children}
+        <div className={cn(!plateFullWidth && COSMIC_SECTION_MIN_VIEWPORT_CLASS)}>
+          {children}
+        </div>
       </div>
     </div>
   );

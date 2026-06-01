@@ -18,13 +18,13 @@ const ROUTE_SECTION_ANCHOR_COUNTS: Record<string, number> = {
   "/pricing": 5,
   "/contact": 4,
   "/blog": 5,
-  "/projects": 6,
+  "/projects": 1,
 };
 
 /** Blog posts under `/blog/[slug]` — slug is part of `layoutKey`, so each article’s layout differs. */
 const BLOG_POST_ANCHOR_COUNT = 4;
-/** Case study body shells 1–5 + blue CTA at 6 (no wheel point for index 6). */
-const PROJECT_SLUG_ANCHOR_COUNT = 6;
+/** Case study: preview (1), story block (2), blue CTA at 3 (no wheel point). */
+const PROJECT_SLUG_ANCHOR_COUNT = 2;
 /** Any other localized route still gets markers; tune per page when you add one. */
 const FALLBACK_ROUTE_ANCHOR_COUNT = 4;
 
