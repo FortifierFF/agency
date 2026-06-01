@@ -10,7 +10,7 @@ import {
   isRouteAnchorsSurfaceReady,
   subscribeRouteAnchorScreen,
 } from "@/components/home/routeAnchorScreenBridge";
-import { computeCosmicPlateScrollPhase } from "@/lib/cosmicPlateScrollBand";
+import { computeHeroPlateScrollPhase } from "@/lib/cosmicPlateScrollBand";
 import { computeCosmicPlateOpacity } from "@/lib/cosmicPlateViewportOpacity";
 
 /**
@@ -121,7 +121,7 @@ export function CosmicPageHeroShell({ children, className, pad = "md" }: CosmicP
       }
 
       const vh = Math.max(1, window.innerHeight);
-      const sp = computeCosmicPlateScrollPhase(rect, vh);
+      const sp = computeHeroPlateScrollPhase(rect, vh, window.scrollY);
       if (Math.abs(sp - lastPublishedScrollPhase.current) > 0.004) {
         lastPublishedScrollPhase.current = sp;
         setScrollPhase(sp);

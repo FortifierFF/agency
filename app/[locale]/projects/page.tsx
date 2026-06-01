@@ -2,20 +2,19 @@
 
 import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
 import { Search } from "lucide-react";
 import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
 import { CosmicRouteSectionShell } from "@/components/CosmicRouteSectionShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { ProjectCard } from "@/components/projects/ProjectCard";
 import { projects, getProjectsByTag, searchProjects } from "@/data/projects";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 
 export default function ProjectsPage() {
   const t = useTranslations("projects");
   const [activeTag, setActiveTag] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   const tags = [
     { value: "All", label: t("filterAll") },
     { value: "Web", label: t("filterWeb") },
@@ -36,7 +35,6 @@ export default function ProjectsPage() {
 
   return (
     <>
-      {/* Hero */}
       <section className="pt-28 pb-16 min-h-[92svh] flex items-center">
         <div className="container md:min-h-[640px] flex items-center">
           <CosmicPageHeroShell pad="sm">
@@ -55,13 +53,11 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      {/* Filters + Projects Grid stay in one motion block */}
       <CosmicRouteSectionShell anchorIndex={1}>
         <section className="pb-12">
           <div className="container">
             <AnimatedSection>
               <div className="flex flex-col sm:flex-row gap-4 justify-between">
-                {/* Tags */}
                 <div className="flex flex-wrap gap-2">
                   {tags.map((tag) => (
                     <button
@@ -78,7 +74,6 @@ export default function ProjectsPage() {
                   ))}
                 </div>
 
-                {/* Search */}
                 <div className="relative w-full sm:w-72">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -95,50 +90,19 @@ export default function ProjectsPage() {
         </section>
         <section className="pb-20">
           <div className="container">
-          {filteredProjects.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">{t("noProjects")}</p>
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map((project, index) => (
-                <AnimatedSection key={project.slug} delay={index * 0.05}>
-                  <Link
-                    href={`/projects/${project.slug}`}
-                    className="group block bg-card rounded-2xl border border-border overflow-hidden hover:shadow-soft transition-all duration-300"
-                  >
-                    <div className="aspect-[4/3] bg-muted relative overflow-hidden">
-                      <img
-                        src={project.thumbnail}
-                        alt={project.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute top-4 left-4">
-                        <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm">
-                          {project.resultsMetrics[0]?.label}: {project.resultsMetrics[0]?.value}
-                        </Badge>
-                      </div>
-                    </div>
-                    <div className="p-6">
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        {project.tags.map((tag) => (
-                          <Badge key={tag} variant="outline" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                      <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
-                        {project.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground line-clamp-2">
-                        {project.shortSummary}
-                      </p>
-                    </div>
-                  </Link>
-                </AnimatedSection>
-              ))}
-            </div>
-          )}
+            {filteredProjects.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">{t("noProjects")}</p>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+                {filteredProjects.map((project, index) => (
+                  <AnimatedSection key={project.slug} delay={index * 0.05}>
+                    <ProjectCard project={project} />
+                  </AnimatedSection>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </CosmicRouteSectionShell>

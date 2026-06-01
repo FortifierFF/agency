@@ -9,7 +9,9 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "capture:projects": "node scripts/capture-project-previews.mjs",
+    "capture:projects:rebuild": "node scripts/capture-project-previews.mjs --rebuild"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -84,7 +86,9 @@
     "jsdom": "^20.0.3",
     "lovable-tagger": "^1.1.13",
     "patch-package": "^8.0.1",
+    "playwright": "^1.60.0",
     "postcss": "^8.5.6",
+    "sharp": "^0.34.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",

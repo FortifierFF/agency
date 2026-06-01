@@ -40,3 +40,18 @@ export function computeCosmicPlateScrollPhase(rect: DOMRect, vh: number): number
   const exit = computeCosmicPlateExitLeg(rect.bottom, vh);
   return Math.min(enter, exit);
 }
+
+/**
+ * Hero plate: at the top of the page, `rect.top` sits below the navbar (e.g. `pt-28`), so the
+ * shared enter band never quite reaches 1. Pin full focus while scroll is still at the top.
+ */
+export const HERO_SCROLL_TOP_PIN_Y = 56;
+
+export function computeHeroPlateScrollPhase(
+  rect: DOMRect,
+  vh: number,
+  scrollY: number
+): number {
+  if (scrollY <= HERO_SCROLL_TOP_PIN_Y) return 1;
+  return computeCosmicPlateScrollPhase(rect, vh);
+}

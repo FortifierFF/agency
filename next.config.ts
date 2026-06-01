@@ -15,6 +15,20 @@ const nextConfig: NextConfig = {
   
   // Set workspace root to silence warning about multiple lockfiles
   outputFileTracingRoot: path.join(process.cwd()),
+
+  async headers() {
+    return [
+      {
+        source: "/projects/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);

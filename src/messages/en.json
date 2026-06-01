@@ -47,7 +47,8 @@
   "home": {
     "featuredWork": {
       "label": "Featured Work",
-      "title": "Projects that delivered",
+      "title": "Live work from PAL Web Studio",
+      "subtitle": "Real products we design and build — from PAL Group brands to international studios.",
       "viewAll": "View all projects"
     },
     "services": {
@@ -157,18 +158,20 @@
   },
   "projects": {
     "title": "Projects that delivered results",
-    "description": "From startups to established brands, here's a selection of the digital products we've designed and built.",
+    "description": "Live websites and platforms we've shipped for PAL Group and partners — strategy, design, and development in production.",
     "ourWork": "Our Work",
     "noProjects": "No projects found matching your criteria.",
     "backToProjects": "Back to Projects",
     "nextProject": "Next Project",
     "viewProject": "View Project",
+    "visitLiveSite": "Visit live site",
+    "readCaseStudy": "Read case study",
     "readyToStart": "Ready to start your project?",
     "readyToStartDescription": "Let's discuss how we can help you achieve similar results for your business.",
     "challenge": "The Challenge",
     "approach": "Our Approach",
     "delivered": "What We Delivered",
-    "gallery": "Gallery",
+    "outcomesTitle": "At a glance",
     "techStack": "Tech Stack",
     "client": "Client",
     "timeline": "Timeline",
@@ -177,7 +180,101 @@
     "filterWeb": "Web",
     "filterUIUX": "UIUX",
     "filterSEO": "SEO",
-    "filterMobile": "Mobile"
+    "filterMobile": "Mobile",
+    "cases": {
+      "medboard": {
+        "title": "MedBoard",
+        "highlight": "Healthcare careers",
+        "shortSummary": "Bulgaria's first specialized healthcare career platform — connecting medical talent with employers across the PAL ecosystem.",
+        "clientName": "PAL Recruitment · PAL Group",
+        "industry": "Healthcare · HR Tech",
+        "timeline": "Ongoing partnership",
+        "challenge": "PAL Recruitment needed a dedicated digital home for healthcare hiring — distinct from general recruitment, trustworthy for clinicians and hospitals, and ready to grow with the PAL Group network.",
+        "approach": "We shaped a calm, clinical-meets-modern brand experience with clear candidate and employer journeys, strong typography, and a fast, accessible marketing site built to feel credible in a regulated sector.",
+        "deliverables": [
+          "Brand-aligned marketing website",
+          "Healthcare-focused positioning & page structure",
+          "Responsive UI for all breakpoints",
+          "Performance-minded front-end build",
+          "Integration with PAL Group narrative"
+        ],
+        "outcomes": [
+          { "label": "Sector", "value": "Healthcare careers" },
+          { "label": "Ecosystem", "value": "PAL Group" },
+          { "label": "Market", "value": "Bulgaria" },
+          { "label": "Status", "value": "Live platform" }
+        ]
+      },
+      "pal-recruitment": {
+        "title": "PAL Recruitment",
+        "highlight": "HR & talent",
+        "shortSummary": "Boutique recruitment partner for Bulgaria — showcasing services, trust, and the wider PAL Group network including MedBoard and PAL Credit Consult.",
+        "clientName": "PAL Recruitment",
+        "industry": "Human Resources",
+        "timeline": "Ongoing partnership",
+        "challenge": "The agency needed a modern flagship site that communicates boutique HR expertise, surfaces social proof, and links the growing PAL Group family of brands without feeling corporate or cold.",
+        "approach": "We built a confident, people-first experience with clear service storytelling, reference-friendly layouts, and subtle motion — optimized for discovery, credibility, and cross-linking to sister products.",
+        "deliverables": [
+          "Corporate marketing website",
+          "Services & trust narrative",
+          "PAL Group network showcase",
+          "Lead-generation contact flows",
+          "SEO-friendly structure"
+        ],
+        "outcomes": [
+          { "label": "Placements", "value": "500+ specialists" },
+          { "label": "Partners", "value": "100+ companies" },
+          { "label": "Satisfaction", "value": "98% reported" },
+          { "label": "Status", "value": "Live site" }
+        ]
+      },
+      "pal-credit-consult": {
+        "title": "PAL Credit Consult",
+        "highlight": "Credit consulting",
+        "shortSummary": "BNB-licensed credit intermediary — transparent positioning for mortgages, consumer loans, and business financing under the PAL Group umbrella.",
+        "clientName": "PAL Credit Consult · PAL Group",
+        "industry": "Financial Services",
+        "timeline": "Ongoing partnership",
+        "challenge": "A regulated financial brand had to earn trust quickly online — explaining complex credit services clearly while highlighting licensing, leadership experience, and PAL Group credibility.",
+        "approach": "We designed a structured, reassuring interface with strong hierarchy for services and compliance, warm professional tone, and clear paths to book a consultation.",
+        "deliverables": [
+          "Licensed intermediary web presence",
+          "Service catalog & consultation CTAs",
+          "Team & credibility storytelling",
+          "Legal & compliance page structure",
+          "Mobile-first responsive UI"
+        ],
+        "outcomes": [
+          { "label": "License", "value": "BNB intermediary" },
+          { "label": "Services", "value": "Mortgage · Consumer · Business" },
+          { "label": "Group", "value": "PAL ecosystem" },
+          { "label": "Status", "value": "Live site" }
+        ]
+      },
+      "pitchfork-games": {
+        "title": "Pitchfork Games",
+        "highlight": "Game studio",
+        "shortSummary": "New Zealand studio site for Perspectre, Skyblocker, and Pitchfork Academy — cinematic product storytelling for a global gaming audience.",
+        "clientName": "Pitchfork Games Limited",
+        "industry": "Gaming & Entertainment",
+        "timeline": "Shipped & live",
+        "challenge": "An indie studio needed a portfolio that feels as bold as its games — hero presence for upcoming titles, crisp product cards, and an international tone without clutter.",
+        "approach": "We delivered a dark, high-contrast visual system with immersive gradients, focused project grids, and clear routes to Academy content and contact — built for fans and publishers alike.",
+        "deliverables": [
+          "Studio portfolio website",
+          "Per-title product showcases",
+          "Academy / tutorials entry point",
+          "Contact & social discovery",
+          "Responsive cinematic layout"
+        ],
+        "outcomes": [
+          { "label": "Studio", "value": "NZ · Global" },
+          { "label": "Titles", "value": "Perspectre · Skyblocker" },
+          { "label": "Academy", "value": "Public tutorials" },
+          { "label": "Status", "value": "Live site" }
+        ]
+      }
+    }
   },
   "services": {
     "title": "Everything you need to build and grow online",

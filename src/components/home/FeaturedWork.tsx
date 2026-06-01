@@ -4,8 +4,8 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ArrowUpRight } from "lucide-react";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { ProjectCard } from "@/components/projects/ProjectCard";
 import { getFeaturedProjects } from "@/data/projects";
-import { Badge } from "@/components/ui/badge";
 
 export function FeaturedWork() {
   const t = useTranslations("home.featuredWork");
@@ -23,10 +23,11 @@ export function FeaturedWork() {
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
                 {t("title")}
               </h2>
+              <p className="mt-3 text-muted-foreground max-w-xl">{t("subtitle")}</p>
             </div>
             <Link
               href="/projects"
-              className="text-sm font-medium text-primary hover:underline underline-offset-4 flex items-center gap-1"
+              className="text-sm font-medium text-primary hover:underline underline-offset-4 flex items-center gap-1 shrink-0"
             >
               {t("viewAll")}
               <ArrowUpRight className="h-4 w-4" />
@@ -34,42 +35,10 @@ export function FeaturedWork() {
           </div>
         </AnimatedSection>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
           {projects.map((project, index) => (
-            <AnimatedSection key={project.slug} delay={index * 0.1}>
-              <Link
-                href={`/projects/${project.slug}`}
-                className="group block overflow-hidden rounded-2xl border border-border/60 bg-background/25 backdrop-blur-md transition-all duration-300 hover:border-primary/25 hover:shadow-soft"
-              >
-                <div className="aspect-[4/3] bg-muted relative overflow-hidden">
-                  <img
-                    src={project.thumbnail}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  {/* Outcome badge */}
-                  <div className="absolute top-4 left-4">
-                    <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm">
-                      {project.resultsMetrics[0]?.label}: {project.resultsMetrics[0]?.value}
-                    </Badge>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {project.tags.map((tag) => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {project.shortSummary}
-                  </p>
-                </div>
-              </Link>
+            <AnimatedSection key={project.slug} delay={index * 0.08}>
+              <ProjectCard project={project} />
             </AnimatedSection>
           ))}
         </div>
