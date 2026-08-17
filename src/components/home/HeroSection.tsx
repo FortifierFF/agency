@@ -25,10 +25,10 @@ export function HeroSection({ cosmicShell = false }: HeroSectionProps) {
   const contentDelayBase = landingPhase === "landed" ? 0.1 : 0.18;
 
   const goalButtons = [
-    { key: "getLeads", icon: Sparkles },
-    { key: "improveUX", icon: LineChart },
-    { key: "fixSEO", icon: Search },
-    { key: "buildApp", icon: Smartphone },
+    { key: "getLeads", icon: Sparkles, href: "/services#web-development" as const },
+    { key: "improveUX", icon: LineChart, href: "/services#ui-ux-design" as const },
+    { key: "fixSEO", icon: Search, href: "/services#seo-performance" as const },
+    { key: "buildApp", icon: Smartphone, href: "/services#mobile-apps" as const },
   ];
 
   const inner = (
@@ -73,16 +73,19 @@ export function HeroSection({ cosmicShell = false }: HeroSectionProps) {
             <p className="mb-3 text-sm text-muted-foreground">{tCommon("chooseGoal")}</p>
             <div className="flex flex-wrap gap-2.5">
               {goalButtons.map((goal) => (
-                <motion.button
+                <motion.div
                   key={goal.key}
-                  type="button"
                   whileHover={{ scale: 1.02, y: -1 }}
                   whileTap={{ scale: 0.985 }}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2.5 text-sm font-medium text-foreground/90 transition-colors hover:bg-white/14"
                 >
-                  <goal.icon className="h-4 w-4 text-primary" />
-                  {tCommon(goal.key)}
-                </motion.button>
+                  <Link
+                    href={goal.href}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2.5 text-sm font-medium text-foreground/90 transition-colors hover:bg-white/14"
+                  >
+                    <goal.icon className="h-4 w-4 text-primary" />
+                    {tCommon(goal.key)}
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </div>

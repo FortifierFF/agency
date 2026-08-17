@@ -1,29 +1,42 @@
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { HeroSection } from "@/components/home/HeroSection";
 import { FeaturedWork } from "@/components/home/FeaturedWork";
 import { ServicesSection } from "@/components/home/ServicesSection";
 import { ProcessSection } from "@/components/home/ProcessSection";
-import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-// Pricing section temporarily hidden - uncomment to restore
-// import { PackagesPreview } from "@/components/home/PackagesPreview";
+import { ClientLogosSection } from "@/components/home/ClientLogosSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { CTASection } from "@/components/home/CTASection";
 import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
 import { CosmicRouteSectionShell } from "@/components/CosmicRouteSectionShell";
 import { routing } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/siteMetadata";
 
-// Generate static params for all locales
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta.home" });
+  return buildPageMetadata({
+    locale,
+    title: t("title"),
+    description: t("description"),
+    path: "/",
+  });
+}
+
 /**
- * Home uses the **same** composition as `about/page.tsx`: one hero `<section>` + `CosmicPageHeroShell`,
- * then each block wrapped only by `CosmicRouteSectionShell` (no extra outer section/div shell).
+ * Home: hero + work + services + process + client logos + FAQ + CTA.
  */
 export default function Home() {
   return (
     <>
-      {/* Hero — same outer layout classes as About */}
       <section className="pt-28 pb-16 min-h-[92svh] flex items-center">
         <div className="container md:min-h-[640px] flex items-center">
           <CosmicPageHeroShell className="w-full">
@@ -45,11 +58,8 @@ export default function Home() {
       </CosmicRouteSectionShell>
 
       <CosmicRouteSectionShell anchorIndex={4}>
-        <TestimonialsSection />
+        <ClientLogosSection />
       </CosmicRouteSectionShell>
-
-      {/* Pricing section temporarily hidden - uncomment to restore */}
-      {/* <PackagesPreview /> */}
 
       <CosmicRouteSectionShell anchorIndex={5}>
         <FAQSection />
@@ -61,3 +71,4 @@ export default function Home() {
     </>
   );
 }
+

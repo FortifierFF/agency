@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Link } from "@/i18n/navigation";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -14,11 +13,10 @@ import { useCosmicExperienceOptional } from "@/context/CosmicExperienceContext";
 
 /** Desktop nav choreography: logo from the left, links from the right one-by-one, utilities after a short beat. */
 const logoVariants = {
-  hidden: { x: -72, opacity: 0, filter: "blur(6px)" },
+  hidden: { x: -72, opacity: 0 },
   show: {
     x: 0,
     opacity: 1,
-    filter: "blur(0px)",
     transition: { type: "spring", stiffness: 220, damping: 30, mass: 0.95 },
   },
 };
@@ -32,11 +30,10 @@ const linkParentVariants = {
 };
 
 const linkItemVariants = {
-  hidden: { x: 64, opacity: 0, filter: "blur(5px)" },
+  hidden: { x: 64, opacity: 0 },
   show: {
     x: 0,
     opacity: 1,
-    filter: "blur(0px)",
     transition: { type: "spring", stiffness: 300, damping: 27, mass: 0.95 },
   },
 };
@@ -50,11 +47,10 @@ const controlsParentVariants = {
 };
 
 const controlItemVariants = {
-  hidden: { x: 56, opacity: 0, filter: "blur(4px)" },
+  hidden: { x: 56, opacity: 0 },
   show: {
     x: 0,
     opacity: 1,
-    filter: "blur(0px)",
     transition: { type: "spring", stiffness: 285, damping: 25, mass: 0.96 },
   },
 };
@@ -69,12 +65,11 @@ export function Navbar() {
   const landingPhase = cosmic?.landingPhase ?? "landed";
   const reduceMotion = useReducedMotion();
 
-  /** Projects, Services, About, Blog, Contact — rainbow border hover lives only on these. */
+  /** Home + primary routes — rainbow border hover lives only on these. */
   const navLinks = [
+    { href: "/", label: t("home") },
     { href: "/projects", label: t("projects") },
     { href: "/services", label: t("services") },
-    // Pricing temporarily hidden - uncomment to restore
-    // { href: "/pricing", label: t("pricing") },
     { href: "/about", label: t("about") },
     { href: "/blog", label: t("blog") },
     { href: "/contact", label: t("contact") },

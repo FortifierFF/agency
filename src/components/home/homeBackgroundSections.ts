@@ -8,7 +8,7 @@ export const HOME_BG_SECTION_ORDER = [
   "work",
   "services",
   "process",
-  "testimonials",
+  "clientLogos",
   "faq",
   "cta",
 ] as const;

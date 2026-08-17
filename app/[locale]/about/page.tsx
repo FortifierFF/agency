@@ -2,39 +2,23 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import { CosmicPageHeroShell } from "@/components/CosmicPageHeroShell";
 import { CosmicRouteSectionShell } from "@/components/CosmicRouteSectionShell";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { projects } from "@/data/projects";
 
-const team = [
-  {
-    name: "Alex Chen",
-    role: "Founder & Lead Designer",
-    bio: "10+ years in product design. Previously at Stripe and Airbnb.",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Jordan Smith",
-    role: "Technical Lead",
-    bio: "Full-stack developer with a focus on performance and accessibility.",
-    image: "/placeholder.svg",
-  },
-  {
-    name: "Sam Rivera",
-    role: "UX Strategist",
-    bio: "Research-driven designer who turns insights into intuitive experiences.",
-    image: "/placeholder.svg",
-  },
-];
-
+/**
+ * About — team placeholders removed. Mid plate is “work in the wild” logos
+ * so the page stays full without fake headshots.
+ */
 export default function AboutPage() {
   const t = useTranslations("about");
   const tNav = useTranslations("nav");
   const tCommon = useTranslations("common");
-  
+
   const values = [
     {
       title: t("value1.title"),
@@ -53,16 +37,16 @@ export default function AboutPage() {
       description: t("value4.description"),
     },
   ];
-  
+
   const stats = [
     { value: "2019", label: t("stats.founded") },
     { value: "50+", label: t("stats.projectsCompleted") },
     { value: "100%", label: t("stats.remoteTeam") },
     { value: "12", label: t("stats.countriesServed") },
   ];
+
   return (
     <>
-      {/* Hero */}
       <section className="pt-28 pb-16 min-h-[92svh] flex items-center">
         <div className="container md:min-h-[640px] flex items-center">
           <CosmicPageHeroShell>
@@ -74,9 +58,7 @@ export default function AboutPage() {
                 <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
                   {t("title")}
                 </h1>
-                <p className="text-lg text-muted-foreground mb-8">
-                  {t("description")}
-                </p>
+                <p className="text-lg text-muted-foreground mb-8">{t("description")}</p>
                 <Button asChild className="rounded-full px-6">
                   <Link href="/contact">
                     {t("workWithUs")}
@@ -101,103 +83,111 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Values */}
       <CosmicRouteSectionShell anchorIndex={1}>
         <section className="section-padding">
           <div className="container">
-          <AnimatedSection>
-            <div className="max-w-2xl mb-12">
-              <h2 className="text-3xl font-bold mb-4">{t("whatWeBelieve")}</h2>
-              <p className="text-muted-foreground">
-                {t("whatWeBelieveDescription")}
-              </p>
-            </div>
-          </AnimatedSection>
+            <AnimatedSection>
+              <div className="max-w-2xl mb-12">
+                <h2 className="text-3xl font-bold mb-4">{t("whatWeBelieve")}</h2>
+                <p className="text-muted-foreground">{t("whatWeBelieveDescription")}</p>
+              </div>
+            </AnimatedSection>
 
-          <div className="grid sm:grid-cols-2 gap-8">
-            {values.map((value, index) => (
-              <AnimatedSection key={value.title} delay={index * 0.1}>
-                <div className="p-6 rounded-2xl bg-background border border-border">
-                  <h3 className="text-lg font-semibold mb-2">{value.title}</h3>
-                  <p className="text-muted-foreground">{value.description}</p>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
+            <div className="grid sm:grid-cols-2 gap-8">
+              {values.map((value, index) => (
+                <AnimatedSection key={value.title} delay={index * 0.1}>
+                  <div className="p-6 rounded-2xl bg-background border border-border">
+                    <h3 className="text-lg font-semibold mb-2">{value.title}</h3>
+                    <p className="text-muted-foreground">{value.description}</p>
+                  </div>
+                </AnimatedSection>
+              ))}
+            </div>
           </div>
         </section>
       </CosmicRouteSectionShell>
 
-      {/* Team */}
+      {/* Selected live work — fills the old team plate with real proof */}
       <CosmicRouteSectionShell anchorIndex={2}>
         <section className="section-padding">
           <div className="container">
-          <AnimatedSection>
-            <div className="text-center max-w-2xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold mb-4">{t("meetTeam")}</h2>
-              <p className="text-muted-foreground">
-                {t("meetTeamDescription")}
-              </p>
-            </div>
-          </AnimatedSection>
+            <AnimatedSection>
+              <div className="text-center max-w-2xl mx-auto mb-12">
+                <h2 className="text-3xl font-bold mb-4">{t("selectedWork")}</h2>
+                <p className="text-muted-foreground">{t("selectedWorkDescription")}</p>
+              </div>
+            </AnimatedSection>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {team.map((member, index) => (
-              <AnimatedSection key={member.name} delay={index * 0.1}>
-                <div className="text-center">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-muted overflow-hidden">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      className="w-full h-full object-cover"
-                      width={128}
-                      height={128}
-                    />
-                  </div>
-                  <h3 className="font-semibold mb-1">{member.name}</h3>
-                  <p className="text-sm text-primary mb-2">{member.role}</p>
-                  <p className="text-sm text-muted-foreground">{member.bio}</p>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {projects.map((project, index) => (
+                <AnimatedSection key={project.slug} delay={index * 0.08}>
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-5 rounded-2xl border border-border/60 bg-background/25 p-6 backdrop-blur-md transition-all hover:border-primary/30 hover:bg-background/40"
+                  >
+                    <div className="relative h-14 w-28 shrink-0">
+                      <Image
+                        src={`/projects/${project.slug}/logo.png`}
+                        alt={project.preview.domain}
+                        fill
+                        className="object-contain"
+                        sizes="112px"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold truncate">{project.preview.domain}</p>
+                      <p className="text-sm text-muted-foreground inline-flex items-center gap-1 mt-1">
+                        {t("visitSite")}
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </p>
+                    </div>
+                  </a>
+                </AnimatedSection>
+              ))}
+            </div>
+
+            <AnimatedSection delay={0.35}>
+              <div className="mt-10 text-center">
+                <Button asChild variant="outline" className="rounded-full">
+                  <Link href="/projects">{tCommon("seeOurWork")}</Link>
+                </Button>
+              </div>
+            </AnimatedSection>
           </div>
         </section>
       </CosmicRouteSectionShell>
 
-      {/* Stats */}
       <CosmicRouteSectionShell anchorIndex={3}>
         <section className="section-padding">
           <div className="container">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <AnimatedSection key={stat.label} delay={index * 0.1}>
-                <div className="text-center">
-                  <p className="text-4xl font-bold text-primary mb-2">
-                    {stat.value}
-                  </p>
-                  <p className="text-muted-foreground">{stat.label}</p>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+              {stats.map((stat, index) => (
+                <AnimatedSection key={stat.label} delay={index * 0.1}>
+                  <div className="text-center">
+                    <p className="text-4xl font-bold text-primary mb-2">{stat.value}</p>
+                    <p className="text-muted-foreground">{stat.label}</p>
+                  </div>
+                </AnimatedSection>
+              ))}
+            </div>
           </div>
         </section>
       </CosmicRouteSectionShell>
 
-      {/* CTA */}
       <CosmicRouteSectionShell anchorIndex={4} tone="primary">
         <section className="section-padding">
           <div className="container text-center">
-          <AnimatedSection>
-            <h2 className="text-3xl font-bold mb-4">{t("letsBuild")}</h2>
-            <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-              {t("letsBuildDescription")}
-            </p>
-            <Button asChild size="lg" variant="secondary" className="rounded-full px-8">
-              <Link href="/contact">{tCommon("getInTouch")}</Link>
-            </Button>
-          </AnimatedSection>
+            <AnimatedSection>
+              <h2 className="text-3xl font-bold mb-4">{t("letsBuild")}</h2>
+              <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
+                {t("letsBuildDescription")}
+              </p>
+              <Button asChild size="lg" variant="secondary" className="rounded-full px-8">
+                <Link href="/contact">{tCommon("getInTouch")}</Link>
+              </Button>
+            </AnimatedSection>
           </div>
         </section>
       </CosmicRouteSectionShell>

@@ -8,29 +8,28 @@ const HOME_ROUTE_WHEEL_ANCHOR_COUNT = HOME_BG_SECTION_ORDER.length - 1;
 
 /**
  * Static anchor counts for **top-level** routes (how many sprites we show).
- * World-space positions still come from `getRouteAnchorWorldPosition(layoutKey, index)` — that
- * function hashes the **full** normalized pathname, so `/about` and `/pricing` never share coords.
+ * Must match mounted CosmicRouteSectionShell / hero plates (CTA often has no wheel point).
  */
 const ROUTE_SECTION_ANCHOR_COUNTS: Record<string, number> = {
   "/about": 4,
-  /** Four service plates + hero; CTA shell index 5 has no wheel point (About pattern). */
+  /** Four service plates + hero; CTA shell index 5 has no wheel point. */
   "/services": 5,
-  "/pricing": 5,
-  "/contact": 4,
-  "/blog": 5,
+  "/contact": 1,
+  "/blog": 1,
   "/projects": 1,
+  "/privacy": 1,
+  "/terms": 1,
 };
 
-/** Blog posts under `/blog/[slug]` — slug is part of `layoutKey`, so each article’s layout differs. */
-const BLOG_POST_ANCHOR_COUNT = 4;
+/** Blog posts: hero + article plate (CTA may be inside article). */
+const BLOG_POST_ANCHOR_COUNT = 1;
 /** Case study: preview (1), story block (2), blue CTA at 3 (no wheel point). */
 const PROJECT_SLUG_ANCHOR_COUNT = 2;
 /** Any other localized route still gets markers; tune per page when you add one. */
-const FALLBACK_ROUTE_ANCHOR_COUNT = 4;
+const FALLBACK_ROUTE_ANCHOR_COUNT = 1;
 
 /**
  * Canonical route key for stable anchor layouts (next-intl pathname without locale).
- * Same string every time the user visits that logical page.
  */
 export function normalizeRouteAnchorLayoutKey(pathname: string): string {
   const p = pathname.replace(/\/+$/, "") || "/";
@@ -39,8 +38,6 @@ export function normalizeRouteAnchorLayoutKey(pathname: string): string {
 
 /**
  * How many “section anchor” stars the route-flight decel should show for a pathname.
- * next-intl `usePathname()` returns the path **without** the locale prefix (e.g. `/` for home,
- * `/about` for about) — see https://next-intl.dev/docs/routing/navigation#usepathname
  */
 export function resolveRouteSectionAnchorCount(pathname: string): number {
   const p = normalizeRouteAnchorLayoutKey(pathname);

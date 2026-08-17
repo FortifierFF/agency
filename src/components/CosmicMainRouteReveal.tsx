@@ -43,14 +43,12 @@ export function CosmicMainRouteReveal({ children }: { children: React.ReactNode 
         scale: 0.82,
         rotateX: 11,
         y: 36,
-        filter: "blur(10px)",
       }}
       animate={{
         opacity: 1,
         scale: 1,
         rotateX: 0,
         y: 0,
-        filter: "blur(0px)",
       }}
       transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
       style={{ transformOrigin: "50% 38%", perspective: 1400 }}

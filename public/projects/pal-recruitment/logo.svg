@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" role="img" aria-label="PAL Recruitment">
+  <!-- Sharp vector redraw for dark cards (replaces 135×80 raster). -->
+  <g fill="#ffffff">
+    <!-- P -->
+    <path d="M40 44h122c48 0 80 26 80 74s-32 74-80 74H102v132H40V44zm62 52v68h48c24 0 40-13 40-34s-16-34-40-34H102z"/>
+    <!-- Dot between P and A (baseline) -->
+    <circle cx="302" cy="288" r="26"/>
+    <!-- A without crossbar -->
+    <path fill-rule="evenodd" d="M348 324L456 44h60l108 280h-68l-22-64H438l-22 64h-68zm102-112h56l-28-84-28 84z"/>
+    <!-- L (clear gap after A) -->
+    <path d="M620 44h64v224h86v56H620V44z"/>
+  </g>
+  <text
+    x="360"
+    y="382"
+    text-anchor="middle"
+    fill="#ffffff"
+    font-family="system-ui, -apple-system, Segoe UI, Arial, sans-serif"
+    font-size="36"
+    font-weight="600"
+    letter-spacing="0.55em"
+  >RECRUITMENT</text>
+</svg>

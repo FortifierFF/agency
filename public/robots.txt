@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://your-domain.com/sitemap.xml
+# Prefer the generated Next.js robots route; this static file is a fallback.
+# Set NEXT_PUBLIC_SITE_URL in production.
+Sitemap: https://palstudio.bg/sitemap.xml

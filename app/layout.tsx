@@ -1,19 +1,30 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { SITE_LOGO_PATH } from "@/components/SiteLogo";
+import { SITE_NAME, SITE_URL } from "@/lib/siteConfig";
 import "../src/index.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PAL Studio - Digital Studio Showcase",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} — Digital Studio`,
+    template: `%s | ${SITE_NAME}`,
+  },
   description: "A digital studio that delivers results",
   icons: {
     icon: SITE_LOGO_PATH,
     apple: SITE_LOGO_PATH,
   },
   openGraph: {
-    images: [{ url: SITE_LOGO_PATH, alt: "PAL Web Studio" }],
+    type: "website",
+    siteName: SITE_NAME,
+    images: [{ url: SITE_LOGO_PATH, alt: SITE_NAME }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [SITE_LOGO_PATH],
   },
 };
 

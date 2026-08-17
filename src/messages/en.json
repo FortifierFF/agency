@@ -31,6 +31,7 @@
     "openMenu": "Open menu"
   },
   "nav": {
+    "home": "Home",
     "projects": "Projects",
     "services": "Services",
     "pricing": "Pricing",
@@ -146,6 +147,11 @@
         "averageRating": "Average Rating",
         "experience": "Experience"
       }
+    },
+    "clientLogos": {
+      "label": "Clients",
+      "title": "Sites we built — visit them live",
+      "subtitle": "Click a logo to open the live website."
     },
     "faq": {
       "label": "FAQ",
@@ -331,6 +337,9 @@
     },
     "meetTeam": "Meet the team",
     "meetTeamDescription": "The people behind the pixels. Small team, big impact.",
+    "selectedWork": "Work in the wild",
+    "selectedWorkDescription": "Live products we designed and built — click through to visit each site.",
+    "visitSite": "Visit site",
     "stats": {
       "founded": "Founded",
       "projectsCompleted": "Projects Completed",
@@ -342,8 +351,10 @@
   },
   "contact": {
     "title": "Let's talk about your project",
-    "description": "Fill out the form below and we'll get back to you within 24 hours. Or if you prefer, reach out directly via email.",
-    "directContact": "Direct Contact",
+    "label": "Contact",
+    "description": "Fill out the form below and we'll get back to you within 24 hours.",
+    "formPending": "Message delivery goes live with Resend after we deploy. Your details stay in the browser for now — nothing was sent yet.",
+    "directContact": "Reach us",
     "responseTime": "Response Time",
     "responseTimeDescription": "We typically respond within 24 hours during business days. For urgent inquiries, please mention it in your message.",
     "whatHappensNext": "What happens next?",
@@ -393,9 +404,124 @@
     "seoPerformance": "SEO & Performance",
     "mobileApps": "Mobile Apps",
     "basedRemotely": "Based remotely, working globally.",
+    "contactFormCta": "Contact form",
     "copyright": "© {year} PAL Studio. All rights reserved.",
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service"
+  },
+  "legal": {
+    "privacy": {
+      "label": "Legal",
+      "title": "Privacy Policy",
+      "updated": "Last updated: August 2026",
+      "seeAlso": "See also our",
+      "termsLink": "Terms of Service",
+      "intro": {
+        "title": "Overview",
+        "body": "PAL Studio (“we”, “us”) respects your privacy. This policy explains what information we collect when you use our website and how we use it. By using this site you agree to this policy."
+      },
+      "collect": {
+        "title": "Information we collect",
+        "body": "When you use the contact form, we collect the details you submit (such as name, email, company, project info, and message).\n\nWe may also collect basic technical data automatically — for example IP address, browser type, device, and pages visited — through hosting and analytics tools if enabled."
+      },
+      "use": {
+        "title": "How we use information",
+        "body": "We use your information to respond to inquiries, prepare proposals, improve our website, and meet legal obligations. We do not sell your personal data."
+      },
+      "share": {
+        "title": "Sharing",
+        "body": "We may share data with trusted service providers who help us operate the site (hosting, email delivery, analytics), only as needed for those services. We may also disclose information if required by law."
+      },
+      "cookies": {
+        "title": "Cookies",
+        "body": "Our site may use essential cookies for basic functionality and optional analytics cookies to understand traffic. You can control cookies through your browser settings."
+      },
+      "rights": {
+        "title": "Your rights",
+        "body": "Depending on your location, you may have rights to access, correct, delete, or restrict processing of your personal data. Contact us through the website contact form to make a request."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "For privacy questions, use the contact form on this website. We will respond as soon as reasonably possible."
+      }
+    },
+    "terms": {
+      "label": "Legal",
+      "title": "Terms of Service",
+      "updated": "Last updated: August 2026",
+      "seeAlso": "See also our",
+      "privacyLink": "Privacy Policy",
+      "intro": {
+        "title": "Agreement",
+        "body": "These Terms govern your use of the PAL Studio website. By accessing the site you agree to these Terms. If you do not agree, please do not use the site."
+      },
+      "services": {
+        "title": "Website content",
+        "body": "Content on this site is for general information about our studio and services. Project examples and descriptions are illustrative. Formal project work is governed by a separate written agreement between you and PAL Studio."
+      },
+      "ip": {
+        "title": "Intellectual property",
+        "body": "Unless otherwise noted, the site’s design, text, branding, and media are owned by PAL Studio or used with permission. You may not copy or reuse them without prior written consent."
+      },
+      "client": {
+        "title": "Inquiries",
+        "body": "Submitting the contact form does not create a client relationship. We may decline projects at our discretion. Any quotes or timelines shared before a signed agreement are estimates only."
+      },
+      "liability": {
+        "title": "Limitation of liability",
+        "body": "The website is provided “as is”. To the fullest extent permitted by law, PAL Studio is not liable for damages arising from use of (or inability to use) this website or reliance on its content."
+      },
+      "changes": {
+        "title": "Changes",
+        "body": "We may update these Terms from time to time. Continued use of the site after changes means you accept the updated Terms. The “Last updated” date at the top reflects the latest revision."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "Questions about these Terms can be sent through the contact form on this website."
+      }
+    }
+  },
+  "meta": {
+    "home": {
+      "title": "Digital products that drive results",
+      "description": "PAL Studio designs and builds high-converting websites, web apps, and digital experiences for ambitious businesses."
+    },
+    "about": {
+      "title": "About",
+      "description": "Learn about PAL Studio — a focused digital studio building websites and products with craft, clarity, and partnership."
+    },
+    "services": {
+      "title": "Services",
+      "description": "Web development, UI/UX design, SEO & performance, and mobile apps — focused services that deliver measurable results."
+    },
+    "projects": {
+      "title": "Projects",
+      "description": "Live websites and platforms shipped by PAL Studio for brands and partners."
+    },
+    "project": {
+      "title": "{name} — Case study",
+      "description": "How PAL Studio designed and built {name}."
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Practical articles on websites, pricing, and digital growth from PAL Studio."
+    },
+    "blogPost": {
+      "title": "How much does a website cost in 2026?",
+      "description": "A complete guide to website development pricing — from €250 to €10,000+ and what drives the final cost."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Tell us about your project. PAL Studio typically responds within 24 hours on business days."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "description": "How PAL Studio collects, uses, and protects personal information on this website."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "description": "Terms governing use of the PAL Studio website and related inquiries."
+    }
   },
   "notFound": {
     "title": "Page not found",

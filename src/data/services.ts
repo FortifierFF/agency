@@ -24,7 +24,7 @@ export const services: Service[] = [
       "Performance optimization"
     ],
     icon: "Globe",
-    image: "/services/Websites-and-webapps.png",
+    image: "/services/websites-and-webapps.webp",
   },
   {
     id: "ui-ux-design",
@@ -40,7 +40,7 @@ export const services: Service[] = [
       "Design handoff documentation"
     ],
     icon: "Palette",
-    image: "/services/ui-ux-design.png",
+    image: "/services/ui-ux-design.webp",
   },
   {
     id: "seo-performance",
@@ -56,7 +56,7 @@ export const services: Service[] = [
       "Analytics setup & reporting"
     ],
     icon: "TrendingUp",
-    image: "/services/seo.png",
+    image: "/services/seo.webp",
   },
   {
     id: "mobile-apps",
@@ -72,7 +72,7 @@ export const services: Service[] = [
       "Offline functionality"
     ],
     icon: "Smartphone",
-    image: "/services/mobile-apps.png",
+    image: "/services/mobile-apps.webp",
   },
 ];
 
